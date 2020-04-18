@@ -1,0 +1,21 @@
+<component name="libraryTable">
+  <library name="gjdb">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/cs61b-software/lib/gjdb.jar!/" />
+      <root url="jar://$USER_HOME$/cs61b-software/lib/hamcrest-core-1.3.jar!/" />
+      <root url="jar://$USER_HOME$/cs61b-software/lib/jpt.jar!/" />
+      <root url="jar://$USER_HOME$/cs61b-software/lib/junit-4.12.jar!/" />
+      <root url="jar://$USER_HOME$/cs61b-software/lib/staff-graph.jar!/" />
+      <root url="jar://$USER_HOME$/cs61b-software/lib/staff-make.jar!/" />
+      <root url="jar://$USER_HOME$/cs61b-software/lib/staff-trip.jar!/" />
+      <root url="jar://$USER_HOME$/cs61b-software/lib/tools.jar!/" />
+      <root url="jar://$USER_HOME$/cs61b-software/lib/ucb-checkstyle.jar!/" />
+      <root url="jar://$USER_HOME$/cs61b-software/lib/ucb-f2007.jar!/" />
+      <root url="jar://$USER_HOME$/cs61b-software/lib/ucb.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/cs61b-software/lib/tools.jar!/" />
+    </SOURCES>
+  </library>
+</component>
