@@ -38,7 +38,6 @@ public class NumberofIslands {
         if (grid == null || grid.length == 0) {
             return 0;
         }
-
         int m = grid.length, n = grid[0].length, num = 0;
 
         for (int i = 0; i < grid.length; i++) {

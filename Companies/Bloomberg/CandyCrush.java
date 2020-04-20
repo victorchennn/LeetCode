@@ -34,11 +34,12 @@ public class CandyCrush {
 
     public static void main(String...args) {
         CandyCrush test = new CandyCrush();
-        System.out.println(test.candyCrush("acaaaacc")); // a
-        System.out.println(test.candyCrush("aaabbbc"));  // c
-        System.out.println(test.candyCrush("aabbbacd")); // cd
-        System.out.println(test.candyCrush("aabbccddeeedcba")); // ""
-        System.out.println(test.candyCrush("aaabbbacd")); // acd
+//        System.out.println(test.candyCrush("acaaaacc")); // a
+//        System.out.println(test.candyCrush("aaabbbc"));  // c
+//        System.out.println(test.candyCrush("aabbbacd")); // cd
+//        System.out.println(test.candyCrush("aabbccddeeedcba")); // ""
+//        System.out.println(test.candyCrush("aaabbbacd")); // acd
+        System.out.println(test.candyCrush("deeeeedbbcccccbdaa"));
     }
 
 

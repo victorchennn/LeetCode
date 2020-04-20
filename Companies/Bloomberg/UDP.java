@@ -1,9 +1,6 @@
 package Companies.Bloomberg;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 
 public class UDP {
 
@@ -13,9 +10,10 @@ public class UDP {
         for (Stream s : l) {
             m.put(s.index, s.content);
             while (!m.isEmpty() && m.firstKey() == index) {
-                System.out.println(m.pollFirstEntry().getValue());
+                System.out.print(m.pollFirstEntry().getValue() + " ");
                 index++;
             }
+            System.out.println();
         }
     }
 
