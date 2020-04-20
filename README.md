@@ -5,7 +5,7 @@ This project is the solutions of some [LeetCode](https://leetcode.com) questions
 **Companies**:
 
 * Amazon
-* Bloomberg
+* Bloomberg (working on...)
 * ByteDance
 * Facebook
 * GoldmanSachs
