@@ -66,9 +66,9 @@ public class BestTimetoBuyandSellStock {
         int buy = Integer.MIN_VALUE, prevbuy = 0, sell = 0, prevsell = 0;
         for (int price : prices) {
             prevbuy = buy;
-            buy = Math.max(buy, prevsell-price);
+            buy = Math.max(prevbuy, prevsell-price);
             prevsell = sell;
-            sell = Math.max(sell, prevbuy+price);
+            sell = Math.max(prevsell, prevbuy+price);
         }
         return sell;
     }
@@ -77,8 +77,8 @@ public class BestTimetoBuyandSellStock {
     public int maxProfit(int[] prices, int fee) {
         int buy = -prices[0], sell = 0;
         for (int i = 1; i < prices.length; i++) {
-            sell = Math.max(sell, buy+prices[i]-fee);
-            buy = Math.max(buy, sell-prices[i]);
+            sell = Math.max(sell, buy+prices[i]-fee); // sell first, since sell and buy at same day can't be
+            buy = Math.max(buy, sell-prices[i]);      // better than just continuing to hold the stock
         }
         return sell;
     }

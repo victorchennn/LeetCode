@@ -3,6 +3,11 @@ package Companies.Bloomberg;
 import java.util.*;
 
 public class GroupAnagrams {
+    /**
+     * Time Complexity: O(NKlogK)
+     * N is the length of strs
+     * K is the maximum length of a string in strs.
+     */
     public List<List<String>> groupAnagrams(String[] strs) {
         Map<String, List<String>> m = new HashMap<>();
         for (String s : strs) {
@@ -13,6 +18,7 @@ public class GroupAnagrams {
         return new ArrayList<>(m.values());
     }
 
+    /* Time Complexity: O(NK) */
     public List<List<String>> groupAnagramsII(String[] strs) {
         Map<String, List<String>> m = new HashMap<>();
         for (String s : strs) {

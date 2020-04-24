@@ -1,6 +1,8 @@
 package Companies.Bloomberg;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.PriorityQueue;
 
 public class MeetingRooms {
@@ -37,33 +39,47 @@ public class MeetingRooms {
     public int minMeetingRoomsII(int[][] intervals) {
         if (intervals == null || intervals.length == 0)
             return 0;
-
-        // Sort the intervals by start time
         Arrays.sort(intervals, (a,b)->a[0]-b[0]);
+        PriorityQueue<Integer> q = new PriorityQueue<>(); // endingTime
+        q.add(intervals[0][1]);
+        for (int i = 1; i < intervals.length; i++) {
+            if (intervals[i][0] >= q.peek()) {
+                q.poll();
+            }
+            q.add(intervals[i][1]);
+        }
+        return q.size();
+    }
 
-        // Use a min heap to track the minimum end time of merged intervals
-        PriorityQueue<int[]> heap = new PriorityQueue<int[]>((a,b)->a[1]-b[1]);
-
-        // start with the first meeting, put it to a meeting room
-        heap.offer(intervals[0]);
+    /* Follow-up: Assign room index to each interval */
+    public static List<List<int[]>> minMeetingRoomsIII(int[][] intervals) {
+        List<List<int[]>> re = new ArrayList<>();
+        if (intervals == null || intervals.length == 0)
+            return re;
+        Arrays.sort(intervals, (a,b)->a[0]-b[0]);
+        PriorityQueue<int[]> q = new PriorityQueue<>((a,b)->a[0]-b[0]); // endingTime
+        q.add(new int[]{intervals[0][1], 0});
+        re.add(new ArrayList<>());
+        re.get(0).add(intervals[0]);
 
         for (int i = 1; i < intervals.length; i++) {
-            // get the meeting room that finishes earliest
-            int[] interval = heap.poll();
-
-            if (intervals[i][0] >= interval[1]) {
-                // if the current meeting starts right after
-                // there's no need for a new room, merge the interval
-                interval[1] = intervals[i][1];
+            if (intervals[i][0] >= q.peek()[0]) {
+                int[] prev = q.poll();
+                re.get(prev[1]).add(intervals[i]);
+                q.add(new int[]{intervals[i][1], prev[1]});
             } else {
-                // otherwise, this meeting needs a new room
-                heap.offer(intervals[i]);
+                re.add(new ArrayList<>());
+                re.get(re.size()-1).add(intervals[i]);
+                q.add(new int[]{intervals[i][1], re.size()-1});
             }
-
-            // don't forget to put the meeting room back
-            heap.offer(interval);
         }
+        return re;
+    }
 
-        return heap.size();
+    public static void main(String...args) {
+        minMeetingRoomsIII(new int[][]{{7,10},{2,4}});
+        minMeetingRoomsIII(new int[][]{{0,30},{5,10},{15,20}});
+        minMeetingRoomsIII(new int[][]{{2,15},{36,45},{9,29},{16,23},{4,9}});
+        minMeetingRoomsIII(new int[][]{{1,5},{2,6},{3,7},{4,8},{5,9},{6,10},{7,11}});
     }
 }
