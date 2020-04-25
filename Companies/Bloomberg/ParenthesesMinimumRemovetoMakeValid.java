@@ -2,7 +2,7 @@ package Companies.Bloomberg;
 
 import java.util.Stack;
 
-public class MinimumRemovetoMakeValidParentheses {
+public class ParenthesesMinimumRemovetoMakeValid {
     public String minRemoveToMakeValid(String s) {
         // Parse 1: Remove all invalid ")"
         StringBuilder sb = new StringBuilder();

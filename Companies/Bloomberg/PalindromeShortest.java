@@ -1,6 +1,6 @@
 package Companies.Bloomberg;
 
-public class ShortestPalindrome {
+public class PalindromeShortest {
     public String shortestPalindrome(String s) {
         String temp = s + "#" + new StringBuilder(s).reverse().toString();
         int[] dp = new int[temp.length()];

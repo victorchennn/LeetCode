@@ -1,6 +1,6 @@
 package Companies.Bloomberg;
 
-public class ValidPalindrome {
+public class PalindromeValid {
     public boolean isPalindrome(String s) {
         int l = 0, r = s.length()-1;
         while (l < r) {

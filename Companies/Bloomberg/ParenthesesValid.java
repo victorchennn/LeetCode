@@ -11,7 +11,7 @@ import java.util.Stack;
  *
  * I guess if we consider ' as another type of closing bracket, everything else is same.
  */
-public class ValidParentheses {
+public class ParenthesesValid {
     public boolean isValid(String s) {
         Stack<Character> stack = new Stack<>();
         for (char c : s.toCharArray()) {

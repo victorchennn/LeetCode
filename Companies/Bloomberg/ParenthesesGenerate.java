@@ -3,7 +3,7 @@ package Companies.Bloomberg;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GenerateParentheses {
+public class ParenthesesGenerate {
     public List<String> generateParenthesis(int n) {
         List<String> re = new ArrayList<>();
         dfs(re, "", n, n);

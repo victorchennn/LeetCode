@@ -11,7 +11,7 @@ package Companies.Bloomberg;
  * that we can have exactly 0 open left brackets.
  *
  */
-public class ValidParenthesesString {
+public class ParenthesesValidString {
     public boolean checkValidString(String s) {
         int min = 0, max = 0;
         for (char c : s.toCharArray()) {
