@@ -3,8 +3,8 @@ package Topics.Design;
 import java.util.*;
 
 public class AutocompleteSystem {
-    Trie root;
-    String pre;
+    private Trie root;
+    private String pre;
 
     public AutocompleteSystem(String[] sentences, int[] times) {
         root = new Trie();
@@ -28,14 +28,10 @@ public class AutocompleteSystem {
             }
             cur = cur.children.get(cc);
         }
-        PriorityQueue<Map.Entry<String, Integer>> q = new PriorityQueue<>(
-                (a, b)-> a.getValue()==b.getValue()?a.getKey().compareTo(b.getKey()):b.getValue()-a.getValue());
-        q.addAll(cur.count.entrySet());
         List<String> re = new ArrayList<>();
-        int k = 3;
-        while (k > 0 && !q.isEmpty()) {
-            re.add(q.poll().getKey());
-            k--;
+        PriorityQueue<String> q = new PriorityQueue<>(cur.topK);
+        while (!q.isEmpty()) {
+            re.add(0, q.poll());
         }
         return re;
     }
@@ -47,16 +43,31 @@ public class AutocompleteSystem {
                 cur.children.put(c, new Trie());
             }
             cur = cur.children.get(c);
-            cur.count.put(s, cur.count.getOrDefault(s, 0)+time);
+            cur.add(s, time);
         }
     }
 
     class Trie {
         Map<String, Integer> count;
         Map<Character, Trie> children;
+        PriorityQueue<String> topK;
         Trie() {
             count = new HashMap<>();
             children = new HashMap<>();
+            topK = new PriorityQueue<>((a,b)->!count.get(a).equals(count.get(b))?
+                    count.get(a)-count.get(b):b.compareTo(a));
         }
+
+        void add(String s, int time) {
+            count.put(s, count.getOrDefault(s, 0)+time);
+            if (topK.contains(s)) {
+                topK.remove(s);
+            }
+            topK.add(s);
+            if (topK.size() > 3) {
+                topK.poll();
+            }
+        }
+
     }
 }

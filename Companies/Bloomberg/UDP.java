@@ -2,13 +2,24 @@ package Companies.Bloomberg;
 
 import java.util.*;
 
+/**
+ * https://www.geeksforgeeks.org/user-datagram-protocol-udp
+ * At the Transport layer of the IP network stack, UDP (User Datagram Protocol) is the
+ * preferred method for the delivery of live video streams. UDP offers reduced latency
+ * over the reliability that TCP (Transmission Control Protocol) provides.
+ *
+ * When to use UDP?
+ *  1. Reduce the requirement of computer resources.
+ *  2. When using the Multicast or Broadcast to transfer.
+ *  3. The transmission of Real-time packets, mainly in multimedia applications.
+ *
+ */
 public class UDP {
-
     public void udp(List<Stream> l) {
         TreeMap<Integer, String> m = new TreeMap<>();
         int index = 1;
         for (Stream s : l) {
-            m.put(s.index, s.content);
+            m.put(s.index, s.content); // O(logN) for insertion and lookup
             while (!m.isEmpty() && m.firstKey() == index) {
                 System.out.print(m.pollFirstEntry().getValue() + " ");
                 index++;

@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Marathon {
 
-    private Sensor head, tail;
+    private Sensor head, tail; // dummy
     private Map<Integer, Runner> m = new HashMap<>();
 
     public Marathon(int k) {
@@ -84,7 +84,7 @@ public class Marathon {
 
     class Sensor {
         Sensor prev, next;
-        Runner head, tail;
+        Runner head, tail; // dummy
         int number = 0;
     }
 
