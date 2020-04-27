@@ -16,7 +16,7 @@ def getEventsOrder(team1, team2, events1, events2):
             original_event.append(f["team"]+" "+event)
 
             # split events string to get details
-            pattern = re.compile("([Companies.Amazon-zA-Z\s]*)(\d+)[+]?(\d*).([G,Y,R,S])([Companies.Amazon-zA-Z\s]*)")
+            pattern = re.compile("([a-zA-Z\s]*)(\d+)[+]?(\d*).([G,Y,R,S])([a-zA-Z\s]*)")
             split_event = pattern.search(event)
             record = list()
             record.append(f["team"])  # team name

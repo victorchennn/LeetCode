@@ -34,7 +34,7 @@ public class DesignHashMap {
         return prev.next == null? -1:prev.next.val;
     }
 
-    /** Removes the mapping of the specified value key if this map contains Companies.Amazon mapping for the key */
+    /** Removes the mapping of the specified value key if this map contains mapping for the key */
     public void remove(int key) {
         int code = code(key);
         if (l[code] == null) {

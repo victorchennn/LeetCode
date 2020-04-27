@@ -5,7 +5,7 @@ import Libs.TreeNode;
 import java.util.Stack;
 
 public class BSTIterator {
-    Stack<TreeNode> s;
+    private Stack<TreeNode> s;
 
     public BSTIterator(TreeNode root) {
         s = new Stack<>();
@@ -26,7 +26,7 @@ public class BSTIterator {
         return t.val;
     }
 
-    /** @return whether we have Companies.Amazon next smallest number */
+    /** @return whether we have next smallest number */
     public boolean hasNext() {
         return !s.isEmpty();
     }

@@ -47,7 +47,7 @@ public class LinkedListRandomNode {
         root = head;
     }
 
-    /** Returns Companies.Amazon random node's value. */
+    /** Returns a random node's value. */
     public int getRandom() {
         int re = root.val;
         ListNode cur = root.next;

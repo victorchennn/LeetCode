@@ -3,8 +3,8 @@ package Topics.Design;
 import java.util.PriorityQueue;
 
 public class KthLargest {
-    PriorityQueue<Integer> q;
-    int k;
+    private PriorityQueue<Integer> q;
+    private int k;
 
     public KthLargest(int k, int[] nums) {
         q = new PriorityQueue<>(k);

@@ -2,9 +2,10 @@ package Topics.BTree;
 
 import Libs.TreeNode;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * Time complexity: O(N), where N is number of nodes, since we visit each node not more than 2 times.
+ * Space complexity: O(log(N)), we have to keep a recursion stack of the size of the tree height.
+ */
 public class BTMaximumPathSum {
     int max = Integer.MIN_VALUE;
 

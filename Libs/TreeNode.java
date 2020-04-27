@@ -1,7 +1,7 @@
 package Libs;
 
 /**
- * Definition for Companies.Amazon binary tree node.
+ * Definition for binary tree node.
  */
 
 public class TreeNode {

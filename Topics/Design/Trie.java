@@ -8,7 +8,7 @@ public class Trie {
         root = new TrieNode();
     }
 
-    /** Inserts Companies.Amazon word into the trie. */
+    /** Inserts word into the trie. */
     public void insert(String word) {
         TrieNode cur = root;
         for (char c : word.toCharArray()) {

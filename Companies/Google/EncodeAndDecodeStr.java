@@ -20,7 +20,7 @@ public class EncodeAndDecodeStr {
         return sb.toString();
     }
 
-    // Decodes Companies.Amazon single string to Companies.Amazon list of strings.
+    // Decodes a single string to a list of strings.
     public List<String> decode(String s) {
         if (s.equals(Character.toString((char)257))) {
             return new ArrayList<>();

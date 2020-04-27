@@ -4,8 +4,12 @@ import Libs.TreeNode;
 
 import java.util.*;
 
-public class BTVerticalOrderTraversal2 {
-    List<Location> l;
+/**
+ * If two nodes have the same position, then the value of the node that is reported first
+ * is the value that is smaller.
+ */
+public class BTVerticalOrderTraversalII {
+    private List<Location> l;
 
     public List<List<Integer>> verticalTraversal(TreeNode root) {
         List<List<Integer>> re = new ArrayList<>();
