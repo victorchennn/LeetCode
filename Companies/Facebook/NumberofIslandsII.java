@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class NumberOfIslandsII {
+public class NumberofIslandsII {
     private int[][] dirs = {{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
 
     public List<Integer> numIslands2(int m, int n, int[][] positions) {

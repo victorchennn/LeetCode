@@ -1,5 +1,8 @@
 package Companies.Bloomberg;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FindtheDuplicateNumber {
 
     public int findDuplicate(int[] nums) {
@@ -26,5 +29,18 @@ public class FindtheDuplicateNumber {
             nums[index] = -nums[index];
         }
         return 0;
+    }
+
+    /* Find all duplicates */
+    public List<Integer> findDuplicates(int[] nums) {
+        List<Integer> l = new ArrayList<>();
+        for (int num : nums) {
+            int index = Math.abs(num)-1;
+            if (nums[index] < 0) {
+                l.add(index+1);
+            }
+            nums[index] = -nums[index];
+        }
+        return l;
     }
 }

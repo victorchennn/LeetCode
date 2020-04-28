@@ -3,27 +3,40 @@ package Companies.Bloomberg;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * Follow up: sum of perimeter of islands?
+ */
 public class NumberofIslands {
-    boolean[][] marks;
-    int[][] dirs = {{0,-1},{-1,0},{0,1},{1,0}};
+    private static int[][] dirs = {{0,-1},{-1,0},{0,1},{1,0}};
 
-    public int numIslands(char[][] grid) {
+    public static int numIslands(char[][] grid) {
         int re = 0;
         int m = grid.length, n = grid[0].length;
-        marks = new boolean[m][n];
+//        int num = 0, neigh = 0;
+        boolean[][] marks = new boolean[m][n];
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (grid[i][j] == '1' && !marks[i][j]) {
                     re++;
                     dfs(grid, i, j, marks);
+//                    num += temp[0];
+//                    neigh += temp[1];
                 }
             }
         }
+//        int sum = num*4 - neigh*2; // sum of perimeter of islands
         return re;
     }
 
-    private void dfs(char[][] grid, int x, int y, boolean[][] marks) {
+    private static void dfs(char[][] grid, int x, int y, boolean[][] marks) {
         marks[x][y] = true;
+//        int num = 1, neigh = 0;
+//        if (x < grid.length-1 && grid[x+1][y] == '1') {
+//            neigh++;
+//        }
+//        if (y < grid[0].length-1 && grid[x][y+1] == '1') {
+//            neigh++;
+//        }
         for (int[] dir : dirs) {
             int xx = x + dir[0];
             int yy = y + dir[1];
@@ -31,7 +44,10 @@ public class NumberofIslands {
                 continue;
             }
             dfs(grid, xx, yy, marks);
+//            num += temp[0];
+//            neigh += temp[1];
         }
+//        return new int[]{num, neigh};
     }
 
     public int numIslandsII(char[][] grid) {
@@ -63,5 +79,19 @@ public class NumberofIslands {
             }
         }
         return num;
+    }
+
+    public static void main(String...args) {
+        System.out.println(numIslands(new char[][]{
+                {'1','1','1','1','0'},
+                {'1','1','0','1','0'},
+                {'1','1','0','0','0'},
+                {'0','0','0','0','0'}}));
+        System.out.println(numIslands(new char[][]{
+                {'1','1','0','0','0'},
+                {'1','1','0','0','0'},
+                {'0','0','1','0','0'},
+                {'0','0','0','1','1'}}));
+
     }
 }

@@ -28,7 +28,7 @@ public class MonitorStation {
                 mon.get(type).floorEntry(end).getValue();
     }
 
-    public enum Car {
+    enum Car {
         SEDAN,
         SUV,
         TRUCK
