@@ -3,7 +3,7 @@ package Companies.Bloomberg;
 import java.util.HashMap;
 import java.util.Random;
 
-public class EncodeandDecodeTinyURL {
+public class EncodeAndDecodeTinyURL {
 
     private String ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private HashMap<String, String> map = new HashMap<>();

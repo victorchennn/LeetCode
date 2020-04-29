@@ -7,9 +7,10 @@ import java.util.Deque;
 
 public class FlattenMultilevelDoublyLinkedList {
     public Node flatten(Node head) {
-      if (head == null) return head;
-
-        Node pseudoHead = new Node(0, null, head, null);
+        if (head == null) {
+            return null;
+        }
+        Node pseudoHead = new Node(-1);
         Node curr, prev = pseudoHead;
 
         Deque<Node> stack = new ArrayDeque<>();
@@ -29,6 +30,28 @@ public class FlattenMultilevelDoublyLinkedList {
         }
         pseudoHead.next.prev = null;
         return pseudoHead.next;
+
+        /* may visit nodes twice */
+//        Node cur = head;
+//        while (cur != null) {
+//            if (cur.child == null) {
+//                cur = cur.next;
+//                continue;
+//            }
+//            Node tail = cur.child;
+//            while (tail.next != null) {
+//                tail = tail.next;
+//            }
+//            tail.next = cur.next;
+//            if (cur.next != null) {
+//                cur.next.prev = tail;
+//            }
+//            cur.next = cur.child;
+//            cur.child.prev = cur;
+//            cur.child = null;
+//            cur = cur.next;
+//        }
+//        return head;
 
 //        helper(head);
 //        return head;

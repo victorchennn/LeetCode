@@ -1,12 +1,13 @@
 package Companies.Bloomberg;
 
+import javafx.util.Pair;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 
 public class CandyCrush {
-
     public static String candyCrush(String s) {
-        Deque<Node> stack = new ArrayDeque<>();
+        Deque<Pair<Character, Integer>> stack = new ArrayDeque<>();
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             int count = 1;
@@ -14,19 +15,19 @@ public class CandyCrush {
                 count++;
                 i++;
             }
-            if (!stack.isEmpty() && stack.peek().c == c) {
-                count += stack.pop().count;
+            if (!stack.isEmpty() && stack.peek().getKey() == c) {
+                count += stack.pop().getValue();
             }
             if (count < 3) {
-                stack.push(new Node(c, count));
+                stack.push(new Pair<>(c, count));
             }
         }
 
         StringBuilder sb = new StringBuilder();
         while (!stack.isEmpty()) {
-            Node l = stack.pop();
-            for (int i = l.count; i > 0; i--) {
-                sb.insert(0, l.c);
+            Pair<Character, Integer> l = stack.pop();
+            for (int i = l.getValue(); i > 0; i--) {
+                sb.insert(0, l.getKey());
             }
         }
         return sb.toString();
@@ -88,16 +89,5 @@ public class CandyCrush {
         System.out.println(candyCrushII("aaabbbacd")); // cd
         System.out.println(candyCrush("abbbaaacaaabbba")); // ca
         System.out.println(candyCrushII("abbbaaacaaabbba")); // c
-    }
-
-
-    private static class Node {
-        char c;
-        int count;
-
-        public Node(char c, int count) {
-            this.c = c;
-            this.count = count;
-        }
     }
 }
