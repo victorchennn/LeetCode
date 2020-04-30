@@ -1,11 +1,11 @@
 package Topics.Design;
 
-public class DesignHashMap {
+public class MyHashMap {
     ListNode[] l;
     int size;
 
     /** Initialize your data structure here. */
-    public DesignHashMap() {
+    public MyHashMap() {
         l = new ListNode[1000];
         size = l.length;
     }

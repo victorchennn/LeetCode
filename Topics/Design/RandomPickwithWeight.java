@@ -6,9 +6,9 @@ import java.util.Random;
 
 public class RandomPickwithWeight {
 
-    List<Integer> l;
-    int limit = 0;
-    Random rand = new Random();
+    private List<Integer> l;
+    private int limit = 0;
+    private Random rand = new Random();
 
     public RandomPickwithWeight(int[] w) {
         l = new ArrayList<>();

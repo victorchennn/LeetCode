@@ -1,4 +1,4 @@
-package Topics.Design;
+package Companies.Bloomberg;
 
 import java.util.ArrayList;
 import java.util.List;

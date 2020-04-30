@@ -15,6 +15,26 @@ public class TwoSum {
         throw new IllegalArgumentException("..");
     }
 
+    /**
+     * Two byte arrays(only in range [0, 2^8-1]), need to consider overflow error.
+     * java byte is in range [-128,127]
+     */
+    public int[] twoArraySum(int[] nums1, int[] nums2, int target) {
+        boolean[] exists = new boolean[256];
+        for (int num : nums1) {
+            exists[num] = true;
+        }
+        for (int num : nums2) {
+            if (target - num < 0) {
+                continue;
+            }
+            if (exists[target - num]) {
+                return new int[]{num, target-num};
+            }
+        }
+        return new int[]{-1, -1};
+    }
+
     /** Sorted */
     public int[] twoSumII(int[] numbers, int target) {
         int l = 0, r = numbers.length-1;

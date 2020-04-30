@@ -2,7 +2,7 @@ package Companies.Amazon;
 
 import java.util.PriorityQueue;
 
-public class TrappingRainWater {
+public class TrappingRainWaterII {
     private int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
 
     public int trapRainWater(int[][] heightMap) {

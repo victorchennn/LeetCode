@@ -4,15 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class RandomPickWithWeight {
+public class RandomPickwithWeight {
 
-    List<Integer> l;
-    int limit;
-    Random rand;
+    private List<Integer> l;
+    private int limit = 0;
+    private Random rand = new Random();
 
-    public RandomPickWithWeight(int[] w) {
-        limit = 0;
-        rand = new Random();
+    public RandomPickwithWeight(int[] w) {
         l = new ArrayList<>();
         for (int i : w) {
             limit += i;
@@ -22,15 +20,15 @@ public class RandomPickWithWeight {
 
     public int pickIndex() {
         int target = rand.nextInt(limit);
-        int low = 0, r = l.size();
-        while (low < r) {
-            int mid = (low+r)/2;
+        int le = 0, r = l.size();
+        while (le < r) {
+            int mid = le + (r-le)/2;
             if (target >= l.get(mid)) {
-                low = mid+1;
+                le = mid+1;
             } else {
                 r = mid;
             }
         }
-        return low;
+        return le;
     }
 }
