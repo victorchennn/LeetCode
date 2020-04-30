@@ -37,6 +37,28 @@ public class ParenthesesMinimumRemovetoMakeValid {
     }
 
     public String minRemoveToMakeValidII(String s) {
+        int openCloseCount = 0, close = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == ')') {
+                close++;
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (char c: s.toCharArray()) {
+            if (c == '(') {
+                if (openCloseCount == close) continue;
+                openCloseCount++;
+            } else if (c == ')') {
+                close--;
+                if (openCloseCount == 0) continue;
+                openCloseCount--;
+            }
+            sb.append(c);
+        }
+        return sb.toString();
+    }
+
+    public String minRemoveToMakeValidIII(String s) {
         char[] ch = s.toCharArray();
         Stack<Integer> stack = new Stack<>();
         for (int i = 0; i < ch.length; i++) {

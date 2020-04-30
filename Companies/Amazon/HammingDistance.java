@@ -1,5 +1,9 @@
 package Companies.Amazon;
 
+/**
+ * Hamming distance between two strings of equal length is the number of positions
+ * at which the corresponding symbols are different, exp: 1011101 and 1001001 is 2.
+ */
 public class HammingDistance {
     public int hammingDistance(int x, int y) {
 //        return Integer.bitCount(x^y); // count number of bit '1'

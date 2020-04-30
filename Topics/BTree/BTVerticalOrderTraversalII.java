@@ -9,15 +9,13 @@ import java.util.*;
  * is the value that is smaller.
  */
 public class BTVerticalOrderTraversalII {
-    private List<Location> l;
-
     public List<List<Integer>> verticalTraversal(TreeNode root) {
         List<List<Integer>> re = new ArrayList<>();
         if (root == null) {
             return re;
         }
-        l = new ArrayList<>();
-        dfs(root, 0, 0);
+        List<Location> l = new ArrayList<>();
+        dfs(l, root, 0, 0);
         Collections.sort(l);
         int i = l.get(0).x;
         re.add(new ArrayList<>());
@@ -31,12 +29,11 @@ public class BTVerticalOrderTraversalII {
         return re;
     }
 
-
-    private void dfs(TreeNode root, int x, int y) {
+    private void dfs(List<Location> l, TreeNode root, int x, int y) {
         if (root != null) {
             l.add(new Location(x, y, root.val));
-            dfs(root.left, x-1, y+1);
-            dfs(root.right, x+1, y+1);
+            dfs(l, root.left, x-1, y+1);
+            dfs(l, root.right, x+1, y+1);
         }
     }
 

@@ -6,7 +6,7 @@ import javafx.util.Pair;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-public class BTSumRoottoLeafNumbers {
+public class BTRootToLeafNumbersSum {
     public int sumNumbers(TreeNode root) {
 //        int sum = 0;
 //        Deque<Pair<TreeNode, Integer>> q = new ArrayDeque<>();

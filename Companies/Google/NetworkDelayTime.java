@@ -2,6 +2,9 @@ package Companies.Google;
 
 import java.util.*;
 
+/**
+ * Dijkstra's algorithm
+ */
 public class NetworkDelayTime {
     public int networkDelayTime(int[][] times, int N, int K) {
         Map<Integer, List<int[]>> m = new HashMap<>();
