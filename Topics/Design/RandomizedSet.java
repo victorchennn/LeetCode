@@ -3,10 +3,9 @@ package Topics.Design;
 import java.util.*;
 
 public class RandomizedSet {
-
-    List<Integer> l = new ArrayList<>();
-    Map<Integer, Integer> m = new HashMap<>(); // value, position
-    Random rand = new Random();
+    private List<Integer> l = new ArrayList<>();
+    private Map<Integer, Integer> m = new HashMap<>(); // value, position
+    private Random rand = new Random();
 
     /** Insert-Delete-GetRandom O(1). */
     public RandomizedSet() {

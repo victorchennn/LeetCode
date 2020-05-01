@@ -1,9 +1,9 @@
 package Topics.Design;
 
 public class MovingAverage {
-    int[] nums;
-    double sum = 0;
-    int count = 0, p = 0;
+    private int[] nums;
+    private double sum = 0;
+    private int count = 0, p = 0;
 
     /** Initialize your data structure here. */
     public MovingAverage(int size) {

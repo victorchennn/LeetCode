@@ -4,8 +4,8 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 public class HitCounter {
-    Deque<int[]> q;
-    int size;
+    private Deque<int[]> q;
+    private int size;
 
     /** Initialize your data structure here. */
     public HitCounter() {

@@ -3,13 +3,20 @@ package Companies.Bloomberg;
 import java.util.Stack;
 
 /**
- * Follow-up:
+ * @Follow-up1:
+ * What if the string contains other characters?
+ * Add one more if statement, simply ignore those characters.
+ *
+ * @Follow-up2:
  * What if we add single quotations marks?
  *
  * Input: {'}' -> Output: false
  * Explanation: Because we only have 1 quotation after bracket.
  *
  * I guess if we consider ' as another type of closing bracket, everything else is same.
+ *
+ * @Follow-up3:
+ * What if there are 'X's, which can replace any of the bracket.
  */
 public class ParenthesesValid {
     public boolean isValid(String s) {
@@ -25,9 +32,29 @@ public class ParenthesesValid {
                 if (stack.isEmpty() || stack.pop() != c) {
                     return false;
                 }
+                /* What if contains other characters? */
+//                if (c == ')' || c == '}' || c == ']') {
+//                    if (stack.isEmpty() || stack.pop() != c) {
+//                        return false;
+//                    }
+//                }
             }
         }
         return stack.isEmpty(); // !!!
+    }
+
+    public boolean isValidII(String s) {
+        char[] ch = s.toCharArray();
+        int top = -1;
+        for (int i = 0; i < s.length(); i++) {
+            if (top < 0 || !isMatching(ch[top], ch[i])) {
+                top++;
+                ch[top] = ch[i];
+            } else {
+                top--;
+            }
+        }
+        return top == -1;
     }
 
     /**

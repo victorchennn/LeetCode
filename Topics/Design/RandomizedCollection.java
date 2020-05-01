@@ -3,9 +3,9 @@ package Topics.Design;
 import java.util.*;
 
 public class RandomizedCollection {
-    Map<Integer, Set<Integer>> map;
-    List<Integer> list;
-    Random rand;
+    private Map<Integer, Set<Integer>> map;
+    private List<Integer> list;
+    private Random rand;
 
     /**  Duplicates allowed . */
     public RandomizedCollection() {

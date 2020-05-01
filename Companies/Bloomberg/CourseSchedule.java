@@ -5,7 +5,7 @@ import java.util.*;
 public class CourseSchedule {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
         int[] nums = new int[numCourses]; // how many prerequisites
-        Map<Integer, List<Integer>> m = new HashMap<>(); // courses after key
+        Map<Integer, List<Integer>> m = new HashMap<>(); // <key, courses after key>
         for (int[] pre : prerequisites) {
             nums[pre[0]]++;
             m.computeIfAbsent(pre[1], k->new ArrayList<>()).add(pre[0]);

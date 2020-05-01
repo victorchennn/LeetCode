@@ -16,6 +16,20 @@ import java.util.*;
  */
 public class UDP {
     public void udp(List<Stream> l) {
+        Map<Integer, Stream> m = new HashMap<>();
+        int index = 1;
+        for (Stream s : l) {
+            m.put(s.index, s);
+            while (m.containsKey(index)) {
+                System.out.print(m.get(index).content + " ");
+                m.remove(index);
+                index++;
+            }
+            System.out.println();
+        }
+    }
+
+    public void udpII(List<Stream> l) {
         TreeMap<Integer, String> m = new TreeMap<>();
         int index = 1;
         for (Stream s : l) {
@@ -35,6 +49,13 @@ public class UDP {
                 new Stream(5, "e"), new Stream(3, "c")));
 
         test.udp(Arrays.asList(new Stream(1, "a"),
+                new Stream(2, "b"), new Stream(4, "d")));
+
+        test.udpII(Arrays.asList(new Stream(1, "a"),
+                new Stream(2, "b"), new Stream(4, "d"),
+                new Stream(5, "e"), new Stream(3, "c")));
+
+        test.udpII(Arrays.asList(new Stream(1, "a"),
                 new Stream(2, "b"), new Stream(4, "d")));
     }
 
