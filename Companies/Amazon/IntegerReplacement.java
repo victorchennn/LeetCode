@@ -1,6 +1,8 @@
 package Companies.Amazon;
 
 /**
+ * Minimum steps to 1
+ *
  * When n is odd it can be written as n = 2k+1.
  * That is, n+1 = 2k+2 and n-1 = 2k. Then, (n+1)/2 = k+1 and (n-1)/2 = k.
  * So one of (n+1)/2 and (n-1)/2 is even, the other is odd. And the "best" case of this problem

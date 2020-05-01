@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class FindAllAnagramsinString {
+public class AnagramsFindAllinString {
     public List<Integer> findAnagrams(String s, String p) {
         if (s.length() < p.length()) {
             return new ArrayList<>();

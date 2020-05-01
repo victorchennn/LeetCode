@@ -76,6 +76,6 @@ public class FlattenMultilevelDoublyLinkedList {
         node.next = node.child;
         node.child.prev = node;
         node.child = null;
-        return helper(node.next);
+        return helper(tail);
     }
 }

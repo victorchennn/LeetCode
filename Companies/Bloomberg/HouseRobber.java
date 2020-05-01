@@ -2,8 +2,10 @@ package Companies.Bloomberg;
 
 import Libs.TreeNode;
 
+import java.util.Arrays;
+
 public class HouseRobber {
-    public int robI(int[] nums) {
+    public int robI1(int[] nums) {
         int cur = 0, prev = 0;
         for (int num : nums) {
             int temp = cur;
@@ -11,6 +13,24 @@ public class HouseRobber {
             prev = temp;
         }
         return cur;
+    }
+
+    public int robI2(int[] nums) {
+        int[] memo = new int[nums.length + 1];
+        Arrays.fill(memo, -1);
+        return rob(memo, nums, nums.length - 1);
+    }
+
+    private int rob(int[] memo, int[] nums, int i) {
+        if (i < 0) {
+            return 0;
+        }
+        if (memo[i] >= 0) {
+            return memo[i];
+        }
+        int result = Math.max(rob(memo, nums, i - 2) + nums[i], rob(memo, nums, i - 1));
+        memo[i] = result;
+        return result;
     }
 
     /* Cycle */

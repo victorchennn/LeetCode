@@ -2,7 +2,7 @@ package Companies.Bloomberg;
 
 import java.util.*;
 
-public class GroupAnagrams {
+public class AnagramsGroup {
     /**
      * Time Complexity: O(NKlogK)
      * N is the length of strs

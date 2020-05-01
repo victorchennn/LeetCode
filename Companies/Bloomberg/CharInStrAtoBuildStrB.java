@@ -1,6 +1,6 @@
 package Companies.Bloomberg;
 
-public class UseCharInStrAtoBuildStrB {
+public class CharInStrAtoBuildStrB {
     public static boolean ifAva(String a, String b) {
         if (a.length() < b.length()) {
             return false;
