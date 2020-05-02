@@ -24,7 +24,7 @@ public class AllPathsFromSourcetoTarget {
 
     }
 
-    private static List<List<Character>> getPossibleRoutes(char[][] chars, char start, char end) {
+    public static List<List<Character>> getPossibleRoutes(char[][] chars, char start, char end) {
         Map<Character, Set<Character>> map = new HashMap<>();
         for(char[] cs : chars) {
             map.putIfAbsent(cs[0], new HashSet<>());

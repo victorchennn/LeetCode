@@ -2,6 +2,14 @@ package Topics.Design;
 
 import java.util.Stack;
 
+/**
+ * Time Complexity: O(1)
+ * Space Complexity: O(N)
+ * Single stack need O(2*N) space, add a minstack can help reduce the space, but if
+ * there are multiple same min existing, can push freq also as int[] pair to minstack.
+ *
+ * If need popMin(), see @MaxStack use treemap to make a balance.
+ */
 public class MinStack {
     private Stack<int[]> s = new Stack<>();
 
