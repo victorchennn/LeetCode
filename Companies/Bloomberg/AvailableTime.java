@@ -2,6 +2,13 @@ package Companies.Bloomberg;
 
 import java.util.*;
 
+/**
+ * @see EmployeeFreeTime
+ * @see MeetingRooms
+ * @see MergeIntervals
+ * @see NonoverlappingIntervals
+ * @see RemoveArrayElementsinGivenIndexRanges
+ */
 public class AvailableTime {
     public static List<Interval> availableTime(List<Interval> l) {
         if (l == null || l.size() == 0) {

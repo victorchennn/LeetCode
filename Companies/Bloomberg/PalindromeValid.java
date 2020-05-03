@@ -1,7 +1,7 @@
 package Companies.Bloomberg;
 
 /**
- * @Follow-up: may delete at most one character?
+ * @Follow-up: allow to delete at most one character?
  */
 public class PalindromeValid {
     public boolean isPalindrome(String s) {

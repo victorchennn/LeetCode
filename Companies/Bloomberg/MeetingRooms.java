@@ -5,6 +5,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.PriorityQueue;
 
+/**
+ * @see AvailableTime
+ * @see EmployeeFreeTime
+ * @see MergeIntervals
+ * @see NonoverlappingIntervals
+ * @see RemoveArrayElementsinGivenIndexRanges
+ */
 public class MeetingRooms {
     public boolean canAttendMeetings(int[][] intervals) {
         Arrays.sort(intervals, (a, b)->a[0]-b[0]);

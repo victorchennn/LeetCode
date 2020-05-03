@@ -8,7 +8,13 @@ import java.util.Queue;
  * @see IslandPerimeter
  *
  * @Follow-up2: maximal area island?
- * @see MaxAreaofIsland
+ * @see MaximalAreaofIsland
+ *
+ * @Follow-up3: number of distinct islands?
+ * @see NumberofDistinctIslands
+ *
+ * @Follow-up4: dynamically print number of islands?
+ * @see NumberofIslandsII
  */
 public class NumberofIslands {
     private static int[][] dirs = {{0,-1},{-1,0},{0,1},{1,0}};

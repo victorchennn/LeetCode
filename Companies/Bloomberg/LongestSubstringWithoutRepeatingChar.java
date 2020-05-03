@@ -3,7 +3,6 @@ package Companies.Bloomberg;
 import java.util.*;
 
 public class LongestSubstringWithoutRepeatingChar {
-
     /**
      * Input: "abcabcbb"
      * Output: 3

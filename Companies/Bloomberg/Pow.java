@@ -1,5 +1,8 @@
 package Companies.Bloomberg;
 
+/**
+ * @see Sqrt
+ */
 public class Pow {
     public double myPow(double x, int n) {
         long N = n;

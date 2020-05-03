@@ -3,6 +3,8 @@ package Companies.Bloomberg;
 /**
  * '?' Matches any single character.
  * '*' Matches any sequence of characters (including the empty sequence).
+ *
+ * @see RegularExpressionMatching
  */
 public class WildcardMatching {
     public boolean isMatch(String s, String p) {

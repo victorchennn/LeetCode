@@ -8,6 +8,12 @@ import java.util.PriorityQueue;
 /**
  * N is the number of employees
  * C is the number of jobs across all employees
+ *
+ * @see AvailableTime
+ * @see MeetingRooms
+ * @see MergeIntervals
+ * @see NonoverlappingIntervals
+ * @see RemoveArrayElementsinGivenIndexRanges
  */
 public class EmployeeFreeTime {
     /**

@@ -1,6 +1,9 @@
 package Companies.Bloomberg;
 
-public class LongestSubstringPalindromic {
+/**
+ * find longest palindromic substring
+ */
+public class PalindromeLongestSubstring {
     public String longestPalindrome(String s) {
         int len = s.length();
         if (len == 0) {

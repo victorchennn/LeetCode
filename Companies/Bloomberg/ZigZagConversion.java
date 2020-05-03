@@ -1,7 +1,5 @@
 package Companies.Bloomberg;
 
-import java.util.Arrays;
-
 public class ZigZagConversion {
     public String convert(String s, int numRows) {
         char[] c = s.toCharArray();
@@ -23,10 +21,5 @@ public class ZigZagConversion {
             sbs[0].append(sbs[row]);
         }
         return sbs[0].toString();
-    }
-
-    public static void main(String...args) {
-        ZigZagConversion test = new ZigZagConversion();
-        test.convert("PAYPALISHIRING", 3);
     }
 }

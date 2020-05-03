@@ -2,6 +2,9 @@ package Companies.Bloomberg;
 
 import Libs.ListNode;
 
+/**
+ * @see MergeFile
+ */
 public class MergeKSortedLists {
     public ListNode mergeKLists(ListNode[] lists) {
         if (lists.length == 0) {

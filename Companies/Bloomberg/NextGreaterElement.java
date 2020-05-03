@@ -50,6 +50,7 @@ public class NextGreaterElement {
     /**
      * Input:  5349876
      * Output: 5364789
+     * @see NextPermutation
      */
     public int nextGreaterElement(int n) {
         char[] num = String.valueOf(n).toCharArray();

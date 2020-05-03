@@ -1,6 +1,9 @@
 package Companies.Bloomberg;
 
-public class LongestPalindromicSubsequence {
+/**
+ * find longest palindromic subsequence
+ */
+public class PalindromeLongestSubsequence {
     public int longestPalindromeSubseq(String s) {
         int len = s.length();
         int[][] dp = new int[len][len];

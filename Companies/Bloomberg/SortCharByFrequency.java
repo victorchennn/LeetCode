@@ -2,6 +2,9 @@ package Companies.Bloomberg;
 
 import java.util.*;
 
+/**
+ * @see FindMostFrequentCharinStr
+ */
 public class SortCharByFrequency {
     public String frequencySort(String s) {
         Map<Character, Integer> m = new HashMap<>();

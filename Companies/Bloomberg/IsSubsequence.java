@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * @see CharInStrAtoBuildStrB
+ */
 public class IsSubsequence {
     public boolean isSubsequence(String s, String t) {
          if (s.length() == 0) {

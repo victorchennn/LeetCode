@@ -2,6 +2,13 @@ package Companies.Bloomberg;
 
 import java.util.Arrays;
 
+/**
+ * @see AvailableTime
+ * @see EmployeeFreeTime
+ * @see MeetingRooms
+ * @see MergeIntervals
+ * @see RemoveArrayElementsinGivenIndexRanges
+ */
 public class NonoverlappingIntervals {
     public int eraseOverlapIntervals(int[][] intervals) {
         int count = 0;

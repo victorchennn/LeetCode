@@ -12,7 +12,7 @@ public class MaximumSubarraySum {
         return max;
     }
 
-    public int maxSubArray_II(int[] nums) {
+    public int maxSubArrayII(int[] nums) {
         int max = Integer.MIN_VALUE, sum = 0;
         for (int num : nums) {
             sum = Math.max(sum+num, num);

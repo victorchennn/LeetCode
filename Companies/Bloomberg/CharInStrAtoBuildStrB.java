@@ -1,7 +1,9 @@
 package Companies.Bloomberg;
 
 /**
- * If it's available to use char in String a to build string b?
+ * use char in String a to build string b?
+ *
+ * @see IsSubsequence
  */
 public class CharInStrAtoBuildStrB {
     public static boolean ifAva(String a, String b) {

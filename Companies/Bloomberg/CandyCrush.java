@@ -5,6 +5,9 @@ import javafx.util.Pair;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+/**
+ * @see RemoveAllAdjacentDuplicatesInString
+ */
 public class CandyCrush {
     public static String candyCrush(String s) {
         Deque<Pair<Character, Integer>> stack = new ArrayDeque<>();
@@ -33,7 +36,9 @@ public class CandyCrush {
         return sb.toString();
     }
 
-    /* @Follow-up: ask for shortest string */
+    /**
+     * @Follow-up: ask for shortest string
+     */
     public static String candyCrushII(String s) {
         String forward = helper(s, false);
         String backward = helper(s, true);

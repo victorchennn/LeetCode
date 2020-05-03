@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
+/**
+ * @see NextGreaterElement
+ */
 public class LastGreaterElement {
     private TreeMap<Integer, Integer> m;
     private List<Integer> l;

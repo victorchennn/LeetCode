@@ -1,5 +1,8 @@
 package Companies.Bloomberg;
 
+/**
+ * @see Pow
+ */
 public class Sqrt {
 
     /**

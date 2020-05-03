@@ -1,5 +1,8 @@
 package Companies.Bloomberg;
 
+/**
+ * @see SortCharByFrequency
+ */
 public class FindMostFrequentCharinStr {
     public static char find(String s) {
         int[] count = new int[26];

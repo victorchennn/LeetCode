@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @see AvailableTime
+ * @see EmployeeFreeTime
+ * @see MeetingRooms
+ * @see MergeIntervals
+ * @see NonoverlappingIntervals
+ */
 public class RemoveArrayElementsinGivenIndexRanges {
     public int[] remove(int[] nums, int[][] intervals) {
         Arrays.sort(intervals, (a,b)->a[0]-b[0]);

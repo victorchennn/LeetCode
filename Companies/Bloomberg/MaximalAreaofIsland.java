@@ -1,6 +1,6 @@
 package Companies.Bloomberg;
 
-public class MaxAreaofIsland {
+public class MaximalAreaofIsland {
     private int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
 
     public int maxAreaOfIsland(int[][] grid) {
