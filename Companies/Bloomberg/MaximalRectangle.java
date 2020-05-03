@@ -1,15 +1,14 @@
 package Companies.Bloomberg;
 
+/**
+ * Input:
+ * [["1","0","1","0","0"],
+ *  ["1","0","1","1","1"],
+ *  ["1","1","1","1","1"],
+ *  ["1","0","0","1","0"]]
+ * Output: 6
+ */
 public class MaximalRectangle {
-
-    /**
-     * Input:
-     * [["1","0","1","0","0"],
-     *  ["1","0","1","1","1"],
-     *  ["1","1","1","1","1"],
-     *  ["1","0","0","1","0"]]
-     * Output: 6
-     */
     public int maximalRectangle(char[][] matrix) {
         if (matrix.length == 0 || matrix[0].length == 0) {
             return 0;

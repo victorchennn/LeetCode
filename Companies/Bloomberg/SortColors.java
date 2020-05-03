@@ -1,7 +1,6 @@
 package Companies.Bloomberg;
 
 public class SortColors {
-
     public void sortColors(int[] nums) {
         int l = 0, r = nums.length-1, p = 0;
         while (p <= r) {

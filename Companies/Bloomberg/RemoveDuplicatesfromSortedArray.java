@@ -11,9 +11,7 @@ public class RemoveDuplicatesfromSortedArray {
         return i;
     }
 
-    /**
-     * duplicates appeared at most twice
-     */
+    /* duplicates appeared at most twice */
     public int removeDuplicatesII(int[] nums) {
         int i = 0;
         for (int num : nums) {

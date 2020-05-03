@@ -28,7 +28,7 @@ public class SearchinRotatedSortedArray {
     }
 
     /**
-     * follow up: Descending order then ascending order
+     * @Follow-up: Descending order then ascending order
      */
     private static int searchII(int[] nums, int target) {
         int l = 0, r = nums.length-1;

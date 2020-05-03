@@ -1,5 +1,8 @@
 package Companies.Bloomberg;
 
+/**
+ * If it's available to use char in String a to build string b?
+ */
 public class CharInStrAtoBuildStrB {
     public static boolean ifAva(String a, String b) {
         if (a.length() < b.length()) {

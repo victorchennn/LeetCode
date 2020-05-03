@@ -58,7 +58,7 @@ public class ParenthesesValid {
     }
 
     /**
-     * Follow up.
+     * @Follow-up:
      * Using 'X' to replace any of the bracket.
      */
     private static boolean isBalanced(String s, Stack<Character> stack, int index) {

@@ -1,18 +1,17 @@
 package Companies.Bloomberg;
 
-import java.util.*;
-
+/**
+ *  Input: n = 9
+ *  1 2 3 4 5 6 7 8 9 (10)
+ *  2 4 6 8 (10)
+ *  2 6
+ *  6
+ *
+ *  Output: 6
+ *
+ *  @see JosephProblem
+ */
 public class EliminationGame {
-
-    /**
-     *  Input: n = 9
-     *  1 2 3 4 5 6 7 8 9 (10)
-     *  2 4 6 8 (10)
-     *  2 6
-     *  6
-     *
-     *  Output: 6
-     */
     public int lastRemaining(int n) {
         boolean left = true;
         int head = 1, step = 1;

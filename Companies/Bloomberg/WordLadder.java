@@ -2,13 +2,12 @@ package Companies.Bloomberg;
 
 import java.util.*;
 
+/**
+ * O(M×N)
+ * M is the length of words
+ * N is the total number of words in the input word list.
+ */
 public class WordLadder {
-
-    /**
-     * O(M×N)
-     * M is the length of words and
-     * N is the total number of words in the input word list.
-     */
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
         Set<String> set = new HashSet<>(wordList);
         int len = beginWord.length(), step = 1;

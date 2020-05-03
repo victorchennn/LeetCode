@@ -1,7 +1,6 @@
 package Companies.Bloomberg;
 
 public class IslandPerimeter {
-
     /**
      * Each square has 4 sides, 'neighbor' counts right and down side square, if exists,
      * will reduce two sides, one is mine and the other one is his, like my right side and

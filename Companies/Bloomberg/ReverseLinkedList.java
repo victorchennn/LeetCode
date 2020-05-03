@@ -3,7 +3,6 @@ package Companies.Bloomberg;
 import Libs.ListNode;
 
 public class ReverseLinkedList {
-
     /* Iterative */
     public ListNode reverseList(ListNode head) {
         ListNode re = null;

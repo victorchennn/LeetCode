@@ -13,6 +13,4 @@ public class FindPeakElement {
         }
         return l;
     }
-
-
 }

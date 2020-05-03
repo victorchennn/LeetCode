@@ -3,7 +3,6 @@ package Companies.Bloomberg;
 import java.util.Arrays;
 
 public class MaximumLengthofPairChain {
-
     /** Greedy, O(NlogN) */
     public int findLongestChain(int[][] pairs) {
         Arrays.sort(pairs, (a, b)->a[1]-b[1]);

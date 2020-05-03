@@ -3,7 +3,10 @@ package Companies.Bloomberg;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MinimumNumberofStepstoMakeTwoStringsAnagram {
+/**
+ * minimum number of steps to make two Strings Anagram
+ */
+public class AnagramsMinimumNumberofStepstoMakeTwoStrings {
     public static int minSteps(String s, String t) {
         Map<Character, Integer> m = new HashMap<>();
         for (char c : s.toCharArray()) {

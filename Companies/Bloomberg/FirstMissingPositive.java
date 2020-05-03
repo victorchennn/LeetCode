@@ -1,11 +1,10 @@
 package Companies.Bloomberg;
 
+/**
+ * Input: [3,4,-1,1]
+ * Output: 2
+ */
 public class FirstMissingPositive {
-
-    /**
-     * Input: [3,4,-1,1]
-     * Output: 2
-     */
     public int firstMissingPositive(int[] nums) {
         int i = 0;
         while (i < nums.length) {

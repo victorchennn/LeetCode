@@ -51,7 +51,9 @@ public class MeetingRooms {
         return q.size();
     }
 
-    /* Follow-up: Assign room index to each interval */
+    /**
+     * @Follow-up: Assign room index to each interval
+     */
     public static List<List<int[]>> minMeetingRoomsIII(int[][] intervals) {
         List<List<int[]>> re = new ArrayList<>();
         if (intervals == null || intervals.length == 0)

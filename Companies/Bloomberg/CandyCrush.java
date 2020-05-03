@@ -33,7 +33,7 @@ public class CandyCrush {
         return sb.toString();
     }
 
-    /* Follow up: ask for shortest string */
+    /* @Follow-up: ask for shortest string */
     public static String candyCrushII(String s) {
         String forward = helper(s, false);
         String backward = helper(s, true);

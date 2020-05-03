@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * Follow up: What if the BST is modified (insert/delete operations) often and
- *            you need to find the kth smallest frequently?
+ * @Follow-up:
+ * What if the BST is modified (insert/delete operations) often and you need to
+ * find the kth smallest frequently?
  *
  * Let's use here the same logic as for LRU cache design, and combine an indexing structure
  * (we could keep BST here) with a double linkedlist.

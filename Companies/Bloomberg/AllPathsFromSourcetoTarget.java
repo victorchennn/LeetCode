@@ -24,6 +24,9 @@ public class AllPathsFromSourcetoTarget {
 
     }
 
+    /**
+     * @see ReconstructItinerary
+     */
     public static List<List<Character>> getPossibleRoutes(char[][] chars, char start, char end) {
         Map<Character, Set<Character>> map = new HashMap<>();
         for(char[] cs : chars) {

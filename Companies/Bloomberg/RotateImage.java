@@ -1,12 +1,11 @@
 package Companies.Bloomberg;
 
+/**
+ *      (i, len-1-j)
+ * (j,i)           (len-1-j, len-1-i)
+ *      (len-1-i, j)
+ */
 public class RotateImage {
-
-    /**
-     *      (i, len-1-j)
-     * (j,i)           (len-1-j, len-1-i)
-     *      (len-1-i, j)
-     */
     public void rotate(int[][] matrix) {
         int len = matrix.length;
         for (int i = 0; i < len/2; i++) {

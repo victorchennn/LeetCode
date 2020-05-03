@@ -3,12 +3,11 @@ package Companies.Bloomberg;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * The expression string may contain open '(' and closing parentheses ')',
+ * plus '+' or minus '-', non-negative integers and empty spaces .
+ */
 public class BasicCalculator {
-
-    /**
-     * The expression string may contain open ( and closing parentheses ),
-     * the plus + or minus sign -, non-negative integers and empty spaces .
-     */
     public int calculate(String s) {
         Queue<Character> q = new LinkedList<>();
         for (char c : s.toCharArray()) {

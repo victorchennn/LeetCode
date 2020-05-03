@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+/**
+ * @see LastGreaterElement
+ */
 public class NextGreaterElement {
     public int[] nextGreaterElement(int[] nums1, int[] nums2) {
         Map<Integer, Integer> m = new HashMap<>();

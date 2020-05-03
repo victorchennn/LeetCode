@@ -1,5 +1,8 @@
 package Companies.Bloomberg;
 
+/**
+ * @see RomanToInteger
+ */
 public class IntegerToRoman {
     public String intToRoman(int num) {
         String[] M = {"", "M", "MM", "MMM"};

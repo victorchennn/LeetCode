@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @see Triangle
+ */
 public class PascalsTriangle {
     /* Iteration */
     public List<List<Integer>> generate(int numRows) {

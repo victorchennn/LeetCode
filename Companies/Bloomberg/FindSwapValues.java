@@ -3,6 +3,9 @@ package Companies.Bloomberg;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Swap value to make two arrays sum equal
+ */
 public class FindSwapValues {
     public static int[] findSwapValues(int[] a, int[] b) {
         if (a.length > b.length) {

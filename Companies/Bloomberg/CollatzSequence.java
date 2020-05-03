@@ -1,5 +1,9 @@
 package Companies.Bloomberg;
 
+/**
+ * n: odd -> 3n+1, even -> n/2
+ * find number of steps to 1
+ */
 public class CollatzSequence {
     public static int printCollatz(int n) {
         int step = 1;

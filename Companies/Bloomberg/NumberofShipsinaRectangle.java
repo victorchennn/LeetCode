@@ -1,7 +1,6 @@
 package Companies.Bloomberg;
 
 public class NumberofShipsinaRectangle {
-
     /** T(n) = 4*T(n/4) + O(1) = O(N) */
     public int countShips(Sea sea, int[] topRight, int[] bottomLeft) {
         if (!sea.hasShips(topRight, bottomLeft)) {

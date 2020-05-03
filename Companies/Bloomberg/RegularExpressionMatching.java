@@ -1,5 +1,8 @@
 package Companies.Bloomberg;
 
+/**
+ * @see WildcardMatching
+ */
 public class RegularExpressionMatching {
     public boolean isMatch(String s, String p) {
         if (s == null || p == null) {

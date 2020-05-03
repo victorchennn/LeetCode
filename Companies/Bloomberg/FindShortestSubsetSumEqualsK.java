@@ -3,7 +3,7 @@ package Companies.Bloomberg;
 import java.util.Arrays;
 
 /**
- * Coin Change problem
+ * @see CoinChange
  */
 public class FindShortestSubsetSumEqualsK {
     public static int find(int[] nums, int K) {

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FindtheDuplicateNumber {
-
     public int findDuplicate(int[] nums) {
         int slow = nums[0], fast = nums[0];
         do {

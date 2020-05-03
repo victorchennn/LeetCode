@@ -8,6 +8,8 @@ import java.util.List;
  *  Input: n = 9, k = 2, Output: 3
  *  1 2 3 4 5 6 7 8 9
  *  2->4->6->8->1->5->9->7->3
+ *
+ *  @see EliminationGame
  */
 public class JosephProblem {
     private static int josephus(int n, int k) {

@@ -1,12 +1,12 @@
 package Companies.Bloomberg;
 
+/**
+ * number of ways to form a string
+ * Input: "226"
+ * Output: 3
+ * Explanation: It could be decoded as "BZ" (2 26), "VF" (22 6), or "BBF" (2 2 6).
+ */
 public class DecodeWays {
-
-    /**
-     * Input: "226"
-     * Output: 3
-     * Explanation: It could be decoded as "BZ" (2 26), "VF" (22 6), or "BBF" (2 2 6).
-     */
     public int numDecodings(String s) {
         if (s.length() == 0 || s.startsWith("0")) {
             return 0;

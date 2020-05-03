@@ -3,7 +3,7 @@ package Companies.Bloomberg;
 import java.util.*;
 
 /**
- * Follow up:
+ * @Follow-up:
  * 1. What if the given array is already sorted? How would you optimize your algorithm?
  *    The sorting way, it will give us linear time and constant memory complexity.
  *

@@ -1,12 +1,11 @@
 package Companies.Bloomberg;
 
+/**
+ * Input: [9,4,2,10,7,8,8,1,9]
+ * Output: 5
+ * Explanation: (A[1] > A[2] < A[3] > A[4] < A[5])
+ */
 public class LongestTurbulentSubarray {
-
-    /**
-     * Input: [9,4,2,10,7,8,8,1,9]
-     * Output: 5
-     * Explanation: (A[1] > A[2] < A[3] > A[4] < A[5])
-     */
     public int maxTurbulenceSize(int[] A) {
         int up = 1, down = 1, re = 1;
         for (int i = 1; i < A.length; i++) {

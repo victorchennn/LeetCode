@@ -3,12 +3,12 @@ package Companies.Bloomberg;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * find all words in the board.
+ */
 public class WordSearchII {
     private int[][] dirs = {{0,1}, {0,-1}, {-1,0}, {1, 0}};
 
-    /**
-     * find all words in the board.
-     */
     public List<String> findWords(char[][] board, String[] words) {
         List<String> re = new ArrayList<>();
         TrieNode root = createTrie(words);

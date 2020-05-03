@@ -3,7 +3,6 @@ package Companies.Bloomberg;
 import java.util.Arrays;
 
 public class CoinChange {
-
     /**
      * fewest number of coins
      * Input: coins = [1, 2, 5], amount = 11
