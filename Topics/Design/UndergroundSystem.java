@@ -5,18 +5,17 @@ import javafx.util.Pair;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Space Complexity O(P+S^2),
+ * S is the number of stations on the network,
+ * P is the number of passengers making a journey concurrently during peak time.
+ * Size of CheckInMap O(P)
+ * Size of CheckOutMap O(S^2), every possible pair of the stations.
+ */
 public class UndergroundSystem {
     private Map<Integer, Pair<String, Integer>> checkInMap = new HashMap<>();
     private Map<String, Pair<Integer, Integer>> checkOutMap = new HashMap<>();
 
-
-    /**
-     * Space Complexity O(P+S^2),
-     * S is the number of stations on the network,
-     * P is the number of passengers making a journey concurrently during peak time.
-     * Size of CheckInMap O(P)
-     * Size of CheckOutMap O(S^2), every possible pair of the stations.
-     * */
     public UndergroundSystem() {
 
     }

@@ -4,7 +4,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * Follow up: sum of perimeter of islands?
+ * Follow up1: sum of perimeter of islands?
+ *
+ * Follow up2: maximal area island? see @MaxAreaofIsland
  */
 public class NumberofIslands {
     private static int[][] dirs = {{0,-1},{-1,0},{0,1},{1,0}};
