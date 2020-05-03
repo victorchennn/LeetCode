@@ -1,4 +1,4 @@
-package Topics.BinarySearch;
+package Topics.Binary;
 
 public class SearchinRotatedSortedArray {
     public int search(int[] nums, int target) {

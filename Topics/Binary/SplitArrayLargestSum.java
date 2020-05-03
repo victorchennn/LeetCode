@@ -1,4 +1,4 @@
-package Topics.BinarySearch;
+package Topics.Binary;
 
 public class SplitArrayLargestSum {
     public int splitArray(int[] nums, int m) {

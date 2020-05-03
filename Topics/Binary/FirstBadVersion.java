@@ -1,4 +1,4 @@
-package Topics.BinarySearch;
+package Topics.Binary;
 
 public class FirstBadVersion {
 //    public int firstBadVersion(int n) {

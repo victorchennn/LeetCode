@@ -1,4 +1,4 @@
-package Topics.BinarySearch;
+package Topics.Binary;
 
 public class Search2DMatrix {
     public boolean searchMatrix(int[][] matrix, int target) {

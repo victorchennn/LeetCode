@@ -4,6 +4,9 @@ import Libs.ListNode;
 
 import java.util.Stack;
 
+/**
+ * Reverse order
+ */
 public class AddTwoNumbersII {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         Stack<ListNode> s1 = new Stack<>();

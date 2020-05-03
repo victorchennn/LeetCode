@@ -1,4 +1,4 @@
-package Topics.BinarySearch;
+package Topics.Binary;
 
 public class PeakIndexinaMountainArray {
     public int peakIndexInMountainArray(int[] A) {

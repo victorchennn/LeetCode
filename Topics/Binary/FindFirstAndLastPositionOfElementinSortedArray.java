@@ -1,4 +1,4 @@
-package Topics.BinarySearch;
+package Topics.Binary;
 
 public class FindFirstAndLastPositionOfElementinSortedArray {
     public int[] searchRange(int[] nums, int target) {

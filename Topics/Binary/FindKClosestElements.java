@@ -1,4 +1,4 @@
-package Topics.BinarySearch;
+package Topics.Binary;
 
 import java.util.ArrayList;
 import java.util.List;

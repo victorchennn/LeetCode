@@ -1,4 +1,4 @@
-package Topics.BinarySearch;
+package Topics.Binary;
 
 public class SearchInsertPosition {
     public int searchInsert(int[] nums, int target) {

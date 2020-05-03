@@ -1,4 +1,4 @@
-package Topics.BinarySearch;
+package Topics.Binary;
 
 /**
  * Find Kth missing number is a sorted array.

@@ -1,4 +1,4 @@
-package Topics.BinarySearch;
+package Topics.Binary;
 
 public class KthLargestElementInAnArray {
     public int findKthLargest(int[] nums, int k) {

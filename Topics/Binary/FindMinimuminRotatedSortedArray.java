@@ -1,4 +1,4 @@
-package Topics.BinarySearch;
+package Topics.Binary;
 
 public class FindMinimuminRotatedSortedArray {
     public int findMin(int[] nums) {
