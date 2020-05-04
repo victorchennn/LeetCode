@@ -19,7 +19,8 @@ This project is the solutions of some [LeetCode](https://leetcode.com) questions
 
 **Topics**:
 
-* BinarySearch
+* Binary
 * BTree
 * Design
+* Node
 * SlidingWindow

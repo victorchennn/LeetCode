@@ -1,12 +1,12 @@
-package Topics.Design;
+package Companies.Bloomberg;
 
 import java.util.PriorityQueue;
 
-public class KthLargest {
+public class KthLargestElementInAStream {
     private PriorityQueue<Integer> q;
     private int k;
 
-    public KthLargest(int k, int[] nums) {
+    public KthLargestElementInAStream(int k, int[] nums) {
         q = new PriorityQueue<>(k);
         this.k = k;
         for (int num : nums) {
