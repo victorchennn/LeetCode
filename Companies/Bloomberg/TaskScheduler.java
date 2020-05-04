@@ -2,6 +2,12 @@ package Companies.Bloomberg;
 
 import java.util.Arrays;
 
+/**
+ * Input: tasks = ["A","A","A","B","B","B"], n = 2
+ * Output: 8
+ *
+ * Explanation: A -> B -> idle -> A -> B -> idle -> A -> B.
+ */
 public class TaskScheduler {
     public int leastInterval(char[] tasks, int n) {
         int[] count = new int[26];

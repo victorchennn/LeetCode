@@ -1,5 +1,9 @@
 package Topics.Binary;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class SearchinRotatedSortedArray {
     public int search(int[] nums, int target) {
         int l = 0, r = nums.length-1;
@@ -56,15 +60,17 @@ public class SearchinRotatedSortedArray {
         return -1;
     }
 
-    public static void main(String...args) {
-        System.out.println(searchII(new int[]{1,0,2,3,4,5,6,7}, 5));
-        System.out.println(searchII(new int[]{1,0,2,3,4,5,6,7}, 0));
-        System.out.println(searchII(new int[]{1,0,2,3,4,5,6,7}, 1));
-        System.out.println(searchII(new int[]{1,0,2,3,4,5,6,7}, 7));
+    @Test
+    void test() {
+        assertEquals(5, searchII(new int[]{1,0,2,3,4,5,6,7}, 5));
+        assertEquals(1, searchII(new int[]{1,0,2,3,4,5,6,7}, 0));
+        assertEquals(0, searchII(new int[]{1,0,2,3,4,5,6,7}, 1));
+        assertEquals(7, searchII(new int[]{1,0,2,3,4,5,6,7}, 7));
 
-        System.out.println(searchII(new int[]{4,3,2,1,0,5,6,7}, 5));
-        System.out.println(searchII(new int[]{4,3,2,1,0,5,6,7}, 0));
-        System.out.println(searchII(new int[]{4,3,2,1,0,5,6,7}, 4));
-        System.out.println(searchII(new int[]{4,3,2,1,0,5,6,7}, 7));
+        assertEquals(5, searchII(new int[]{4,3,2,1,0,5,6,7}, 5));
+        assertEquals(4, searchII(new int[]{4,3,2,1,0,5,6,7}, 0));
+        assertEquals(0, searchII(new int[]{4,3,2,1,0,5,6,7}, 4));
+        assertEquals(7, searchII(new int[]{4,3,2,1,0,5,6,7}, 7));
+
     }
 }

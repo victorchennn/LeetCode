@@ -1,7 +1,11 @@
 package Companies.Bloomberg;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *  Josephus problem
@@ -41,15 +45,16 @@ public class JosephProblem {
         return l.get(0);
     }
 
-    public static void main(String...args) {
-        System.out.println("winner is " + josephus(9, 2));
-        System.out.println("winner is " + josephus(10, 3));
-        System.out.println("winner is " + josephus(5, 2));
-        System.out.println("winner is " + josephus(7, 3));
-        System.out.println("");
-        System.out.println("winner is " + josephusII(9, 2));
-        System.out.println("winner is " + josephusII(10, 3));
-        System.out.println("winner is " + josephusII(5, 2));
-        System.out.println("winner is " + josephusII(7, 3));
+    @Test
+    void test() {
+        assertEquals(3, josephus(9, 2));
+        assertEquals(4, josephus(10, 3));
+        assertEquals(3, josephus(5, 2));
+        assertEquals(4, josephus(7, 3));
+
+        assertEquals(3, josephusII(9, 2));
+        assertEquals(4, josephusII(10, 3));
+        assertEquals(3, josephusII(5, 2));
+        assertEquals(4, josephusII(7, 3));
     }
 }

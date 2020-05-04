@@ -1,9 +1,12 @@
 package Companies.Bloomberg;
 
 import javafx.util.Pair;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @see RemoveAllAdjacentDuplicatesInString
@@ -82,17 +85,19 @@ public class CandyCrush {
         return s;
     }
 
-    public static void main(String...args) {
-        System.out.println(candyCrush("acaaaacc")); // a
-        System.out.println(candyCrush("aaabbbc"));  // c
-        System.out.println(candyCrush("aabbbacd")); // cd
-        System.out.println(candyCrush("aabbccddeeedcba")); // ""
+    @Test
+    void test() {
+        assertEquals("a", candyCrush("acaaaacc"));
+        assertEquals("c", candyCrush("aaabbbc"));
+        assertEquals("cd", candyCrush("aabbbacd"));
+        assertEquals("", candyCrush("aabbccddeeedcba"));
 
-        System.out.println(helper("abbbaaacaaabbba", false));
-        System.out.println(helper("abbbaaacaaabbba", true));
-        System.out.println(candyCrush("aaabbbacd")); // acd
-        System.out.println(candyCrushII("aaabbbacd")); // cd
-        System.out.println(candyCrush("abbbaaacaaabbba")); // ca
-        System.out.println(candyCrushII("abbbaaacaaabbba")); // c
+        assertEquals("aaaacaaabbba", helper("abbbaaacaaabbba", false));
+        assertEquals("abbbaaacaaaa", helper("abbbaaacaaabbba", true));
+
+        assertEquals("acd", candyCrush("aaabbbacd"));
+        assertEquals("cd", candyCrushII("aaabbbacd"));
+        assertEquals("ca", candyCrush("abbbaaacaaabbba"));
+        assertEquals("c", candyCrushII("abbbaaacaaabbba"));
     }
 }

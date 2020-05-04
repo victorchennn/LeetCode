@@ -1,8 +1,21 @@
 package Companies.Bloomberg;
 
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+/**
+ * @Follow-up1: find all pairs sum equals target, may contain duplicates
+ *
+ * @Follow-up2: two byte arrays(only in range [0, 2^8-1]), need to consider overflow error.
+ *
+ * @Follow-up3: Sorted array
+ */
 public class TwoSum {
     public int[] twoSum(int[] nums, int target) {
         Map<Integer, Integer> m = new HashMap<>();
@@ -15,10 +28,30 @@ public class TwoSum {
         throw new IllegalArgumentException("..");
     }
 
-    /**
-     * Two byte arrays(only in range [0, 2^8-1]), need to consider overflow error.
-     * java byte is in range [-128,127]
-     */
+    /* find all pairs sum equals target, may contain duplicates */
+    public List<int[]> findAllTwoSum(int[] nums, int target) {
+        Map<Integer, Integer> m = new HashMap<>();
+        boolean equalFind = false;
+        List<int[]> re = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (m.containsKey(nums[i])) {
+                if (target%2 == 0 && nums[i] == target/2 && !equalFind) {
+                    re.add(new int[]{m.get(nums[i]), i});
+                    equalFind = true;
+                } else {
+                    continue;
+                }
+            } else if (m.containsKey(target - nums[i])) {
+                re.add(new int[]{m.get(target-nums[i]), i});
+            } else {
+                m.put(nums[i], i);
+            }
+        }
+        return re;
+    }
+
+    /* Two byte arrays(only in range [0, 2^8-1]), need to consider overflow error.
+     * java byte is in range [-128,127] */
     public int[] twoArraySum(int[] nums1, int[] nums2, int target) {
         boolean[] exists = new boolean[256];
         for (int num : nums1) {
@@ -35,7 +68,7 @@ public class TwoSum {
         return new int[]{-1, -1};
     }
 
-    /** Sorted */
+    /* Sorted */
     public int[] twoSumII(int[] numbers, int target) {
         int l = 0, r = numbers.length-1;
         while (l < r) {
@@ -74,5 +107,15 @@ public class TwoSum {
             }
         }
         return l;
+    }
+
+    @Test
+    void test() {
+        assertEquals(1, findAllTwoSum(new int[]{2,5,6,3,1}, 9).size());
+        assertEquals(2, findAllTwoSum(new int[]{2,5,6,3,1}, 8).size());
+        assertEquals(2, findAllTwoSum(new int[]{2,2,5,6,3,1}, 8).size());
+        assertEquals(2, findAllTwoSum(new int[]{2,2,4,5,6,3,1}, 8).size());
+        assertEquals(3, findAllTwoSum(new int[]{2,2,4,4,5,6,3,1}, 8).size());
+        assertEquals(3, findAllTwoSum(new int[]{2,2,4,4,4,5,6,3,1}, 8).size());
     }
 }

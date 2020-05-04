@@ -1,10 +1,17 @@
 package Companies.Bloomberg;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+/**
+ * @see Companies.Amazon.IntegerReplacement
+ */
 public class MinimumStepstoGenerateNumber {
     public int minSteps(int target) {
         Deque<Integer> q = new LinkedList<>();
@@ -36,9 +43,9 @@ public class MinimumStepstoGenerateNumber {
         return -1;
     }
 
-    public static void main(String...args) {
-        MinimumStepstoGenerateNumber test = new MinimumStepstoGenerateNumber();
-        System.out.println(test.minSteps(10)); // 6 -> 1 * 2 * 2 * 2 * 2 / 3 * 2
-        System.out.println(test.minSteps(3)); // 7 -> 1 * 2 * 2 * 2 * 2 * 2 / 3 / 3
+    @Test
+    void test() {
+        assertEquals(6,minSteps(10));  // 6 -> 1 * 2 * 2 * 2 * 2 / 3 * 2
+        assertEquals(7,minSteps(3));   // 7 -> 1 * 2 * 2 * 2 * 2 * 2 / 3 / 3
     }
 }

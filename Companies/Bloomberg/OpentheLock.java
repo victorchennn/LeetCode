@@ -30,8 +30,10 @@ public class OpentheLock {
                 }
             }
             step++;
-            l = r;
-            r = temp;
+            l = temp; // slow
+
+//            l = r;
+//            r = temp;
         }
         return -1;
     }
