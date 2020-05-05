@@ -13,8 +13,8 @@ import java.util.Map;
  * Size of CheckOutMap O(S^2), every possible pair of the stations.
  */
 public class UndergroundSystem {
-    private Map<Integer, Pair<String, Integer>> checkInMap = new HashMap<>();
-    private Map<String, Pair<Integer, Integer>> checkOutMap = new HashMap<>();
+    private Map<Integer, Pair<String, Integer>> checkInMap = new HashMap<>(); // <id, <start, time>>
+    private Map<String, Pair<Integer, Integer>> checkOutMap = new HashMap<>(); // <route, <timeSum, freq>>
 
     public UndergroundSystem() {
 
