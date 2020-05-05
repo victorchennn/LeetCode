@@ -11,10 +11,10 @@ import java.util.Set;
  * more find: two set;
  */
 public class TwoSum {
-    Set<Integer> sums = new HashSet<>();
-    Set<Integer> nums = new HashSet<>();
+    private Set<Integer> sums = new HashSet<>();
+    private Set<Integer> nums = new HashSet<>();
 
-    Map<Integer, Integer> m = new HashMap<>();
+    private Map<Integer, Integer> m = new HashMap<>();
 
     public TwoSum() {
 

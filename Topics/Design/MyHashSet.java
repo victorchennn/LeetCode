@@ -7,7 +7,6 @@ import Libs.TreeNode;
  * Space Complexity: O(K+M), M is the number of unique values inserted
  */
 public class MyHashSet {
-
     private Bucket[] bucketArray;
     private int keyRange;
 

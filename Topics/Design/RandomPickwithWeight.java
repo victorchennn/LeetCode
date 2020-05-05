@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 
 public class RandomPickwithWeight {
-
     private List<Integer> l;
     private int limit = 0;
     private Random rand = new Random();

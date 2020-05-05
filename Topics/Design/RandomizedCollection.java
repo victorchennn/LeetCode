@@ -3,7 +3,7 @@ package Topics.Design;
 import java.util.*;
 
 public class RandomizedCollection {
-    private Map<Integer, Set<Integer>> map;
+    private Map<Integer, Set<Integer>> map; // val, positions
     private List<Integer> list;
     private Random rand;
 

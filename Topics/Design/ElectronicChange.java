@@ -29,6 +29,11 @@ package Topics.Design;
  * could dominate. A good option is to use an order statistic tree, which supports Add in O(log n) time, and
  * GetKLargest in O(k log n) time. To look up a company by name in the tree requires a separate index, which can
  * be maintained as a hashtable. The total cost is O(Qk log n) in the worst case.
+ *
+ * @see KthLargest PriorityQueue
+ * @see LeaderBoard TreeMap
+ *
+ * @see StockTransaction
  */
 public class ElectronicChange {
 }

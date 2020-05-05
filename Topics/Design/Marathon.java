@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Marathon {
-
     private Sensor head, tail; // dummy
     private Map<Integer, Runner> m = new HashMap<>();
 

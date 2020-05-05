@@ -2,8 +2,10 @@ package Topics.Design;
 
 import java.util.*;
 
+/**
+ * @see ElectronicChange
+ */
 public class StockTransaction {
-
     private TreeMap<Integer, Stock> topK;
     private Map<String, Stock> dataset;
 

@@ -1,7 +1,6 @@
 package Topics.Design;
 
 public class TicTacToe {
-
     private int[] rows, cols;
     private int diag, antidiag;
 

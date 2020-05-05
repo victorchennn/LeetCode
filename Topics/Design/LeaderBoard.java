@@ -10,9 +10,7 @@ import java.util.TreeMap;
  * 2.Use TreeMap to find the topK in O(KlogN) by traverse the treemap
  * 3.Reset we can just remove the key from the treemap which is O(logN), same for addScore().
  *
- * TreeMap: A Red-Black tree based NavigableMap implementation. The map is sorted
- * according to the natural ordering of its keys.
- *
+ * TreeMap: A Red-Black tree based NavigableMap implementation.
  * Guaranteed O(logN) time cost for the containsKey, get, put and remove operations.
  */
 public class LeaderBoard {

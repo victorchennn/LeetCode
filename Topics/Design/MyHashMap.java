@@ -1,8 +1,8 @@
 package Topics.Design;
 
 public class MyHashMap {
-    ListNode[] l;
-    int size;
+    private ListNode[] l;
+    private int size;
 
     /** Initialize your data structure here. */
     public MyHashMap() {

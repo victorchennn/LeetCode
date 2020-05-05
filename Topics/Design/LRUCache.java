@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LRUCache {
-
     private Node head, tail;
     private final int cap;
     private Map<Integer, Node> m;

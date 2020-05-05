@@ -12,7 +12,6 @@ import java.util.*;
  * Space Complexity: O(N)
  */
 public class MaxStack {
-
     private Node head, tail;
     private TreeMap<Integer, LinkedList<Node>> map;
 
