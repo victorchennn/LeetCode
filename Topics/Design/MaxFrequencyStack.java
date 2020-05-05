@@ -1,15 +1,15 @@
-package Companies.Google;
+package Topics.Design;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-public class MaximumFrequencyStack {
+public class MaxFrequencyStack {
     private Map<Integer, Integer> freq;
     private Map<Integer, Stack<Integer>> ties;
     private int max;
 
-    public MaximumFrequencyStack() {
+    public MaxFrequencyStack() {
         max = 0;
         freq = new HashMap<>();
         ties = new HashMap<>();

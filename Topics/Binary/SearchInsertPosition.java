@@ -2,13 +2,13 @@ package Topics.Binary;
 
 public class SearchInsertPosition {
     public int searchInsert(int[] nums, int target) {
-        int l = 0, r = nums.length;
+        int l = 0, r = nums.length, mid;
         while (l < r) {
-            int m = l + (r-l)/2;
-            if (nums[m] >= target) {
-                r = m;
+            mid = l + (r-l)/2;
+            if (nums[mid] >= target) {
+                r = mid;
             } else {
-                l = m+1;
+                l = mid+1;
             }
         }
         return l;

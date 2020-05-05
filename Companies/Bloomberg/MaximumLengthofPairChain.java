@@ -2,6 +2,14 @@ package Companies.Bloomberg;
 
 import java.util.Arrays;
 
+/**
+ * @see AvailableTime
+ * @see EmployeeFreeTime
+ * @see MeetingRooms
+ * @see MergeIntervals
+ * @see NonoverlappingIntervals
+ * @see RemoveArrayElementsinGivenIndexRanges
+ */
 public class MaximumLengthofPairChain {
     /** Greedy, O(NlogN) */
     public int findLongestChain(int[][] pairs) {

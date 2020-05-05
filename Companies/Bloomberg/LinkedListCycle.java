@@ -30,6 +30,5 @@ public class LinkedListCycle {
             }
         }
         return null;
-
     }
 }

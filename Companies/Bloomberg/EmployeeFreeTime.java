@@ -10,6 +10,7 @@ import java.util.PriorityQueue;
  * C is the number of jobs across all employees
  *
  * @see AvailableTime
+ * @see MaximumLengthofPairChain
  * @see MeetingRooms
  * @see MergeIntervals
  * @see NonoverlappingIntervals

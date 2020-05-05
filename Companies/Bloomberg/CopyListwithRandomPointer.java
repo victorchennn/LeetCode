@@ -34,7 +34,7 @@ public class CopyListwithRandomPointer {
         return re;
     }
 
-    private Map<Node, Node> visitedHash = new HashMap<Node, Node>();
+    private Map<Node, Node> visitedHash = new HashMap<>();
 
     public Node copyRandomListII(Node head) {
         if (head == null) {
