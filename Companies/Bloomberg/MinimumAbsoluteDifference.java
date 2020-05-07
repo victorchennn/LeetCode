@@ -1,9 +1,13 @@
 package Companies.Bloomberg;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class MinimumAbsoluteDifference {
-    public static int minAbsoluteDiff(int[] nums1, int[] nums2) {
+    public int minAbsoluteDiff(int[] nums1, int[] nums2) {
         if (nums1.length > nums2.length) {
             return minAbsoluteDiff(nums2, nums1);
         }
@@ -23,7 +27,7 @@ public class MinimumAbsoluteDifference {
         return re;
     }
 
-    private static int find(int[] nums, int num) {
+    private int find(int[] nums, int num) {
         int l = 0, r = nums.length;
         while (l < r) {
             int mid = l + (r-l)/2;
@@ -38,7 +42,8 @@ public class MinimumAbsoluteDifference {
         return l;
     }
 
-    public static void main(String...args) {
-        System.out.println(minAbsoluteDiff(new int[]{5,6,7,3}, new int[]{1,2,4,9}));
+    @Test
+    void test() {
+        assertEquals(1, minAbsoluteDiff(new int[]{5,6,7,3}, new int[]{1,2,4,9}));
     }
 }

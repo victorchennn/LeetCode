@@ -1,7 +1,11 @@
 package Companies.Bloomberg;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.LinkedList;
 import java.util.Queue;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @Follow-up1: sum of perimeter of islands?
@@ -91,17 +95,27 @@ public class NumberofIslands {
         return num;
     }
 
-    public static void main(String...args) {
-        System.out.println(numIslands(new char[][]{
+    @Test
+    void test() {
+        assertEquals(1, numIslands(new char[][]{
                 {'1','1','1','1','0'},
                 {'1','1','0','1','0'},
                 {'1','1','0','0','0'},
                 {'0','0','0','0','0'}}));
-        System.out.println(numIslands(new char[][]{
+        assertEquals(3, numIslands(new char[][]{
                 {'1','1','0','0','0'},
                 {'1','1','0','0','0'},
                 {'0','0','1','0','0'},
                 {'0','0','0','1','1'}}));
-
+        assertEquals(1, numIslandsII(new char[][]{
+                {'1','1','1','1','0'},
+                {'1','1','0','1','0'},
+                {'1','1','0','0','0'},
+                {'0','0','0','0','0'}}));
+        assertEquals(3, numIslandsII(new char[][]{
+                {'1','1','0','0','0'},
+                {'1','1','0','0','0'},
+                {'0','0','1','0','0'},
+                {'0','0','0','1','1'}}));
     }
 }
