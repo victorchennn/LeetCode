@@ -1,13 +1,18 @@
 package Companies.Bloomberg;
 
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Swap value to make two arrays sum equal
  */
 public class FindSwapValues {
-    public static int[] findSwapValues(int[] a, int[] b) {
+    public int[] findSwapValues(int[] a, int[] b) {
         if (a.length > b.length) {
             return findSwapValues(b, a);
         }
@@ -37,8 +42,11 @@ public class FindSwapValues {
         return sum;
     }
 
-    public static void main(String...args) {
-        findSwapValues(new int[]{4,1,2,1,1,2}, new int[]{3,6,3,3});
-        findSwapValues(new int[]{5,7,4,6}, new int[]{1,2,3,8});
+    @Test
+    void test() {
+        assertEquals(true, Arrays.equals(new int[]{6,4},
+                findSwapValues(new int[]{4,1,2,1,1,2}, new int[]{3,6,3,3})));
+        assertEquals(true, Arrays.equals(new int[]{5,1},
+                findSwapValues(new int[]{5,7,4,6}, new int[]{1,2,3,8})));
     }
 }

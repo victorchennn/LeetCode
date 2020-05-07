@@ -1,7 +1,11 @@
 package Companies.Bloomberg;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class CarCollisions {
-    public static int collisions(int[] nums) {
+    public int collisions(int[] nums) {
         int countZero = 0, sum = 0;
         for (int num : nums) {
             if (num == 0) {
@@ -13,10 +17,11 @@ public class CarCollisions {
         return sum;
     }
 
-    public static void main(String...args) {
-        System.out.println(collisions(new int[]{0,1}));
-        System.out.println(collisions(new int[]{0,0,1}));
-        System.out.println(collisions(new int[]{1,0,1,0}));
-        System.out.println(collisions(new int[]{0,1,0,1,1,0}));
+    @Test
+    void test() {
+        assertEquals(1, collisions(new int[]{0,1}));
+        assertEquals(2, collisions(new int[]{0,0,1}));
+        assertEquals(1, collisions(new int[]{1,0,0,1}));
+        assertEquals(5, collisions(new int[]{0,1,0,1,1,0}));
     }
 }

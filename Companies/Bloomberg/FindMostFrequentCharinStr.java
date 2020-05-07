@@ -1,10 +1,14 @@
 package Companies.Bloomberg;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * @see SortCharByFrequency
  */
 public class FindMostFrequentCharinStr {
-    public static char find(String s) {
+    public char find(String s) {
         int[] count = new int[26];
         for (char c : s.toCharArray()) {
             count[c-'a']++;
@@ -20,8 +24,9 @@ public class FindMostFrequentCharinStr {
         return c;
     }
 
-    public static void main(String...args) {
-        System.out.println(find("bloomberg"));
-        System.out.println(find("blooomberg"));
+    @Test
+    void test() {
+        assertEquals('b', find("bloomberg"));
+        assertEquals('o', find("blooomberg"));
     }
 }

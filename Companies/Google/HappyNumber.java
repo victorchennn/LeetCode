@@ -13,12 +13,12 @@ public class HappyNumber {
         return false;
     }
 
-    private int helper(int num) {
-        int re = 0;
-        while (num > 0) {
-            re += (num%10)*(num%10);
-            num /= 10;
+    private int helper(int n) {
+        int sum = 0;
+        while (n > 0) {
+            sum += (n%10)*(n%10);
+            n /= 10;
         }
-        return re;
+        return sum;
     }
 }

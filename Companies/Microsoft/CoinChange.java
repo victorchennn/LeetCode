@@ -1,9 +1,12 @@
 package Companies.Microsoft;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 
-public class CoinChange {
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+public class CoinChange {
     /**
      * fewest number of coins
      * Input: coins = [1, 2, 5], amount = 11
@@ -13,13 +16,9 @@ public class CoinChange {
     public int coinChange(int[] coins, int amount) {
         int[] dp = new int[amount+1];
         Arrays.fill(dp, amount+1);
-        Arrays.sort(coins);
         dp[0] = 0;
-        for (int i = 1; i <= amount; i++) {
-            for (int coin : coins) {
-                if (coin > i) {
-                    break;
-                }
+        for (int coin : coins) {
+            for (int i = coin; i <= amount; i++) {
                 dp[i] = Math.min(dp[i], dp[i-coin]+1);
             }
         }
@@ -31,7 +30,7 @@ public class CoinChange {
      * Input: amount = 5, coins = [1, 2, 5]
      * Output: 4
      */
-    public int change(int amount, int[] coins) {
+    public static int change(int amount, int[] coins) {
         int[] dp = new int[amount+1];
         dp[0] = 1;
         for (int coin : coins) {
@@ -40,5 +39,12 @@ public class CoinChange {
             }
         }
         return dp[amount];
+    }
+
+    @Test
+    void test() {
+        assertEquals(3, coinChange(new int[]{1,2,5}, 11));
+        assertEquals(4, change(5, new int[]{1,2,5}));
+        assertEquals(4, change(60, new int[]{10,15,60}));
     }
 }

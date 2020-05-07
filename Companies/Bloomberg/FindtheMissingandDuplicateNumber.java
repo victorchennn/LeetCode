@@ -1,11 +1,16 @@
 package Companies.Bloomberg;
 
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class FindtheMissingandDuplicateNumber {
     /* Warning: Modify the array */
-    public static int[] find(int[] nums) {
+    public int[] find(int[] nums) {
         int missing = -1, duplicate = -1;
         for (int num : nums) {
             int index = Math.abs(num)-1;
@@ -25,7 +30,7 @@ public class FindtheMissingandDuplicateNumber {
         return new int[]{missing, duplicate};
     }
 
-    public static int[] findII(int[] nums) {
+    public int[] findII(int[] nums) {
         int missing = -1, duplicate = -1, sum = 0, truesum = 0;
         Set<Integer> s = new HashSet<>();
         for (int i = 0; i < nums.length; i++) {
@@ -41,10 +46,11 @@ public class FindtheMissingandDuplicateNumber {
         return new int[]{missing, duplicate};
     }
 
-    public static void main(String...args) {
-        find(new int[]{3,1,3});
-        find(new int[]{4,3,6,2,1,1});
-        findII(new int[]{3,1,3});
-        findII(new int[]{4,3,6,2,1,1});
+    @Test
+    void test() {
+        assertEquals(true, Arrays.equals(new int[]{2,3}, find(new int[]{3,1,3})));
+        assertEquals(true, Arrays.equals(new int[]{5,1}, find(new int[]{4,3,6,2,1,1})));
+        assertEquals(true, Arrays.equals(new int[]{2,3}, findII(new int[]{3,1,3})));
+        assertEquals(true, Arrays.equals(new int[]{5,1}, findII(new int[]{4,3,6,2,1,1})));
     }
 }

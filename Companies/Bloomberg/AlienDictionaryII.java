@@ -1,6 +1,10 @@
 package Companies.Bloomberg;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Dic: "a","b","c","d","ch","dd","e","r"
@@ -9,7 +13,7 @@ import java.util.*;
  * Sort: "ab","dea","chc","ddr"
  */
 public class AlienDictionaryII {
-    public static List<String> sort(List<String> l, List<String> words) {
+    public List<String> sort(List<String> l, List<String> words) {
         Map<String, Integer> m = new HashMap<>();
         for (int i = 1; i <= l.size(); i++) {
             m.put(l.get(i-1), i);
@@ -19,7 +23,7 @@ public class AlienDictionaryII {
     }
 
     /* Sorting based on dictionary maximal match */
-    private static int compare(String a, String b, Map<String, Integer> m) {
+    private int compare(String a, String b, Map<String, Integer> m) {
         if (a.equals(b)) {
             return 0;
         }
@@ -47,9 +51,11 @@ public class AlienDictionaryII {
         return compare(a.substring(i), b.substring(j), m);
     }
 
-    public static void main(String...args) {
+    @Test
+    void test() {
         List<String> dic = new ArrayList<>(Arrays.asList("a","b","c","d","ch","dd","e","r"));
         List<String> l = new ArrayList<>(Arrays.asList("ddr", "dea", "ab", "chc", "a"));
-        sort(dic, l);
+        assertEquals(true, sort(dic, l).equals(
+                new ArrayList<>(Arrays.asList("a","ab","dea","chc","ddr"))));
     }
 }

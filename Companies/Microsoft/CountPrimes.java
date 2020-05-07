@@ -6,7 +6,7 @@ public class CountPrimes {
         if (n < 2) {
             return 0;
         }
-        int count = 0;
+        int count = 2; // 0 and 1
         for (int i = 2; i < Math.sqrt(n); i++) {
             if (!dp[i]) {
                 for (int j = i*i; j < n; j += i) {
@@ -18,6 +18,6 @@ public class CountPrimes {
                 }
             }
         }
-        return n - count - 2;
+        return n - count;
     }
 }

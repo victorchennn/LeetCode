@@ -18,17 +18,17 @@ public class HouseRobber {
     public int robI2(int[] nums) {
         int[] memo = new int[nums.length + 1];
         Arrays.fill(memo, -1);
-        return rob(memo, nums, nums.length - 1);
+        return helper(memo, nums, nums.length - 1);
     }
 
-    private int rob(int[] memo, int[] nums, int i) {
+    private int helper(int[] memo, int[] nums, int i) {
         if (i < 0) {
             return 0;
         }
         if (memo[i] >= 0) {
             return memo[i];
         }
-        int result = Math.max(rob(memo, nums, i - 2) + nums[i], rob(memo, nums, i - 1));
+        int result = Math.max(helper(memo, nums, i - 2) + nums[i], helper(memo, nums, i - 1));
         memo[i] = result;
         return result;
     }
@@ -38,10 +38,10 @@ public class HouseRobber {
         if (nums.length == 1) {
             return nums[0];
         }
-        return Math.max(helper(nums, 0, nums.length-1), helper(nums, 1, nums.length));
+        return Math.max(helperII(nums, 0, nums.length-1), helperII(nums, 1, nums.length));
     }
 
-    private int helper(int[] nums, int l, int r) {
+    private int helperII(int[] nums, int l, int r) {
         int cur = 0, prev = 0;
         for (int i = l; i < r; i++) {
             int temp = cur;

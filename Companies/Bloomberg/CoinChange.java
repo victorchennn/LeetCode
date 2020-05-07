@@ -1,6 +1,10 @@
 package Companies.Bloomberg;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CoinChange {
     /**
@@ -37,7 +41,10 @@ public class CoinChange {
         return dp[amount];
     }
 
-    public static void main(String...args) {
-        System.out.println(change(60, new int[]{10, 15, 50}));
+    @Test
+    void test() {
+        assertEquals(3, coinChange(new int[]{1,2,5}, 11));
+        assertEquals(4, change(5, new int[]{1,2,5}));
+        assertEquals(4, change(60, new int[]{10,15,60}));
     }
 }

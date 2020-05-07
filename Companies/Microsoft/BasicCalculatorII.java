@@ -1,44 +1,41 @@
 package Companies.Microsoft;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Stack;
 
 public class BasicCalculatorII {
     public int calculate(String s) {
-        Queue<Character> q = new LinkedList<>();
-        for (char c : s.toCharArray()) {
-            if (c != ' ') {
-                q.add(c);
-            }
-        }
-        q.add('+');
-        return helper(q);
-    }
-
-    private int helper(Queue<Character> q) {
-        int sum = 0, prev = 0, num = 0;
+        s = s.replace(" ", "");
+        Stack<Integer> stack = new Stack<>();
         char sign = '+';
-        while (!q.isEmpty()) {
-            char c = q.poll();
+        int num = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
             if (Character.isDigit(c)) {
                 num = num*10 + c-'0';
-            } else if (c == '(') {
-                num = helper(q);
-            } else {
-                if (sign == '+') {
-                    sum += prev;
-                    prev = num;
-                } else {
-                    sum += prev;
-                    prev = -num;
+            }
+            if (!Character.isDigit(c) || i == s.length()-1) {
+                switch(sign) {
+                    case '+':
+                        stack.push(num);
+                        break;
+                    case'-':
+                        stack.push(-num);
+                        break;
+                    case'*':
+                        stack.push(stack.pop()*num);
+                        break;
+                    case'/':
+                        stack.push(stack.pop()/num);
+                        break;
                 }
-                if (c == ')') {
-                    break;
-                }
-                sign = c;
                 num = 0;
+                sign = c;
             }
         }
-        return sum + prev;
+        int re = 0;
+        for (int i : stack) {
+            re += i;
+        }
+        return re;
     }
 }

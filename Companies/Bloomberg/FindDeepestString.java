@@ -1,9 +1,13 @@
 package Companies.Bloomberg;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class FindDeepestString {
-    public static String find(String s) {
+    public String find(String s) {
         int counter = 0, max = 0, l = -1;
         String re = "";
         for (int i = 0; i < s.length(); i++) {
@@ -28,7 +32,7 @@ public class FindDeepestString {
     }
 
     /* Find all deepest string */
-    public static List<String> findII(String s) {
+    public List<String> findII(String s) {
         List<String> re = new ArrayList<>();
         int counter = 0, max = 0, l = -1;
         for (char c : s.toCharArray()) {
@@ -60,7 +64,7 @@ public class FindDeepestString {
     }
 
     /* Find all nested string */
-    public static List<String> findIII(String s) {
+    public List<String> findIII(String s) {
         List<String> re = new ArrayList<>();
         Map<Integer, List<String>> m = new HashMap<>();
         int[] pos = new int[s.length()];
@@ -80,22 +84,33 @@ public class FindDeepestString {
         return m.size() == 0? new ArrayList<>(Arrays.asList(s)):m.get(max);
     }
 
-    public static void main(String...args) {
-        System.out.println(find("123"));
-        System.out.println(find("{123}"));
-        System.out.println(find("1{2{3{4}}5}}6"));
-        System.out.println(find("{{{444}}{}{}}"));
+    @Test
+    void test() {
+        assertEquals("123", find("123"));
+        assertEquals("123", find("{123}"));
+        assertEquals("4", find("1{2{3{4}}5}}6"));
+        assertEquals("444", find("{{{444}}{}{}}"));
 
-        System.out.println(findII("{{{444}}{}{}}"));
-        System.out.println(findII("{{{222}}{}{{333}}}"));
-        System.out.println(findII("{{{222}}{}{{{}333}}}"));
-        System.out.println(findII("{{{222}}{}{{{4}333}}}"));
+        assertEquals(true, findII("{{{444}}{}{}}").equals(
+                new ArrayList<>(Arrays.asList("444"))));
+        assertEquals(true, findII("{{{222}}{}{{333}}}").equals(
+                new ArrayList<>(Arrays.asList("222","333"))));
+        assertEquals(true, findII("{{{222}}{}{{{}333}}}").equals(
+                new ArrayList<>(Arrays.asList(""))));
+        assertEquals(true, findII("{{{222}}{}{{{4}333}}}").equals(
+                new ArrayList<>(Arrays.asList("4"))));
 
-        System.out.println(findIII("123"));
-        System.out.println(findIII("{123}"));
-        System.out.println(findIII("{{{444}}{}{}}"));
-        System.out.println(findIII("{{{222}}{}{{333}}}"));
-        System.out.println(findIII("{{{222}}{}{{{}333}}}"));
-        System.out.println(findIII("{{{222}}{}{{{4}333}}}"));
+        assertEquals(true, findIII("123").equals(
+                new ArrayList<>(Arrays.asList("123"))));
+        assertEquals(true, findIII("{123}").equals(
+                new ArrayList<>(Arrays.asList("123"))));
+        assertEquals(true, findIII("{{{444}}{}{}}").equals(
+                new ArrayList<>(Arrays.asList("444"))));
+        assertEquals(true, findIII("{{{222}}{}{{333}}}").equals(
+                new ArrayList<>(Arrays.asList("222","333"))));
+        assertEquals(true, findIII("{{{222}}{}{{{}333}}}").equals(
+                new ArrayList<>(Arrays.asList(""))));
+        assertEquals(true, findIII("{{{222}}{}{{{4}333}}}").equals(
+                new ArrayList<>(Arrays.asList("4"))));
     }
 }

@@ -1,7 +1,11 @@
 package Companies.Bloomberg;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * minimum number of steps to make two Strings Anagram
@@ -24,10 +28,11 @@ public class AnagramsMinimumNumberofStepstoMakeTwoStrings {
         return step;
     }
 
-    public static void main(String...args) {
-        System.out.println(minSteps("ab", "bb")); // 1
-        System.out.println(minSteps("abc", "abcb")); // -1
-        System.out.println(minSteps("kjm", "abc")); // 3
-        System.out.println(minSteps("wef", "few")); // 0
+    @Test
+    void test() {
+        assertEquals(1, minSteps("ab", "bb"));
+        assertEquals(-1, minSteps("abc", "abcb"));
+        assertEquals(3, minSteps("kjm", "abc"));
+        assertEquals(0, minSteps("wef", "few"));
     }
 }

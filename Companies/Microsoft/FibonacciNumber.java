@@ -1,16 +1,19 @@
 package Companies.Microsoft;
 
+/**
+ * @see ClimbingStairs
+ */
 public class FibonacciNumber {
     public int fib(int N) {
         if (N <= 1) {
             return N;
         }
-        int first = 0, second = 1;
+        int num1 = 0, num2 = 1;
         for (int i = 2; i <= N; i++) {
-            int third = first + second;
-            first = second;
-            second = third;
+            int temp = num1 + num2;
+            num1 = num2;
+            num2 = temp;
         }
-        return second;
+        return num2;
     }
 }

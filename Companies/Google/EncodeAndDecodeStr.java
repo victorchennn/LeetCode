@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class EncodeAndDecodeStr {
-
     public String encode(List<String> strs) {
         if (strs.size() == 0) {
             return Character.toString((char)257);

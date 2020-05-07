@@ -3,10 +3,9 @@ package Companies.Google;
 import java.util.*;
 
 public class CourseSchedule {
-    public int[] findOrder(int numCourses, int[][] prerequisites) {
-        int[] nums = new int[numCourses];
-        int[] re = new int[numCourses];
-        Map<Integer, List<Integer>> m = new HashMap<>();
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        int[] nums = new int[numCourses]; // how many prerequisites
+        Map<Integer, List<Integer>> m = new HashMap<>(); // <key, courses after key>
         for (int[] pre : prerequisites) {
             nums[pre[0]]++;
             m.computeIfAbsent(pre[1], k->new ArrayList<>()).add(pre[0]);
@@ -18,9 +17,11 @@ public class CourseSchedule {
             }
         }
         int index = 0;
+//        int[] re = new int[numCourses];
         while (!q.isEmpty()) {
             int cur = q.poll();
-            re[index++] = cur;
+//            re[index++] = cur;
+            index++;
             if (m.get(cur) == null) {
                 continue;
             }
@@ -31,6 +32,7 @@ public class CourseSchedule {
                 }
             }
         }
-        return index == numCourses? re : new int[0];
+        return index == numCourses;
+//        return index == numCourses? re : new int[0];
     }
 }
