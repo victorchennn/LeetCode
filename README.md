@@ -6,7 +6,7 @@ Some solutions contain several basic tests, including analysis of Time complexit
 
 **Companies**:
 
-* Amazon<sup>*165*</sup> 
+* Amazon <sup>*165*</sup> 
 * Bloomberg<sup>*238*</sup>
 * Facebook<sup>*128*</sup>
 * GoldmanSachs<sup>*35*</sup>
