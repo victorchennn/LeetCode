@@ -6,7 +6,7 @@ package Companies.Google;
  *
  * The array may contain multiple peaks, in that case return the index to any one of the peaks.
  *
- * @see Companies.Bloomberg.PeakIndexinaMountainArray
+ * @see PeakIndexinaMountainArray
  */
 public class FindPeakElement {
     public int findPeakElement(int[] nums) {

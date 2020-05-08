@@ -1,8 +1,12 @@
 package Companies.Bloomberg;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @see AvailableTime
@@ -44,12 +48,11 @@ public class RemoveArrayElementsinGivenIndexRanges {
         return false;
     }
 
-    public static void main(String...args) {
-        RemoveArrayElementsinGivenIndexRanges test = new RemoveArrayElementsinGivenIndexRanges();
+    @Test
+    void test() {
         int[] input = {-8, 3, -5, 1, 51, 56, 0, -5, 29, 43, 78, 75, 32, 76, 73, 76};
         int[][] ranges = {{5, 8}, {10, 13}, {3, 6}, {20, 25}};
-        for (int i : test.remove(input, ranges)) {
-            System.out.print(i + " ");
-        }
+        assertEquals(true, Arrays.equals(
+                new int[]{-8,3,-5,29,43,76,73,76}, remove(input, ranges)));
     }
 }

@@ -1,7 +1,11 @@
 package Companies.Bloomberg;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.HashSet;
 import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SingleCycle {
     public static boolean ifSingle(int[] nums, int start) {
@@ -18,9 +22,10 @@ public class SingleCycle {
         return index == start && count == nums.length;
     }
 
-    public static void main(String...args) {
-        System.out.println(ifSingle(new int[]{1,2,-2,1,-2}, 0));
-        System.out.println(ifSingle(new int[]{3,1,-2,-3}, 0));
-        System.out.println(ifSingle(new int[]{1,1,-1,-3}, 0));
+    @Test
+    void test() {
+        assertEquals(true, ifSingle(new int[]{1,2,-2,1,-2}, 0));
+        assertEquals(false, ifSingle(new int[]{3,1,-2,-3}, 0));
+        assertEquals(false, ifSingle(new int[]{1,1,-1,-3}, 0));
     }
 }

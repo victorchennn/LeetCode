@@ -5,8 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PacificAtlanticWaterFlow {
-
-    int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
+    private int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
 
     public List<List<Integer>> pacificAtlantic(int[][] matrix) {
         List<List<Integer>> re = new ArrayList<>();

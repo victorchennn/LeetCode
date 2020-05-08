@@ -1,7 +1,11 @@
 package Companies.Microsoft;
 
+/**
+ * Time Complexity: O(N*4^L), N is the number of cells and L is the length of the word
+ * Space Complexity: O(L)
+ */
 public class WordSearch {
-    private int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
+    private int[][] dirs = {{0,1}, {0,-1}, {-1,0}, {1,0}};
 
     public boolean exist(char[][] board, String word) {
         for (int i = 0; i < board.length; i++) {

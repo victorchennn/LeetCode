@@ -2,17 +2,17 @@ package Companies.Microsoft;
 
 public class SortColors {
     public void sortColors(int[] nums) {
-        int i = 0, j = nums.length-1, cur = 0;
-        while (cur <= j) {
-            if (nums[cur] == 0) {
-                swap(nums, cur, i);
-                i++;
-                cur++;
-            } else if (nums[cur] == 2) { // no need to add cur
-                swap(nums, cur, j);
-                j--;
+        int l = 0, r = nums.length-1, p = 0;
+        while (p <= r) {
+            if (nums[p] == 0) {
+                swap(nums, l, p);
+                p++;
+                l++;
+            } else if (nums[p] == 2) {
+                swap(nums, r, p);
+                r--;
             } else {
-                cur++;
+                p++;
             }
         }
     }

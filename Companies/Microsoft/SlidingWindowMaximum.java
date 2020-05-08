@@ -5,8 +5,8 @@ public class SlidingWindowMaximum {
         if (nums.length == 0) {
             return new int[]{};
         }
-        int[] win = new int[nums.length-k+1];
-        int i = 0, max = Integer.MIN_VALUE, maxp = 0;
+        int[] re = new int[nums.length-k+1];
+        int i = 0, maxp = 0, max = Integer.MIN_VALUE;
         while (i < k) {
             if (nums[i] >= max) {
                 max = nums[i];
@@ -14,27 +14,26 @@ public class SlidingWindowMaximum {
             }
             i++;
         }
-        win[0] = max;
+        re[0] = max;
         while (i < nums.length) {
-            int cur = nums[i];
-            if (cur >= max) {
-                max = cur;
+            if (nums[i] >= max) {
+                max = nums[i];
                 maxp = i;
             } else {
                 if (maxp < i-k+1) {
-                    max = cur;
+                    max = nums[i];
                     maxp = i;
-                    for (int j = i; j >= i-k+1; j--) {
-                        if (nums[j] > max) {
+                    for (int j = i-1; j >= i-k+1; j--) {
+                        if (nums[j] >= max) {
                             max = nums[j];
                             maxp = j;
                         }
                     }
                 }
             }
-            win[i-k+1] = max;
+            re[i-k+1] = max;
             i++;
         }
-        return win;
+        return re;
     }
 }

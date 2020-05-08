@@ -1,51 +1,51 @@
 package Companies.Google;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class WordBreak {
-
     public boolean wordBreak(String s, List<String> wordDict) {
-        return dfs(s, wordDict, new HashMap<>());
-    }
-
-    private boolean dfs(String s, List<String> wordDict, Map<String, Boolean> m) {
-        if (m.containsKey(s)) {
-            return m.get(s);
-        }
-        if (s.length() == 0) {
-            return true;
-        }
-        boolean re = false;
-        for (String word : wordDict) {
-            if (s.startsWith(word)) {
-                re = dfs(s.substring(word.length()), wordDict, m);
-                if (re) {
+        boolean[] dp = new boolean[s.length()+1];
+        dp[0] = true;
+        Set<String> set = new HashSet<>(wordDict);
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 0; j < i; j++) {
+                if (dp[j] && set.contains(s.substring(j, i))) {
+                    dp[i] = true;
                     break;
                 }
             }
         }
-        m.put(s, re);
-        return re;
+        return dp[s.length()];
+
+//        return dfs(s, wordDict, new HashMap<>());
     }
 
-    public boolean wordBreakII(String s, List<String> wordDict) {
-        boolean[] dp = new boolean[s.length()+1];
-        for (int i = 1; i <= s.length(); i++) {
-            if (wordDict.contains(s.substring(0, i))) {
-                dp[i] = true;
-            } else {
-                for (int j = 0; j < i; j++) {
-                    if (dp[j] && wordDict.contains(s.substring(j, i))) {
-                        dp[i] = true;
-                        if (dp[i]) {
-                            break;
-                        }
-                    }
+    /**
+     * Time complexity: O(n^2). Size of recursion tree can go up to O(n^2).
+     * Space complexity: O(n). The depth of recursion tree can go up to O(n).
+     */
+    private boolean dfs(String s, List<String> l, Map<String, Boolean> m) {
+        if (m.containsKey(s)) {
+            return m.get(s);
+        }
+        boolean exist = false;
+        for (String word : l) {
+            if (s.startsWith(word)) {
+                String after = s.substring(word.length());
+                if (after.length() == 0) {
+                    exist = true;
+                } else {
+                    exist = dfs(after, l, m);
+                }
+                if (exist) {
+                    break;
                 }
             }
         }
-        return dp[s.length()];
+        m.put(s, exist);
+        return exist;
     }
 }

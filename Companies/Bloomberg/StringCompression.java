@@ -1,5 +1,9 @@
 package Companies.Bloomberg;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class StringCompression {
     /**
      * Input: ['a','a','b','b','c','c','c']
@@ -8,7 +12,7 @@ public class StringCompression {
      * Input: ['a','b','b','c','c','c']
      * Output: 5, ['a','b','2','c','3']
      */
-    public static int compress(char[] chars) {
+    public int compress(char[] chars) {
         int len = 0, i = 0;
         while (i < chars.length) {
             char cur = chars[i];
@@ -27,7 +31,7 @@ public class StringCompression {
         return len;
     }
 
-    public static String deCompress(char[] chars) {
+    public String deCompress(char[] chars) {
         StringBuilder sb = new StringBuilder();
         int i = 0, len = chars.length, num = 0;
         while (i < len) {
@@ -50,11 +54,14 @@ public class StringCompression {
         return sb.toString();
     }
 
-    public static void main(String...args) {
-        System.out.println(compress(new char[]{'a','a','b','b','c','c','c'}));
-        System.out.println(compress(new char[]{'a','b','b','c','c','c'}));
+    @Test
+    void test() {
+        assertEquals(1, compress(new char[]{'a'}));
+        assertEquals(6, compress(new char[]{'a','a','b','b','c','c','c'}));
+        assertEquals(5, compress(new char[]{'a','b','b','c','c','c'}));
 
-        System.out.println(deCompress(new char[]{'a','b','2','c','3'}));
-        System.out.println(deCompress(new char[]{'a','2','b','2','c','3'}));
+        assertEquals("a", deCompress(new char[]{'a'}));
+        assertEquals("abbccc", deCompress(new char[]{'a','b','2','c','3'}));
+        assertEquals("aabbccc", deCompress(new char[]{'a','2','b','2','c','3'}));
     }
 }

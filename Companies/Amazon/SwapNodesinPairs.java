@@ -6,10 +6,10 @@ public class SwapNodesinPairs {
     public ListNode swapPairs(ListNode head) {
         ListNode dummy = new ListNode(-1);
         dummy.next = head;
-        ListNode tail = dummy;
+        ListNode tail = dummy, first, second;
         while (tail.next != null && tail.next.next != null) {
-            ListNode first = tail.next;
-            ListNode second = tail.next.next;
+            first = tail.next;
+            second = tail.next.next;
 
             tail.next = second;
             first.next = second.next;

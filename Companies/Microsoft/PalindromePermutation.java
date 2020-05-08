@@ -13,7 +13,7 @@ public class PalindromePermutation {
                 set.remove(c);
             }
         }
-        return set.size() == 0 || set.size() == 1;
+        return set.size() <= 1;
     }
 
     public List<String> generatePalindromes(String s) {

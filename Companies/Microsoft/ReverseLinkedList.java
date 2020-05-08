@@ -3,11 +3,24 @@ package Companies.Microsoft;
 import Libs.ListNode;
 
 public class ReverseLinkedList {
+    /* Iterative */
     public ListNode reverseList(ListNode head) {
+        ListNode re = null;
+        while (head != null) {
+            ListNode temp = head.next;
+            head.next = re;
+            re = head;
+            head = temp;
+        }
+        return re;
+    }
+
+    /* Recursive */
+    public ListNode reverseListII(ListNode head) {
         if (head == null || head.next == null) {
             return head;
         }
-        ListNode p = reverseList(head.next);
+        ListNode p = reverseListII(head.next);
         head.next.next = head;
         head.next = null;
         return p;

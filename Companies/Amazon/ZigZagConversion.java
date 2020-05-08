@@ -7,7 +7,7 @@ public class ZigZagConversion {
         for (int i = 0; i < numRows; i++) {
             sbs[i] = new StringBuilder();
         }
-
+//        Arrays.fill(sbs, new StringBuilder());  // !!! not work
         int i = 0;
         while (i < s.length()) {
             for (int ix = 0; ix < numRows && i < s.length(); ix++) {

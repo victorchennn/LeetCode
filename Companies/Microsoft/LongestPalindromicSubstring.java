@@ -1,5 +1,8 @@
 package Companies.Microsoft;
 
+/**
+ * find longest palindromic substring
+ */
 public class LongestPalindromicSubstring {
     public String longestPalindrome_s1(String s) {
         String re = "";

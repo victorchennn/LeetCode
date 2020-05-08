@@ -1,15 +1,12 @@
 package Companies.Microsoft;
 
-import Companies.Bloomberg.Permutations;
-import Companies.Bloomberg.Subsets;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * @see Subsets
  * @see Permutations
+ * @see Subsets
  */
 public class CombinationSum {
     public List<List<Integer>> combinationSum(int[] candidates, int target) {

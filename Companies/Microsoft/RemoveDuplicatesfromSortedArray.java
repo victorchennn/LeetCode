@@ -2,16 +2,23 @@ package Companies.Microsoft;
 
 public class RemoveDuplicatesfromSortedArray {
     public int removeDuplicates(int[] nums) {
-        if (nums.length == 0) {
-            return 0;
-        }
         int i = 0;
-        for (int j = 1; j < nums.length; j++) {
-            if (nums[i] != nums[j]) {
-                i++;
-                nums[i] = nums[j];
+        for (int num : nums) {
+            if (i < 1 || num > nums[i-1]) {
+                nums[i++] = num;
             }
         }
-        return i+1;
+        return i;
+    }
+
+    /* duplicates appeared at most twice */
+    public int removeDuplicatesII(int[] nums) {
+        int i = 0;
+        for (int num : nums) {
+            if (i < 2 || num > nums[i-2]) {
+                nums[i++] = num;
+            }
+        }
+        return i;
     }
 }

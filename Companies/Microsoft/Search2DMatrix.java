@@ -21,8 +21,10 @@ public class Search2DMatrix {
         return false;
     }
 
-    /* Integers in each row are sorted in ascending from left to right. */
-    /* Integers in each column are sorted in ascending from top to bottom. */
+    /**
+     * Integers in each row are sorted in ascending from left to right.
+     * Integers in each column are sorted in ascending from top to bottom.
+     */
     public boolean searchMatrixII(int[][] matrix, int target) {
         if (matrix.length == 0) {
             return false;

@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class ShortestBridge {
-    int[][] dirs = {{0,1},{0,-1},{-1,0},{1,0}};
+    private int[][] dirs = {{0,1},{0,-1},{-1,0},{1,0}};
 
     public int shortestBridge(int[][] A) {
         Queue<int[]> q = new LinkedList<>();

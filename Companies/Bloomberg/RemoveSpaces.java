@@ -1,7 +1,11 @@
 package Companies.Bloomberg;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class RemoveSpaces {
-    public static String remove(String s) {
+    public String remove(String s) {
         int i = 0, j = 0;
         boolean found = false;
         char[] ch = s.toCharArray();
@@ -27,11 +31,12 @@ public class RemoveSpaces {
         return new String(ch, 0, i);
     }
 
-    public static void main(String...args) {
-        System.out.println(remove("GeeksforGeeks"));
-        System.out.println(remove("   GeeksforGeeks"));
-        System.out.println(remove("GeeksforGeeks   "));
-        System.out.println(remove("GeeksforGeeks. "));
-        System.out.println(remove("   Hello Geeks . Welcome   to  GeeksforGeeks   .    "));
+    @Test
+    void test() {
+        assertEquals("GeeksforGeeks", remove("GeeksforGeeks"));
+        assertEquals("GeeksforGeeks", remove("   GeeksforGeeks"));
+        assertEquals("GeeksforGeeks ", remove("GeeksforGeeks   "));
+        assertEquals("GeeksforGeeks. ", remove("GeeksforGeeks. "));
+        assertEquals("Hello Geeks. Welcome to GeeksforGeeks. ", remove("   Hello Geeks . Welcome   to  GeeksforGeeks   .    "));
     }
 }
