@@ -6,22 +6,22 @@ Some solutions contain several basic tests, including analysis of Time complexit
 
 **Companies**:
 
-* Amazon
-* Bloomberg
-* Facebook
-* GoldmanSachs
-* Google
-* Microsoft
-* ServiceNow
-* Twitter
+* Amazon<sup>*165*</sup> 
+* Bloomberg<sup>*238*</sup>
+* Facebook<sup>*128*</sup>
+* GoldmanSachs<sup>*35*</sup>
+* Google<sup>*250*</sup>
+* Microsoft<sup>*171*</sup>
+* ServiceNow<sup>*10*</sup>
+* Twitter<sup>*28*</sup>
 
 -----------------
 
 **Topics**:
 
-* Binary
-* BTree
-* Design
-* DP
-* Node
-* SlidingWindow
+* Binary<sup>*17*</sup>
+* BTree<sup>*63*</sup>
+* Design<sup>*43*</sup>
+* DP<sup>*0*</sup>
+* Node<sup>*17*</sup>
+* SlidingWindow<sup>*9*</sup>
