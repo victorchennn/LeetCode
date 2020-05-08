@@ -22,6 +22,5 @@ Some solutions contain several basic tests, including analysis of Time complexit
 * Binary <sup>*17*</sup>
 * BTree <sup>*63*</sup>
 * Design <sup>*43*</sup>
-* DP <sup>*0*</sup>
 * Node <sup>*17*</sup>
 * SlidingWindow <sup>*9*</sup>
