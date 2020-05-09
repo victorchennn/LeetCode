@@ -6,13 +6,12 @@ Some solutions contain several basic tests, including analysis of Time and Space
 
 **Companies**:
 
-* Amazon <sup>*165*</sup> 
+* Amazon <sup>*166*</sup> 
 * Bloomberg <sup>*238*</sup>
-* Facebook <sup>*128*</sup>
-* GoldmanSachs <sup>*35*</sup>
-* Google <sup>*250*</sup>
+* Facebook <sup>*130*</sup>
+* GoldmanSachs <sup>*36*</sup>
+* Google <sup>*246*</sup>
 * Microsoft <sup>*171*</sup>
-* ServiceNow <sup>*10*</sup>
 * Twitter <sup>*28*</sup>
 
 -----------------
@@ -22,5 +21,6 @@ Some solutions contain several basic tests, including analysis of Time and Space
 * Binary <sup>*17*</sup>
 * BTree <sup>*63*</sup>
 * Design <sup>*43*</sup>
+* Greedy <sup>*13*</sup>
 * Node <sup>*17*</sup>
 * SlidingWindow <sup>*9*</sup>

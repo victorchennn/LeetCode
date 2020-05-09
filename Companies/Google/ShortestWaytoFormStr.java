@@ -1,6 +1,10 @@
 package Companies.Google;
 
-public class ShortestWayFormStr {
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class ShortestWaytoFormStr {
     public int shortestWay(String source, String target) {
         int re = 0, i = 0;
         while (i < target.length()) {
@@ -21,5 +25,12 @@ public class ShortestWayFormStr {
             }
         }
         return start;
+    }
+
+    @Test
+    void test() {
+        assertEquals(2, shortestWay("abc", "abcbc"));
+        assertEquals(-1, shortestWay("abc", "acdbc"));
+        assertEquals(3, shortestWay("xyz", "xzyxz"));
     }
 }

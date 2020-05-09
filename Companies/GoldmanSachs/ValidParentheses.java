@@ -1,4 +1,4 @@
-package Companies.Microsoft;
+package Companies.GoldmanSachs;
 
 import java.util.Stack;
 

@@ -1,4 +1,4 @@
-package Companies.Microsoft;
+package Companies.Facebook;
 
 import java.util.Stack;
 
@@ -20,7 +20,7 @@ import java.util.Stack;
  *
  * @Follow-up4:
  * Return minimum add to make parentheses valid?
- * @see Companies.Facebook.MinimumAddtoMakeParenthesesValid
+ * @see MinimumAddtoMakeParenthesesValid
  */
 public class ValidParentheses {
     public boolean isValid(String s) {

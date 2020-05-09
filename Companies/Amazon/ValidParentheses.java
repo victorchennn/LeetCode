@@ -1,4 +1,4 @@
-package Companies.Bloomberg;
+package Companies.Amazon;
 
 import java.util.Stack;
 
@@ -17,8 +17,12 @@ import java.util.Stack;
  *
  * @Follow-up3:
  * What if there are 'X's, which can replace any of the bracket.
+ *
+ * @Follow-up4:
+ * Return minimum add to make parentheses valid?
+ * @see Companies.Facebook.MinimumAddtoMakeParenthesesValid
  */
-public class ParenthesesValid {
+public class ValidParentheses {
     public boolean isValid(String s) {
         Stack<Character> stack = new Stack<>();
         for (char c : s.toCharArray()) {
