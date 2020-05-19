@@ -1,3 +1,11 @@
+<<<<<<< HEAD
 .idea
 .DS_Store
 out
+=======
+.DS_Store
+.idea
+out
+Solutions.iml
+Libs/PlayGround.java
+>>>>>>> bf7381617bffc791b76067348345261929e32636
