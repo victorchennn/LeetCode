@@ -1,5 +1,8 @@
 package Companies.Bloomberg;
 
+/**
+ * @Follow-up: allow to delete at most one character?
+ */
 public class ValidPalindrome {
     public boolean isPalindrome(String s) {
         int l = 0, r = s.length()-1;
@@ -30,9 +33,7 @@ public class ValidPalindrome {
         return sb.toString().equals(sb.reverse().toString());
     }
 
-    /**
-     * may delete at most one character.
-     */
+    /* may delete at most one character */
     public boolean validPalindrome(String s) {
         int l = 0, r = s.length()-1;
         while (l < r) {

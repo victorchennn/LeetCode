@@ -2,6 +2,9 @@ package Topics.BTree;
 
 import Libs.TreeNode;
 
+/**
+ * If the tree has a root-to-leaf path sum equals target.
+ */
 public class BTPathSum {
     public boolean hasPathSum(TreeNode root, int sum) {
         if (root == null) {

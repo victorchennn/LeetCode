@@ -13,7 +13,7 @@ public class LongestSubstringwithAtMostKDistinctChar {
 //                count[s.charAt(l)]--;
 //                while (count[s.charAt(l)] > 0) {
 //                    l++;
-//                count[s.charAt(l)]--;
+//                    count[s.charAt(l)]--;
 //                }
 //                l++;
 //              ------

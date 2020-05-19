@@ -6,7 +6,7 @@ import java.util.*;
 
 public class NaryTreeSerializeandDeserialize {
 
-    // Encodes Companies.Amazon tree to Companies.Amazon single string.
+    // Encodes a tree to a single string.
     public String serialize(Node root) {
         List<String> l = new ArrayList<>();
         helperS(l, root);

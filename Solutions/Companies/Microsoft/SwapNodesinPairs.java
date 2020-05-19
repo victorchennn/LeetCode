@@ -4,20 +4,19 @@ import Libs.ListNode;
 
 public class SwapNodesinPairs {
     public ListNode swapPairs(ListNode head) {
-        ListNode dummy = new ListNode(0);
+        ListNode dummy = new ListNode(-1);
         dummy.next = head;
-        ListNode t = dummy;
-        while (t.next != null && t.next.next != null) {
-            ListNode first = t.next;
-            ListNode second = t.next.next;
+        ListNode tail = dummy, first, second;
+        while (tail.next != null && tail.next.next != null) {
+            first = tail.next;
+            second = tail.next.next;
 
-            t.next = second;
+            tail.next = second;
             first.next = second.next;
             second.next = first;
 
-            t = first;
+            tail = first;
         }
-
         return dummy.next;
     }
 }

@@ -3,7 +3,7 @@ package Companies.Google;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NumberOfMatchingSubsequences {
+public class NumberofMatchingSubsequences {
 
     public int numMatchingSubseq(String S, String[] words) {
         List<StringBuilder>[] l = new List[26];

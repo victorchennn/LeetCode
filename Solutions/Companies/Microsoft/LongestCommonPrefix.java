@@ -1,6 +1,7 @@
 package Companies.Microsoft;
 
 public class LongestCommonPrefix {
+    /* O(S), where S is the sum of all characters in all strings. */
     public String longestCommonPrefix(String[] strs) {
         if (strs.length == 0) {
             return "";

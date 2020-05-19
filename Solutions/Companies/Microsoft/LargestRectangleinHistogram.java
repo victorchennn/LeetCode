@@ -2,34 +2,31 @@ package Companies.Microsoft;
 
 public class LargestRectangleinHistogram {
     public int largestRectangleArea(int[] heights) {
-        if (heights.length == 0) {
+        int len = heights.length;
+        if (len == 0) {
             return 0;
         }
-        int len = heights.length;
-        int[] left = new int[len];
-        int[] right = new int[len];
-        left[0] = -1;
-        right[len-1] = len;
-
+        int[] l = new int[len];
+        int[] r = new int[len];
+        l[0] = -1;
         for (int i = 1; i < len; i++) {
             int p = i-1;
             while (p >= 0 && heights[p] >= heights[i]) {
-                p = left[p];
+                p = l[p];
             }
-            left[i] = p;
+            l[i] = p;
         }
-
-        for (int i = len-2; i >=0; i--) {
+        r[len-1] = len;
+        for (int i = len-2; i >= 0; i--) {
             int p = i+1;
             while (p < len && heights[p] >= heights[i]) {
-                p = right[p];
+                p = r[p];
             }
-            right[i] = p;
+            r[i] = p;
         }
-
         int max = 0;
         for (int i = 0; i < len; i++) {
-            max = Math.max(max, heights[i]*(right[i]-left[i]-1));
+            max = Math.max(max, heights[i]*(r[i]-l[i]-1));
         }
         return max;
     }

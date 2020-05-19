@@ -5,8 +5,8 @@ import java.util.*;
 public class Logger {
 //    Map<String, Integer> m = new HashMap<>();
 
-    Set<String> s = new HashSet<>();
-    Queue<Pair> q = new LinkedList<>();
+    private Set<String> s = new HashSet<>();
+    private Queue<Pair> q = new LinkedList<>();
 
     /** Initialize your data structure here. */
     public Logger() {

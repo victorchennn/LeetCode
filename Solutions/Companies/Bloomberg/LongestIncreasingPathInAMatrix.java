@@ -1,8 +1,7 @@
 package Companies.Bloomberg;
 
 public class LongestIncreasingPathInAMatrix {
-
-    int[][] dirs = {{0,1},{0,-1},{-1,0},{1,0}};
+    private int[][] dirs = {{0,1},{0,-1},{-1,0},{1,0}};
 
     public int longestIncreasingPath(int[][] matrix) {
         if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {

@@ -2,34 +2,38 @@ package Companies.Microsoft;
 
 import java.util.*;
 
+/**
+ * O(M×N)
+ * M is the length of words
+ * N is the total number of words in the input word list.
+ */
 public class WordLadder {
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-        Set<String> s = new HashSet<>(wordList);
+        Set<String> set = new HashSet<>(wordList);
+        int len = beginWord.length(), step = 1;
         Queue<String> q = new LinkedList<>();
         q.add(beginWord);
-        int step = 1;
-        int len = beginWord.length();
-        while (!q.isEmpty()) {
+        while(!q.isEmpty()) {
+            step++;
             int size = q.size();
             for (int i = 0; i < size; i++) {
                 char[] cur = q.poll().toCharArray();
-                for (int j = 0; j < len; j++) {
-                    char old = cur[j];
-                    for (char c = 'a'; c <= 'z'; c++) {
-                        cur[j] = c;
-                        String newWord = new String(cur);
-                        if (s.contains(newWord)) {
-                            if (newWord.equals(endWord)) {
-                                return step+1;
+                for (int p = 0; p < len; p++) {
+                    char c = cur[p];
+                    for (char ch = 'a'; ch <= 'z'; ch++) {
+                        cur[p] = ch;
+                        String newone = new String(cur);
+                        if (set.contains(newone)) {
+                            if (newone.equals(endWord)) {
+                                return step;
                             }
-                            q.add(newWord);
-                            s.remove(newWord);
+                            set.remove(newone);
+                            q.add(newone);
                         }
                     }
-                    cur[j] = old;
+                    cur[p] = c;
                 }
             }
-            step++;
         }
         return 0;
     }

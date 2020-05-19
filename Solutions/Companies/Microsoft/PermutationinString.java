@@ -17,7 +17,6 @@ public class PermutationinString {
             count[s2.charAt(i - len1) - 'a']++;
             if (allZero(count)) return true;
         }
-
         return false;
     }
 

@@ -1,7 +1,11 @@
 package Companies.Bloomberg;
 
+/**
+ * 1 is read off as "one 1" or 11.
+ * 11 is read off as "two 1s" or 21.
+ * 21 is read off as "one 2, then one 1" or 1211.
+ */
 public class CountAndSay {
-
     /**
      * "(.)": defines a group that contains a single character that could be of anything.
      * "\1": refers to the defined group with the index of 1.

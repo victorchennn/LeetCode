@@ -1,6 +1,6 @@
 package Companies.Google;
 
-public class NumberOfDiceRollsWithTargetSum {
+public class NumberofDiceRollsWithTargetSum {
     public int numRollsToTarget(int d, int f, int target) {
         int mod = (int) Math.pow(10, 9)+7;
         int[][] dp = new int[d+1][target+1];

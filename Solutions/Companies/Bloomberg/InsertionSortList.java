@@ -3,6 +3,8 @@ package Companies.Bloomberg;
 import Libs.ListNode;
 
 public class InsertionSortList {
+
+    /* Sort a linkedlist using insertion sort. */
     public ListNode insertionSortList(ListNode head) {
         ListNode dummy = new ListNode(0);
         ListNode prev = dummy;

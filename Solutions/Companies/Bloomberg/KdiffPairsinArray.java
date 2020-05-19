@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Number of pairs absolute difference is K
+ */
 public class KdiffPairsinArray {
     public int findPairs(int[] nums, int k) {
         if (k < 0) {

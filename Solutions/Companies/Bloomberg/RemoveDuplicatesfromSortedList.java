@@ -3,7 +3,6 @@ package Companies.Bloomberg;
 import Libs.ListNode;
 
 public class RemoveDuplicatesfromSortedList {
-
     /* each element appear only once */
     public ListNode deleteDuplicatesI(ListNode head) {
         ListNode re = head;
@@ -20,8 +19,10 @@ public class RemoveDuplicatesfromSortedList {
         return re;
     }
 
-    /* delete all duplicate numbers, leaving only distinct numbers. */
-    /* Iterative */
+    /**
+     * delete all duplicate numbers, leaving only distinct numbers.
+     * Iterative
+     */
     public ListNode deleteDuplicates(ListNode head) {
         if (head == null) {
             return head;

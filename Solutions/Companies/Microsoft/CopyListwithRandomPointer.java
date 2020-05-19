@@ -2,6 +2,9 @@ package Companies.Microsoft;
 
 import Libs.Node;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CopyListwithRandomPointer {
     public Node copyRandomList(Node head) {
         if (head == null) {
@@ -29,5 +32,21 @@ public class CopyListwithRandomPointer {
             newhead = newhead.next;
         }
         return re;
+    }
+
+    private Map<Node, Node> visitedHash = new HashMap<>();
+
+    public Node copyRandomListII(Node head) {
+        if (head == null) {
+            return null;
+        }
+        if (visitedHash.containsKey(head)) {
+            return visitedHash.get(head);
+        }
+        Node node = new Node(head.val);
+        visitedHash.put(head, node);
+        node.next = copyRandomListII(head.next);
+        node.random = copyRandomListII(head.random);
+        return node;
     }
 }

@@ -1,6 +1,6 @@
 package Companies.Bloomberg;
 
-public class WallsAndGates {
+public class WallsandGates {
     public void wallsAndGates(int[][] rooms) {
         for (int i = 0; i < rooms.length; i++) {
             for (int j = 0; j < rooms[0].length; j++) {

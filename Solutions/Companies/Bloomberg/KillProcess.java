@@ -2,6 +2,11 @@ package Companies.Bloomberg;
 
 import java.util.*;
 
+/**
+ * Return a list of processes that will be killed in the end.
+ * When a process is killed, all its children processes will be killed.
+ *
+ */
 public class KillProcess {
     public List<Integer> killProcess(List<Integer> pid, List<Integer> ppid, int kill) {
         Map<Integer, List<Integer>> m = new HashMap<>();

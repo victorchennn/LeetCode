@@ -1,6 +1,6 @@
 package Companies.Bloomberg;
 
-public class GameOfLife {
+public class GameofLife {
     public void gameOfLife(int[][] board) {
         int[][] dirs = new int[][]{{1,1},{1,0},{1,-1},{0,-1},{0,1},{-1,1},{-1,0},{-1,-1}};
         int row = board.length;

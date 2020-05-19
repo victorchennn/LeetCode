@@ -4,6 +4,10 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.TreeMap;
 
+/**
+ * Rearrange the cards(hand[]) into groups so that each group is size W,
+ * and consists of W consecutive cards.
+ */
 public class HandofStraights {
     public boolean isNStraightHand(int[] hand, int W) {
         PriorityQueue<Integer> q = new PriorityQueue<>();

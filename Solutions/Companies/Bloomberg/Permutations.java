@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @see CombinationSum
+ * @see Subsets
+ */
 public class Permutations {
     public List<List<Integer>> permuteUnique(int[] nums) {
         Arrays.sort(nums);

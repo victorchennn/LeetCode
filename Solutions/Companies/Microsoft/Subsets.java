@@ -3,18 +3,26 @@ package Companies.Microsoft;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @see CombinationSum
+ * @see Permutations
+ */
 public class Subsets {
-    public List<List<Integer>> subsets(int[] nums) {
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+//        Arrays.sort(nums);
         List<List<Integer>> re = new ArrayList<>();
-        helper(re, new ArrayList<>(), nums, 0);
+        dfs(re, new ArrayList<>(), nums, 0);
         return re;
     }
 
-    private void helper(List<List<Integer>> re, List<Integer> l, int[] nums, int start) {
+    private void dfs(List<List<Integer>> re, List<Integer> l, int[] nums, int start) {
         re.add(new ArrayList<>(l));
         for (int i = start; i < nums.length; i++) {
+//            if (i > start && nums[i] == nums[i-1]) {  // duplicates
+//                continue;
+//            }
             l.add(nums[i]);
-            helper(re, l, nums, i+1);
+            dfs(re, l, nums, i+1);
             l.remove(l.size()-1);
         }
     }

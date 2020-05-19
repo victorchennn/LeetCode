@@ -3,6 +3,10 @@ package Companies.Bloomberg;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @see CombinationSum
+ * @see Permutations
+ */
 public class Subsets {
     public List<List<Integer>> subsetsWithDup(int[] nums) {
 //        Arrays.sort(nums);

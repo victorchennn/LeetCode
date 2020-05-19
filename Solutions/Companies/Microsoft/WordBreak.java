@@ -1,20 +1,20 @@
 package Companies.Microsoft;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class WordBreak {
     public boolean wordBreak(String s, List<String> wordDict) {
         boolean[] dp = new boolean[s.length()+1];
+        dp[0] = true;
+        Set<String> set = new HashSet<>(wordDict);
         for (int i = 1; i <= s.length(); i++) {
-            if (wordDict.contains(s.substring(0, i))) {
-                dp[i] = true;
-            } else {
-                for (int j = 0; j < i; j++) {
-                    if (dp[j] && wordDict.contains(s.substring(j, i))) {
-                        dp[i] = true;
-                        break;
-                    }
+            for (int j = 0; j < i; j++) {
+                if (dp[j] && set.contains(s.substring(j, i))) {
+                    dp[i] = true;
+                    break;
                 }
             }
         }
@@ -23,6 +23,10 @@ public class WordBreak {
 //        return dfs(s, wordDict, new HashMap<>());
     }
 
+    /**
+     * Time complexity: O(n^2). Size of recursion tree can go up to O(n^2).
+     * Space complexity: O(n). The depth of recursion tree can go up to O(n).
+     */
     private boolean dfs(String s, List<String> l, Map<String, Boolean> m) {
         if (m.containsKey(s)) {
             return m.get(s);

@@ -3,9 +3,8 @@ package Topics.Design;
 import java.util.Iterator;
 
 public class PeekingIterator implements Iterator<Integer> {
-
-    Integer next;
-    Iterator<Integer> it;
+    private Integer next;
+    private Iterator<Integer> it;
 
     public PeekingIterator(Iterator<Integer> iterator) {
         // initialize any member here.

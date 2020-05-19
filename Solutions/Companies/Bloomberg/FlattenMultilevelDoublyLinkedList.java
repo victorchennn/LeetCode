@@ -2,8 +2,36 @@ package Companies.Bloomberg;
 
 import Libs.Node;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class FlattenMultilevelDoublyLinkedList {
     public Node flatten(Node head) {
+        if (head == null) {
+            return null;
+        }
+        Node pseudoHead = new Node(-1);
+        Node curr, prev = pseudoHead;
+
+        Deque<Node> stack = new ArrayDeque<>();
+        stack.push(head);
+
+        while (!stack.isEmpty()) {
+            curr = stack.pop();
+            prev.next = curr;
+            curr.prev = prev;
+
+            if (curr.next != null) stack.push(curr.next);
+            if (curr.child != null) {
+                stack.push(curr.child);
+                curr.child = null;
+            }
+            prev = curr;
+        }
+        pseudoHead.next.prev = null;
+        return pseudoHead.next;
+
+        /* may visit nodes twice */
 //        Node cur = head;
 //        while (cur != null) {
 //            if (cur.child == null) {
@@ -15,7 +43,7 @@ public class FlattenMultilevelDoublyLinkedList {
 //                tail = tail.next;
 //            }
 //            tail.next = cur.next;
-//            if (cur.next != null) {     // Be careful!
+//            if (cur.next != null) {
 //                cur.next.prev = tail;
 //            }
 //            cur.next = cur.child;
@@ -25,8 +53,8 @@ public class FlattenMultilevelDoublyLinkedList {
 //        }
 //        return head;
 
-        helper(head);
-        return head;
+//        helper(head);
+//        return head;
     }
 
     private Node helper(Node node) {
@@ -48,6 +76,6 @@ public class FlattenMultilevelDoublyLinkedList {
         node.next = node.child;
         node.child.prev = node;
         node.child = null;
-        return helper(node.next);
+        return helper(tail);
     }
 }

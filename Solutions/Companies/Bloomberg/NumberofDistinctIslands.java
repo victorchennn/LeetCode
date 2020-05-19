@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class NumberofDistinctIslands {
-
     private int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};
 
     public int numDistinctIslands(int[][] grid) {

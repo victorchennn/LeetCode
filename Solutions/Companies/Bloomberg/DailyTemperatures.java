@@ -3,7 +3,6 @@ package Companies.Bloomberg;
 import java.util.Stack;
 
 public class DailyTemperatures {
-
     /**
      * Next greater position
      * O(NW), N is length of array, W is the number of allowed values for T[i].

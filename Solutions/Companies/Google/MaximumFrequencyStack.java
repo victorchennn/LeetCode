@@ -5,10 +5,9 @@ import java.util.Map;
 import java.util.Stack;
 
 public class MaximumFrequencyStack {
-
-    Map<Integer, Integer> freq;
-    Map<Integer, Stack<Integer>> ties;
-    int max;
+    private Map<Integer, Integer> freq;
+    private Map<Integer, Stack<Integer>> ties;
+    private int max;
 
     public MaximumFrequencyStack() {
         max = 0;

@@ -1,9 +1,8 @@
 package Topics.Design;
 
 public class TicTacToe {
-
-    int[] rows, cols;
-    int diag, antidiag;
+    private int[] rows, cols;
+    private int diag, antidiag;
 
     /** Initialize your data structure here. */
     public TicTacToe(int n) {
@@ -11,7 +10,7 @@ public class TicTacToe {
         cols = new int[n];
     }
 
-    /** Player {player} makes Companies.Amazon move at ({row}, {col}).
+    /** Player {player} makes move at ({row}, {col}).
      @param row The row of the board.
      @param col The column of the board.
      @param player The player, can be either 1 or 2.

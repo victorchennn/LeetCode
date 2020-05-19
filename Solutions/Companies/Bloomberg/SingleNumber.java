@@ -20,7 +20,7 @@ public class SingleNumber {
         return re;
     }
 
-    public int singleNumberII(int[] nums) {
+    public int singleNumber_2(int[] nums) {
         Set<Integer> s = new HashSet<>();
         int sum = 0, dsum = 0;
         for (int num : nums) {
@@ -31,5 +31,31 @@ public class SingleNumber {
             dsum += num;
         }
         return sum*2-dsum;
+    }
+
+    /* Every element appears three times except for one */
+    public int singleNumberII(int[] nums) {
+        int one = 0, two = 0;
+        for (int i : nums) {
+            one = ~two & (one ^ i);
+            two = ~one & (two ^ i);
+        }
+        return one;
+    }
+
+    /* exactly two elements appear only once and all the other elements appear exactly twice */
+    public int[] singleNumberIII(int[] nums) {
+        int i = 0;
+        for (int num : nums) {
+            i ^= num;
+        }
+        int diff = i & (-i);
+        int x = 0;
+        for (int num : nums) {
+            if ((num & diff) != 0) {
+                x ^= num;
+            }
+        }
+        return new int[]{x, i^x};
     }
 }

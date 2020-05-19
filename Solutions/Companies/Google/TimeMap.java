@@ -28,7 +28,7 @@ public class TimeMap {
             return "";
         }
         List<Pair<Integer, String>> l = m.get(key);
-//        int i = Collections.binarySearch(l, new Pair<>(timestamp, ""), (Companies.Amazon,b)->Companies.Amazon.getKey()-b.getKey()); // !
+//        int i = Collections.binarySearch(l, new Pair<>(timestamp, ""), (a,b)->a.getKey()-b.getKey()); // !
 //        if (i >= 0) {
 //            return l.get(i).getValue();
 //        } else if (i == -1) {

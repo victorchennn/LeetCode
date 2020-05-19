@@ -2,7 +2,7 @@ package Companies.Google;
 
 import java.util.TreeSet;
 
-public class MaxSumOfRectangleNoLargerThanK {
+public class MaxSumofRectangleNoLargerThanK {
     public int maxSumSubmatrix(int[][] matrix, int k) {
         int m = matrix.length, n = matrix[0].length, re = Integer.MIN_VALUE;
         for (int l = 0; l < n; l++) {

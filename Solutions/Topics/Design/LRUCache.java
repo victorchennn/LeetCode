@@ -4,10 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LRUCache {
-
-    Node head, tail;
-    int cap;
-    Map<Integer, Node> m;
+    private Node head, tail;
+    private final int cap;
+    private Map<Integer, Node> m;
 
     public LRUCache(int capacity) {
         cap = capacity;

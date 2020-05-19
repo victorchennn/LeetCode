@@ -1,8 +1,10 @@
 package Companies.Bloomberg;
 
-import java.io.File;
 import java.util.List;
 
+/**
+ * @see MergeKSortedLists
+ */
 public class MergeFile {
     public File merge(List<File> files) {
         if (files.size() == 0) {

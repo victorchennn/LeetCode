@@ -1,11 +1,20 @@
 package Companies.Bloomberg;
 
+/**
+ * @see Pow
+ */
 public class Sqrt {
+
+    /**
+     * mySqrt(x) = 2*mySqrt(x/4)
+     */
     public int mySqrt(int x) {
         if (x < 2) {
             return x;
         }
         int left = mySqrt(x >> 2) << 1;
+//        int left = (int)Math.pow(Math.E, 0.5*Math.log(x));
+
         int right = left+1;
         return (long)right * right > x ? left:right;
     }

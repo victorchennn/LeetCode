@@ -4,6 +4,9 @@ import Libs.TreeNode;
 
 import java.util.*;
 
+/**
+ * @see Companies.Bloomberg.MinimumStepstoGenerateNumber
+ */
 public class BTLevelOrderTraversal {
     public List<List<Integer>> levelOrder(TreeNode root) {
 //        List<List<Integer>> re = new ArrayList<>();
@@ -28,16 +31,19 @@ public class BTLevelOrderTraversal {
 //        }
 //        return re;
 
-        Map<Integer, List<Integer>> m = new HashMap<>();
-        helper(m, root, 0);
-        return new ArrayList<>(m.values());
+        List<List<Integer>> re = new ArrayList<>();
+        helper(re, root, 0);
+        return re;
     }
 
-    private void helper(Map<Integer, List<Integer>> m, TreeNode root, int level) {
+    private void helper(List<List<Integer>> re, TreeNode root, int level) {
         if (root != null) {
-            m.computeIfAbsent(level, k-> new ArrayList<>()).add(root.val);
-            helper(m, root.left, level+1);
-            helper(m, root.right, level+1);
+            if (level == re.size()) {
+                re.add(new ArrayList<>());
+            }
+            re.get(level).add(root.val);
+            helper(re, root.left, level+1);
+            helper(re, root.right, level+1);
         }
     }
 }

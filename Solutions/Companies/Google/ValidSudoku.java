@@ -3,27 +3,27 @@ package Companies.Google;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * @see Companies.Microsoft.SudokuSolver
+ */
 public class ValidSudoku {
     public boolean isValidSudoku(char[][] board) {
-        for (int i = 0; i < 9; i ++) {
-            Set<Character> rows = new HashSet<>();
-            Set<Character> cols = new HashSet<>();
+        for (int i = 0; i < 9; i++) {
+            Set<Character> row = new HashSet<>();
+            Set<Character> col = new HashSet<>();
+            Set<Character> sub = new HashSet<>();
             for (int j = 0; j < 9; j++) {
-                if (board[i][j] != '.' && !rows.add(board[i][j])) {
+                if (board[i][j] != '.' && !col.add(board[i][j])) {
                     return false;
                 }
-                if (board[j][i] != '.' && !cols.add(board[j][i])) {
+                if (board[j][i] != '.' && !row.add(board[j][i])) {
                     return false;
                 }
             }
-        }
-        for (int index = 0; index < 9; index++) {
-            Set<Character> seen = new HashSet<>();
-            for (int row = 0; row < 3; row++) {
-                for (int col = 0; col < 3; col++) {
-                    int rr = index/3*3 + row;
-                    int cc = index%3*3 + col;
-                    if (board[rr][cc] != '.' && !seen.add(board[rr][cc])) {
+            for (int m = 0; m < 3; m++) {
+                for (int n = 0; n < 3; n++) {
+                    int r = i/3*3+m, c = i%3*3+n;
+                    if (board[r][c] != '.' && !sub.add(board[r][c])) {
                         return false;
                     }
                 }

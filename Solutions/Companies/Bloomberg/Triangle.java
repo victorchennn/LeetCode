@@ -2,6 +2,9 @@ package Companies.Bloomberg;
 
 import java.util.List;
 
+/**
+ * @see PascalsTriangle
+ */
 public class Triangle {
     public int minimumTotal(List<List<Integer>> triangle) {
         int[] dp = new int[triangle.size()+1];

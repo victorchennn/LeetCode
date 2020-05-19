@@ -3,7 +3,7 @@ package Companies.Google;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NumberOfSubmatricesThatSumToTarget {
+public class NumberofSubmatricesThatSumToTarget {
     public int numSubmatrixSumTarget(int[][] matrix, int target) {
         int m = matrix.length, n = matrix[0].length;
         for (int i = 0; i < m; i++) {

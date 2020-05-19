@@ -1,5 +1,8 @@
 package Companies.Bloomberg;
 
+/**
+ * leftSum == rightSum
+ */
 public class FindPivotIndex {
     public int pivotIndex(int[] nums) {
         int sum = 0, cur = 0;

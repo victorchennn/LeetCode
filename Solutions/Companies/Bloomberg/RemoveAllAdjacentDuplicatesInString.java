@@ -1,5 +1,8 @@
 package Companies.Bloomberg;
 
+/**
+ * @see CandyCrush
+ */
 public class RemoveAllAdjacentDuplicatesInString {
     public String removeDuplicates(String S) {
         int p = 0;

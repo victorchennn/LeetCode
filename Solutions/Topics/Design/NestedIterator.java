@@ -5,8 +5,7 @@ import java.util.List;
 import java.util.Stack;
 
 public class NestedIterator implements Iterator<Integer> {
-
-    Stack<NestedInteger> s = new Stack<>();
+    private Stack<NestedInteger> s = new Stack<>();
 
     public NestedIterator(List<NestedInteger> nestedList) {
         for (int i = nestedList.size()-1; i >= 0; i--) {

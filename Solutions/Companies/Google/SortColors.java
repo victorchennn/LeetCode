@@ -2,22 +2,24 @@ package Companies.Google;
 
 public class SortColors {
     public void sortColors(int[] nums) {
-        int i = 0, j = nums.length-1, cur = 0;
-        while (cur <= j) {  // Be careful!
-            if (nums[cur] == 0) {
-                int temp = nums[cur];
-                nums[cur] = nums[i];
-                nums[i] = temp;
-                i++;
-                cur++;
-            } else if (nums[cur] == 2) {
-                int temp = nums[cur];
-                nums[cur] = nums[j];
-                nums[j] = temp;
-                j--;   // Be careful, no need to add cur
+        int l = 0, r = nums.length-1, p = 0;
+        while (p <= r) {
+            if (nums[p] == 0) {
+                swap(nums, l, p);
+                p++;
+                l++;
+            } else if (nums[p] == 2) {
+                swap(nums, r, p);
+                r--;
             } else {
-                cur++;
+                p++;
             }
         }
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
 }

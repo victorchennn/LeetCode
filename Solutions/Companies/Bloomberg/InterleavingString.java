@@ -1,14 +1,15 @@
 package Companies.Bloomberg;
 
+/**
+ * Use s1 and s2 to build s3
+ *
+ * Input: s1 = "aabcc", s2 = "dbbca", s3 = "aadbbcbcac"
+ * Output: true
+ *
+ * Input: s1 = "aabcc", s2 = "dbbca", s3 = "aadbbbaccc"
+ * Output: false
+ */
 public class InterleavingString {
-
-    /**
-     * Input: s1 = "aabcc", s2 = "dbbca", s3 = "aadbbcbcac"
-     * Output: true
-     *
-     * Input: s1 = "aabcc", s2 = "dbbca", s3 = "aadbbbaccc"
-     * Output: false
-     */
     public boolean isInterleave(String s1, String s2, String s3) {
         int m = s1.length(), n = s2.length();
         if (s3.length() != m+n) {

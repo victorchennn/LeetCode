@@ -4,7 +4,6 @@ import java.util.stream.IntStream;
 
 public class FriendCircles {
     public int findCircleNum(int[][] M) {
-
         /* Union-Find */
         int len = M.length, count = M.length;
         int[] parents = IntStream.range(0, len).toArray();

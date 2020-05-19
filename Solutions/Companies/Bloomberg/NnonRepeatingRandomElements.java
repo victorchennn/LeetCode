@@ -35,9 +35,9 @@ import java.util.Random;
  *
  */
 public class NnonRepeatingRandomElements {
-    private Random rand = new Random();
+    private static Random rand = new Random();
 
-    public int[] nonRepeatingRandomElements(int[] nums, int k) {
+    public static int[] nonRepeatingRandomElements(int[] nums, int k) {
         int[] re = new int[k];
         for (int i = 0; i < k; i++) {
             re[i] = nums[i];
@@ -58,10 +58,8 @@ public class NnonRepeatingRandomElements {
 
     public static void main(String...args) {
         int[] input = {2,4,1,-19,56,23,0,34,112,5};
-        NnonRepeatingRandomElements test = new NnonRepeatingRandomElements();
-        for (int num : test.nonRepeatingRandomElements(input, 3)) {
+        for (int num : nonRepeatingRandomElements(input, 3)) {
             System.out.print(num + " ");
         }
     }
-
 }

@@ -23,6 +23,10 @@ public class WordBreak {
 //        return dfs(s, wordDict, new HashMap<>());
     }
 
+    /**
+     * Time complexity: O(n^2). Size of recursion tree can go up to O(n^2).
+     * Space complexity: O(n). The depth of recursion tree can go up to O(n).
+     */
     private boolean dfs(String s, List<String> l, Map<String, Boolean> m) {
         if (m.containsKey(s)) {
             return m.get(s);

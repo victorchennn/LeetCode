@@ -6,24 +6,21 @@ import java.util.Set;
 public class SudokuValid {
     public boolean isValidSudoku(char[][] board) {
         for (int i = 0; i < 9; i++) {
-            Set<Character> rows = new HashSet<>();
-            Set<Character> cols = new HashSet<>();
+            Set<Character> row = new HashSet<>();
+            Set<Character> col = new HashSet<>();
+            Set<Character> sub = new HashSet<>();
             for (int j = 0; j < 9; j++) {
-                if (board[i][j] != '.' && !rows.add(board[i][j])) {
+                if (board[i][j] != '.' && !col.add(board[i][j])) {
                     return false;
                 }
-                if (board[j][i] != '.' && !cols.add(board[j][i])) {
+                if (board[j][i] != '.' && !row.add(board[j][i])) {
                     return false;
                 }
             }
-        }
-        for (int i = 0; i < 9; i++) {
-            Set<Character> set = new HashSet<>();
-            for (int r = 0; r < 3; r++) {
-                for (int c = 0; c < 3; c++) {
-                    int row = i/3*3+r;
-                    int col = i%3*3+c;
-                    if (board[row][col] != '.' && !set.add(board[row][col])) {
+            for (int m = 0; m < 3; m++) {
+                for (int n = 0; n < 3; n++) {
+                    int r = i/3*3+m, c = i%3*3+n;
+                    if (board[r][c] != '.' && !sub.add(board[r][c])) {
                         return false;
                     }
                 }

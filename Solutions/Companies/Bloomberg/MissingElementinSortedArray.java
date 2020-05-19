@@ -1,12 +1,12 @@
 package Companies.Bloomberg;
 
+/**
+ * Find Kth missing number is a sorted array.
+ * Input: A = [4,7,9,10], K = 3
+ * Output: 8
+ * Explanation: The missing numbers are [5,6,8,...], hence the third missing number is 8.
+ */
 public class MissingElementinSortedArray {
-
-    /**
-     * Input: A = [4,7,9,10], K = 3
-     * Output: 8
-     * Explanation: The missing numbers are [5,6,8,...], hence the third missing number is 8.
-     */
     public int missingElement(int[] nums, int k) {
         int len = nums.length, l = 0, r = len-1;
         int mis = nums[r] - nums[l] + 1 - len;

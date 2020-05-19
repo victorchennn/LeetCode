@@ -1,6 +1,6 @@
 package Companies.Bloomberg;
 
-public class StringToIntegerATOI {
+public class StringtoIntegerATOI {
     public int myAtoi(String str) {
         int i = 0, sign = 1, num = 0;
         while (i < str.length() && str.charAt(i) == ' ') {

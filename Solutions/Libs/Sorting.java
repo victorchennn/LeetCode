@@ -146,7 +146,6 @@ public class Sorting {
         int[] a2 = new int[]{12,6,8,13,1,5,0,9,4,11,10,7,2,3};
         int[] a3 = new int[]{852,142,284,923,355,00,
                 71,497,639,710,426,781,213};
-//        System.arraycopy();
 
         Sorting test = new Sorting();
         System.out.println(Arrays.toString(a1));

@@ -4,6 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @see AvailableTime
+ * @see EmployeeFreeTime
+ * @see MaximumLengthofPairChain
+ * @see MeetingRooms
+ * @see NonoverlappingIntervals
+ * @see RemoveArrayElementsinGivenIndexRanges
+ */
 public class MergeIntervals {
     public int[][] merge(int[][] intervals) {
         if (intervals == null || intervals.length <= 1) {

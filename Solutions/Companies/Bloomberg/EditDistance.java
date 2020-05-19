@@ -1,5 +1,11 @@
 package Companies.Bloomberg;
 
+/**
+ * Given two words, find the minimum number of operations required to convert word1 to word2.
+ * You have the following 3 operations permitted on a word:
+ *
+ * Insert/Delete/Replace
+ */
 public class EditDistance {
     public int minDistance(String word1, String word2) {
         int m = word1.length(), n = word2.length();

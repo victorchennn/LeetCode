@@ -1,5 +1,8 @@
 package Companies.Bloomberg;
 
+/**
+ * @see Companies.Amazon.TrappingRainWaterII
+ */
 public class TrappingRainWater {
     public int trap(int[] height) {
         int l = 0, r = height.length-1, lmax = 0, rmax = 0, sum = 0;

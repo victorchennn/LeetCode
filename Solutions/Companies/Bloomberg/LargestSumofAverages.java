@@ -1,7 +1,6 @@
 package Companies.Bloomberg;
 
 public class LargestSumofAverages {
-
     /* O(KN^2) */
     public double largestSumOfAverages(int[] A, int K) {
         int len = A.length;

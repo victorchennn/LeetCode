@@ -1,5 +1,8 @@
 package Companies.Microsoft;
 
+/**
+ * find longest palindromic subsequence
+ */
 public class LongestPalindromicSubsequence {
     public int longestPalindromeSubseq(String s) {
         int len = s.length();

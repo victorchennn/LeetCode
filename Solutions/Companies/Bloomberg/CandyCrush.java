@@ -1,12 +1,19 @@
 package Companies.Bloomberg;
 
+import javafx.util.Pair;
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-public class CandyCrush {
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-    public String candyCrush(String s) {
-        Deque<Letter> stack = new ArrayDeque<>();
+/**
+ * @see RemoveAllAdjacentDuplicatesInString
+ */
+public class CandyCrush {
+    public static String candyCrush(String s) {
+        Deque<Pair<Character, Integer>> stack = new ArrayDeque<>();
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             int count = 1;
@@ -14,41 +21,83 @@ public class CandyCrush {
                 count++;
                 i++;
             }
-            if (!stack.isEmpty() && stack.peek().c == c) {
-                count += stack.pop().count;
+            if (!stack.isEmpty() && stack.peek().getKey() == c) {
+                count += stack.pop().getValue();
             }
             if (count < 3) {
-                stack.push(new Letter(c, count));
+                stack.push(new Pair<>(c, count));
             }
         }
 
         StringBuilder sb = new StringBuilder();
         while (!stack.isEmpty()) {
-            Letter l = stack.pop();
-            for (int i = l.count; i > 0; i--) {
-                sb.insert(0, l.c);
+            Pair<Character, Integer> l = stack.pop();
+            for (int i = l.getValue(); i > 0; i--) {
+                sb.insert(0, l.getKey());
             }
         }
         return sb.toString();
     }
 
-    public static void main(String...args) {
-        CandyCrush test = new CandyCrush();
-        System.out.println(test.candyCrush("acaaaacc")); // a
-        System.out.println(test.candyCrush("aaabbbc"));  // c
-        System.out.println(test.candyCrush("aabbbacd")); // cd
-        System.out.println(test.candyCrush("aabbccddeeedcba")); // ""
-        System.out.println(test.candyCrush("aaabbbacd")); // acd
+    /**
+     * @Follow-up: ask for shortest string
+     */
+    public static String candyCrushII(String s) {
+        String forward = helper(s, false);
+        String backward = helper(s, true);
+        if (forward.equals(s) && backward.equals(s)) {
+            return s;
+        }
+        String re1 = candyCrushII(forward);
+        String re2 = candyCrushII(backward);
+        return re1.length() < re2.length()? re1:re2;
+     }
+
+
+    private static String helper(String s, boolean reverse) {
+        if (!reverse) {
+            for (int i = 0; i < s.length(); i++) {
+                char c = s.charAt(i);
+                int start = i;
+                int count = 1;
+                while (i < s.length()-1 && s.charAt(i+1) == c) {
+                    count++;
+                    i++;
+                }
+                if (count >= 3) {
+                    return s.substring(0, start) + s.substring(i+1);
+                }
+            }
+        } else {
+            for (int i = s.length()-1; i >= 0; i--) {
+                char c = s.charAt(i);
+                int start = i;
+                int count = 1;
+                while (i > 0 && s.charAt(i-1) == c) {
+                    count++;
+                    i--;
+                }
+                if (count >= 3) {
+                    return s.substring(0, i) + s.substring(start+1);
+                }
+            }
+        }
+        return s;
     }
 
+    @Test
+    void test() {
+        assertEquals("a", candyCrush("acaaaacc"));
+        assertEquals("c", candyCrush("aaabbbc"));
+        assertEquals("cd", candyCrush("aabbbacd"));
+        assertEquals("", candyCrush("aabbccddeeedcba"));
 
-    private class Letter {
-        char c;
-        int count;
+        assertEquals("aaaacaaabbba", helper("abbbaaacaaabbba", false));
+        assertEquals("abbbaaacaaaa", helper("abbbaaacaaabbba", true));
 
-        public Letter(char c, int count) {
-            this.c = c;
-            this.count = count;
-        }
+        assertEquals("acd", candyCrush("aaabbbacd"));
+        assertEquals("cd", candyCrushII("aaabbbacd"));
+        assertEquals("ca", candyCrush("abbbaaacaaabbba"));
+        assertEquals("c", candyCrushII("abbbaaacaaabbba"));
     }
 }

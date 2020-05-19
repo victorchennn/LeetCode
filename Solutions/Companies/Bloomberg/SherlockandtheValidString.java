@@ -1,5 +1,9 @@
 package Companies.Bloomberg;
 
+/**
+ * A string to be valid if all characters of the string appear the same number of times.
+ * It's also valid if can remove just 1 character, and the remaining characters will occur the same number of times.
+ */
 public class SherlockandtheValidString {
     public String isValid(String s) {
         int[] count = new int[26];

@@ -3,7 +3,7 @@ package Companies.Microsoft;
 public class OnebitandTwobitChar {
 
     /**
-     * Companies.Amazon) if there is odd amount of 1(10, ...01110, etc) the answer is false
+     * a) if there is odd amount of 1(10, ...01110, etc) the answer is false
      * b) if it's even (110, ...011110, etc) the answer is true
      */
     public boolean isOneBitCharacter(int[] bits) {

@@ -18,7 +18,7 @@ public class Anagram {
     public static void main(String[] args) {
         Anagram test = new Anagram();
 //        System.out.println(test.count("toe", "ate"));
-//        System.out.println(test.count("Companies.Amazon", "bb"));
+//        System.out.println(test.count("a", "bb"));
 //        System.out.println(test.count("jk", "kj"));
 //        System.out.println(test.count("abb", "bbc"));
 //        System.out.println(test.count("mn", "op"));

@@ -5,10 +5,9 @@ import java.util.List;
 import java.util.TreeMap;
 
 public class MyCalendar {
-
-    TreeMap<Integer, Integer> m;
-    List<int[]> overlap;
-    List<int[]> calendar;
+    private TreeMap<Integer, Integer> m;
+    private List<int[]> overlap;
+    private List<int[]> calendar;
 
     public MyCalendar() {
         m = new TreeMap<>();

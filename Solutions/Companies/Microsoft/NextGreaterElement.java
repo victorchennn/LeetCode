@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+/**
+ * @see Companies.Bloomberg.LastGreaterElement
+ */
 public class NextGreaterElement {
     public int[] nextGreaterElement(int[] nums1, int[] nums2) {
         Map<Integer, Integer> m = new HashMap<>();
@@ -47,6 +50,7 @@ public class NextGreaterElement {
     /**
      * Input:  5349876
      * Output: 5364789
+     * @see NextPermutation
      */
     public int nextGreaterElement(int n) {
         char[] num = String.valueOf(n).toCharArray();

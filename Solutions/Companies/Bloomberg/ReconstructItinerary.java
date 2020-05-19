@@ -2,6 +2,9 @@ package Companies.Bloomberg;
 
 import java.util.*;
 
+/**
+ * @see AllPathsFromSourcetoTarget
+ */
 public class ReconstructItinerary {
     public List<String> findItinerary(List<List<String>> tickets) {
         List<String> re = new ArrayList<>();

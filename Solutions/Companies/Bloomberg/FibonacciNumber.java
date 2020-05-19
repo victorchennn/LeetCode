@@ -1,7 +1,9 @@
 package Companies.Bloomberg;
 
+/**
+ * @see ClimbingStairs
+ */
 public class FibonacciNumber {
-    /* Fibonacci Number */
     public int fib(int N) {
         if (N <= 1) {
             return N;
@@ -13,16 +15,5 @@ public class FibonacciNumber {
             num2 = temp;
         }
         return num2;
-    }
-
-    public static void main(String...args) {
-        FibonacciNumber test = new FibonacciNumber();
-        int num1 = 0, num2 = 1;
-        while (num2 < 15) {
-            System.out.println(num2);
-            int temp = num1+num2;
-            num1 = num2;
-            num2 = temp;
-        }
     }
 }

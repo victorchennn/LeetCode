@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class NaryTreeEncodeToBT {
 
-    // Encodes an n-ary tree to Companies.Amazon binary tree.
+    // Encodes an n-ary tree to a binary tree.
     public TreeNode encode(Node root) {
         if (root == null) {
             return null;
