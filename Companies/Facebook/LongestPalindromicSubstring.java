@@ -2,6 +2,8 @@ package Companies.Facebook;
 
 /**
  * find longest palindromic substring
+ *
+ * @see PalindromicSubstrings
  */
 public class LongestPalindromicSubstring {
     public String longestPalindrome_s1(String s) {

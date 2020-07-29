@@ -11,6 +11,22 @@ import java.util.Arrays;
 public class TaskScheduler {
     public int leastInterval(char[] tasks, int n) {
         int[] count = new int[26];
+        int max = 0;
+        for (char t : tasks) {
+            count[t-'A']++;
+            max = Math.max(max, count[t-'A']);
+        }
+        int re = (max-1)*n + max-1;
+        for (int c : count) {
+            if (c == max) {
+                re++;
+            }
+        }
+        return Math.max(re, tasks.length);
+    }
+
+    public int leastIntervalII(char[] tasks, int n) {
+        int[] count = new int[26];
         for (char t: tasks) {
             count[t - 'A']++;
         }
@@ -22,7 +38,7 @@ public class TaskScheduler {
         return idles > 0 ? idles + tasks.length : tasks.length;
     }
 
-    public int leastIntervalII(char[] tasks, int n) {
+    public int leastIntervalIII(char[] tasks, int n) {
         int[] count = new int[26];
         for (char c : tasks) {
             count[c-'A']++;

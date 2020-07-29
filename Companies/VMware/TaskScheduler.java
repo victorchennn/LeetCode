@@ -1,4 +1,4 @@
-package Companies.Microsoft;
+package Companies.VMware;
 
 import java.util.Arrays;
 
@@ -24,7 +24,7 @@ public class TaskScheduler {
         }
         return Math.max(re, tasks.length);
     }
-
+    
     public int leastIntervalII(char[] tasks, int n) {
         int[] count = new int[26];
         for (char t: tasks) {

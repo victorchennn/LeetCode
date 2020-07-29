@@ -1,4 +1,4 @@
-package Companies.Facebook;
+package Companies.VMware;
 
 import java.util.*;
 
@@ -28,7 +28,7 @@ public class TopKFrequentWords {
         for (String word: words) {
             count.put(word, count.getOrDefault(word, 0) + 1);
         }
-        PriorityQueue<String> heap = new PriorityQueue<>(
+        PriorityQueue<String> heap = new PriorityQueue<String>(
                 (w1, w2) -> count.get(w1).equals(count.get(w2)) ?
                         w2.compareTo(w1) : count.get(w1) - count.get(w2));
 
