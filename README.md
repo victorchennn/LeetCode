@@ -6,14 +6,14 @@ Some solutions contain several basic tests, including analysis of Time and Space
 
 **Companies**:
 
-- Amazon <sup>_171_</sup>
+- Amazon <sup>_172_</sup>
 - Bloomberg <sup>_238_</sup>
-- Facebook <sup>_134_</sup>
+- Facebook <sup>_135_</sup>
 - GoldmanSachs <sup>_37_</sup>
-- Google <sup>_246_</sup>
+- Google <sup>_247_</sup>
 - Microsoft <sup>_172_</sup>
 - Twitter <sup>_28_</sup>
-- VMware <sup>_13_</sup> (with C++ version)
+- VMware <sup>_14_</sup> (with C++ version)
 
 ---
 
