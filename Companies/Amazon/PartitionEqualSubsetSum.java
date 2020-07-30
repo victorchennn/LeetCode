@@ -1,4 +1,4 @@
-package Companies.Google;
+package Companies.Amazon;
 
 import java.util.Arrays;
 
