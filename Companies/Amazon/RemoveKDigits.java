@@ -1,4 +1,4 @@
-package Companies.Microsoft;
+package Companies.Amazon;
 
 import java.util.Stack;
 

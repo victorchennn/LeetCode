@@ -1,10 +1,10 @@
-package Companies.Bloomberg;
+package Companies.VMware;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @see LinkedListCycle
+ * @see Companies.Bloomberg.LinkedListCycle
  */
 public class FindtheDuplicateNumber {
     public int findDuplicate(int[] nums) {

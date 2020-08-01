@@ -1,4 +1,4 @@
-package Companies.Microsoft;
+package Topics.Greedy;
 
 import java.util.Stack;
 

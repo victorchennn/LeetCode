@@ -3,6 +3,9 @@ package Companies.Microsoft;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @see LinkedListCycle
+ */
 public class FindtheDuplicateNumber {
     public int findDuplicate(int[] nums) {
         int slow = nums[0], fast = nums[0];

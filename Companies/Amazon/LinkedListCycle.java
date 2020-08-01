@@ -2,6 +2,9 @@ package Companies.Amazon;
 
 import Libs.ListNode;
 
+/**
+ * @see FindtheDuplicateNumber
+ */
 public class LinkedListCycle {
     public boolean hasCycle(ListNode head) {
         ListNode slow = head, fast = head;
