@@ -1,4 +1,4 @@
-package Topics.Binary;
+package Companies.VMware;
 
 /**
  * Given an input array nums, where nums[i] ≠ nums[i+1], find a peak element's index.
@@ -6,7 +6,7 @@ package Topics.Binary;
  *
  * The array may contain multiple peaks, in that case return the index to any one of the peaks.
  *
- * @see PeakIndexinaMountainArray
+ * @see Companies.Bloomberg.PeakIndexinaMountainArray
  */
 public class FindPeakElement {
     public int findPeakElement(int[] nums) {
