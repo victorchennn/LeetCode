@@ -2,6 +2,8 @@ package Companies.Bloomberg;
 
 /**
  * @Follow-up: allow to delete at most one character?
+ *
+ * @see Companies.LinkedIn.MinimumInsertionStepstoMakeStringPalindrome
  */
 public class ValidPalindrome {
     public boolean isPalindrome(String s) {
