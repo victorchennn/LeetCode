@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Stack;
 
 /**
+ * @see Companies.Uber.FinalPricesWithSpecialDiscountinShop
  * @see LastGreaterElement
  */
 public class NextGreaterElement {
