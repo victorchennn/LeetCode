@@ -1,4 +1,4 @@
-package Companies.GoldmanSachs;
+package Topics.SlidingWindow;
 
 import org.junit.jupiter.api.Test;
 

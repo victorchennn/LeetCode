@@ -7,6 +7,11 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Given an integer array arr and an integer difference, return the length of the longest
+ * subsequence in arr which is an arithmetic sequence such that the difference between
+ * adjacent elements in the subsequence equals difference.
+ */
 public class LongestArithmeticSubsequenceofGivenDifference {
     public int longestSubsequence(int[] arr, int difference) {
         Map<Integer, Integer> dp = new HashMap<>();
