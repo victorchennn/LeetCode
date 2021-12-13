@@ -3,20 +3,23 @@ package Companies.Bloomberg;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * Return the smallest number of 0's you must flip to connect the two islands.
+ */
 public class ShortestBridge {
     private int[][] dirs = {{0,1},{0,-1},{-1,0},{1,0}};
 
-    public int shortestBridge(int[][] A) {
+    public int shortestBridge(int[][] grid) {
         Queue<int[]> q = new LinkedList<>();
-        boolean[][] marks = new boolean[A.length][A[0].length];
+        boolean[][] marks = new boolean[grid.length][grid[0].length];
         boolean found = false;
-        for (int i = 0; i < A.length; i++) {
+        for (int i = 0; i < grid.length; i++) {
             if (found) {
                 break;
             }
-            for (int j = 0; j < A[0].length; j++) {
-                if (A[i][j] == 1) {
-                    dfs(A, marks, q, i, j);
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == 1) {
+                    dfs(grid, marks, q, i, j);
                     found = true;
                     break;
                 }
@@ -30,8 +33,8 @@ public class ShortestBridge {
                 for (int[] dir : dirs) {
                     int x = cur[0] + dir[0];
                     int y = cur[1] + dir[1];
-                    if (x >= 0 && y >= 0 && x < A.length && y < A[0].length && !marks[x][y]) {
-                        if (A[x][y] == 1) {
+                    if (x >= 0 && y >= 0 && x < grid.length && y < grid[0].length && !marks[x][y]) {
+                        if (grid[x][y] == 1) {
                             return re;
                         } else {
                             marks[x][y] = true;
