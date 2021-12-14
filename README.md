@@ -8,13 +8,13 @@ Some solutions contain several basic tests, including analysis of Time and Space
 
 - Amazon <sup>_192_</sup>
 - Bloomberg <sup>_241_</sup>
-- Facebook <sup>_152_</sup>
+- Facebook <sup>_153_</sup>
 - GoldmanSachs <sup>_37_</sup>
 - Google <sup>_264_</sup>
-- LinkedIn <sup>_8_</sup>
+- LinkedIn <sup>_13_</sup>
 - Microsoft <sup>_188_</sup>
 - Twitter <sup>_28_</sup>
-- Uber <sup>_23_</sup>
+- Uber <sup>_24_</sup>
 - VMware <sup>_41_</sup> (with C++ version)
 
 ---

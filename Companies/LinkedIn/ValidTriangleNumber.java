@@ -1,4 +1,4 @@
-package Companies.Facebook;
+package Companies.LinkedIn;
 
 import org.junit.jupiter.api.Test;
 
