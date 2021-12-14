@@ -3,7 +3,7 @@ package Companies.Facebook;
 /**
  * Treat '(' as openning parenthesis and '))' as closing parenthesis.
  *
- * @see MinimumAddtoMakeParenthesesValid
+ * @see ValidParentheses
  */
 public class MinimumInsertionstoBalanceParenthesesString {
     public int minInsertions(String s) {

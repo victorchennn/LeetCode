@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * @see MinimumInsertionstoBalanceParenthesesString
+ * @see ValidParentheses
  */
 public class MinimumAddtoMakeParenthesesValid {
     public int minAddToMakeValid(String S) {

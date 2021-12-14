@@ -1,4 +1,4 @@
-package Companies.Google;
+package Topics.SlidingWindow;
 
 import org.junit.jupiter.api.Test;
 

@@ -6,13 +6,13 @@ Some solutions contain several basic tests, including analysis of Time and Space
 
 **Companies**:
 
-- Amazon <sup>_191_</sup>
+- Amazon <sup>_192_</sup>
 - Bloomberg <sup>_241_</sup>
 - Facebook <sup>_152_</sup>
 - GoldmanSachs <sup>_37_</sup>
 - Google <sup>_264_</sup>
-- LinkedIn <sup>_7_</sup>
-- Microsoft <sup>_185_</sup>
+- LinkedIn <sup>_8_</sup>
+- Microsoft <sup>_188_</sup>
 - Twitter <sup>_28_</sup>
 - Uber <sup>_23_</sup>
 - VMware <sup>_41_</sup> (with C++ version)
@@ -22,9 +22,9 @@ Some solutions contain several basic tests, including analysis of Time and Space
 **Topics**:
 
 - Binary <sup>_19_</sup>
-- BTree <sup>_65_</sup>
+- BTree <sup>_66_</sup>
 - Design <sup>_48_</sup>
 - DynamicProgramming <sup>_3_</sup>
 - Greedy <sup>_15_</sup>
 - Node <sup>_17_</sup>
-- SlidingWindow <sup>_10_</sup>
+- SlidingWindow <sup>_11_</sup>

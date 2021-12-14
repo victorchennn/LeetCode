@@ -1,4 +1,4 @@
-package Companies.Amazon;
+package Companies.Microsoft;
 
 import org.junit.jupiter.api.Test;
 

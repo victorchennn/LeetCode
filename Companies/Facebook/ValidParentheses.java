@@ -21,6 +21,14 @@ import java.util.Stack;
  * @Follow-up4:
  * Return minimum add to make parentheses valid?
  * @see MinimumAddtoMakeParenthesesValid
+ *
+ * @Follow-up5:
+ * Treat '(' as openning parenthesis and '))' as closing parenthesis.
+ * @see MinimumInsertionstoBalanceParenthesesString
+ *
+ * @Follow-up6:
+ * '*' could be treated as ')' or '(' or "".
+ * @see ValidParenthesesString
  */
 public class ValidParentheses {
     public boolean isValid(String s) {

@@ -1,4 +1,4 @@
-package Companies.Amazon;
+package Companies.LinkedIn;
 
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * our choices are. Also, we can never have less than 0 open left brackets. At the end, we should check
  * that we can have exactly 0 open left brackets.
  *
- * @see ValidParentheses
+ * @see Companies.Bloomberg.ValidParentheses
  */
 public class ValidParenthesesString {
     public boolean checkValidString(String s) {
