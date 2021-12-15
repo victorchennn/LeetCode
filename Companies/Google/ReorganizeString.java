@@ -1,46 +1,49 @@
 package Companies.Google;
 
-import java.util.PriorityQueue;
-import java.util.Stack;
+import org.junit.jupiter.api.Test;
 
+import java.util.PriorityQueue;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+/**
+ * Given a string s, rearrange the characters of s so that any two adjacent characters are not the same.
+ *
+ * Return any possible rearrangement of s or return "" if not possible.
+ */
 public class ReorganizeString {
-    public String reorganizeString(String S) {
-        int[] dict = new int[26];
-        for (char c : S.toCharArray()) {
-            dict[c-'A']++;
+    public String reorganizeString(String s) {
+        int[] count = new int[26];
+        for (char c : s.toCharArray()) {
+            count[c-'a']++;
         }
-        PriorityQueue<int[]> q = new PriorityQueue<>((a, b)->b[1]-a[1]);
-        for (int i = 0; i < 26; i++) {
-            if (dict[i] != 0) {
-                q.offer(new int[]{i, dict[i]});
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->b[1]-a[1]);
+        for (int i = 0; i < count.length; i++) {
+            if (count[i] != 0) {
+                pq.add(new int[]{i, count[i]});
             }
         }
-        if (q.peek()[1] > (S.length()+1)/2) { // aaab
+        if (pq.peek()[1] > (s.length()+1)/2) {
             return "";
         }
         StringBuilder sb = new StringBuilder();
-        int[] prev = {-1, 0}; // vvvlo
-        while (!q.isEmpty()) {
-            int[] cur = q.poll();
+        int[] prev = new int[2];
+        while (!pq.isEmpty()) {
+            int[] cur = pq.poll();
             if (prev[1] > 0) {
-                q.offer(prev);
+                pq.add(prev);
             }
-            sb.append((char)(cur[0]+'A'));  // be careful (char)
+            sb.append((char)(cur[0]+'a'));
             cur[1]--;
             prev = cur;
         }
         return sb.toString();
     }
 
-    public static void main(String...args) {
-//        Companies.Google.ReorganizeString test = new Companies.Google.ReorganizeString();
-//        System.out.println(test.reorganizeString("aaab"));
-        Stack<String> stack = new Stack<>();
-        stack.push("");
-        stack.push("b");
-        for (String s : stack) {
-            System.out.println(s);
-        }
-
+    @Test
+    void test() {
+        assertEquals("aba", reorganizeString("aab"));
+        assertEquals("", reorganizeString("aaab"));
+        assertEquals("vlvov", reorganizeString("vvvlo"));
     }
 }
