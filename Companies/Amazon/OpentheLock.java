@@ -1,4 +1,4 @@
-package Companies.Bloomberg;
+package Companies.Amazon;
 
 import org.junit.jupiter.api.Test;
 
