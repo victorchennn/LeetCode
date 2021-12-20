@@ -1,4 +1,4 @@
-package Companies.GoldmanSachs;
+package Topics.DynamicProgramming;
 
 import org.junit.jupiter.api.Test;
 
