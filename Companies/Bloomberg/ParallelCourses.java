@@ -1,5 +1,5 @@
 public int minimumSemesters(int n, int[][] relations) {
-        int[] inCount = new int[N + 1]; // 或者入度
+        int[] inCount = new int[N + 1]; // how many courses need to take 
         List<List<Integer>> graph = new ArrayList<>(N + 1);
         for (int i = 0; i < N + 1; ++i) {
             graph.add(new ArrayList<Integer>());
@@ -16,7 +16,7 @@ public int minimumSemesters(int n, int[][] relations) {
                 bfsQueue.add(node);
             }
         }
-        // 开始使用 BFS 学习
+
         while (!bfsQueue.isEmpty()) {
             // 开始一个新学期
             step++;
