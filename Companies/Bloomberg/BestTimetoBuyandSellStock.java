@@ -30,14 +30,14 @@ public class BestTimetoBuyandSellStock {
 
     /* At most two transactions. */
     public int maxProfitIII(int[] prices) {
-        int buy1 = Integer.MIN_VALUE, buy2 = Integer.MIN_VALUE, sell1 = 0, sell2 = 0;
+        int buy1 = Integer.MAX_VALUE, buy2 = Integer.MAX_VALUE, sell1 = 0, sell2 = 0;
         for (int price : prices) {                  // Assume we only have 0 money at first
-            sell2 = Math.max(sell2, buy2+price);    // The maximum if we've just sold 2nd stock so far.
-            buy2 = Math.max(buy2, sell1-price);     // The maximum if we've just buy  2nd stock so far.
-            sell1 = Math.max(sell1, buy1+price);    // The maximum if we've just sold 1nd stock so far.
-            buy1 = Math.max(buy1, -price);          // The maximum if we've just buy  1st stock so far.
+            buy1 = Math.min(buy1, price);
+            sell1 = Math.max(sell1, price-buy1);
+            buy2  = Math.min(buy2, price-sell1);
+            sell2 = Math.max(sell2, price-buy2);
         }
-        return sell2;                               // Since release1 is initiated as 0, so release2 will always higher than release1.
+        return sell2;                               
     }
 
     /* At most K transactions. */
@@ -77,8 +77,8 @@ public class BestTimetoBuyandSellStock {
     public int maxProfit(int[] prices, int fee) {
         int buy = -prices[0], sell = 0;
         for (int i = 1; i < prices.length; i++) {
-            sell = Math.max(sell, buy+prices[i]-fee); // sell first, since sell and buy at same day can't be
-            buy = Math.max(buy, sell-prices[i]);      // better than just continuing to hold the stock
+            buy = Math.max(buy, sell-prices[i]);      // dont trade or use previous profit to buy
+            sell = Math.max(sell, buy+prices[i]-fee); // dont trade keep profit or sell today 
         }
         return sell;
     }
