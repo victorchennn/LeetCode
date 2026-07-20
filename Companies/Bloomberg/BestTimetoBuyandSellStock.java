@@ -64,12 +64,12 @@ public class BestTimetoBuyandSellStock {
 
     /* Cooldown */
     public int maxProfitCooldown(int[] prices) {
-        int buy = Integer.MIN_VALUE, prevbuy = 0, sell = 0, prevsell = 0;
+        int buy = Integer.MAX_VALUE, prevbuy = 0, sell = 0, prevsell = 0;
         for (int price : prices) {
             prevbuy = buy;
-            buy = Math.max(prevbuy, prevsell-price);
+            buy = Math.min(prevbuy, price-prevsell);
             prevsell = sell;
-            sell = Math.max(prevsell, prevbuy+price);
+            sell = Math.max(prevsell, price-prevbuy);
         }
         return sell;
     }
