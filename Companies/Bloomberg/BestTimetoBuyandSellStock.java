@@ -52,10 +52,11 @@ public class BestTimetoBuyandSellStock {
         }
         int[][] dp = new int[k+1][prices.length];
         for (int i = 1; i <= k; i++) {
-            int buy = -prices[0];
+            int buy = prices[0];
             for (int j = 1; j < prices.length; j++) {
-                dp[i][j] = Math.max(dp[i][j-1], prices[j]+buy);
-                buy = Math.max(buy, dp[i-1][j]-prices[j]);
+                buy = Math.min(buy, prices[j]-dp[i-1][j]);
+                dp[i][j] = Math.max(dp[i][j-1], prices[j]-buy);
+                
             }
         }
         return dp[k][prices.length-1];
