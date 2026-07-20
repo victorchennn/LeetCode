@@ -34,9 +34,14 @@ public class MaxConsecutiveOnes {
                 k += 1-nums[l];
                 l++;
             }
+            // re = Math.max(re, r-l); ? unnecessary 
             r++;
         }
         return r-l;
+
+        // The maximum window size is the array length minus the final left position
+        // This works because the window only shrinks when necessary, maintaining max size
+        return nums.length - left;
     }
 
     @Test
