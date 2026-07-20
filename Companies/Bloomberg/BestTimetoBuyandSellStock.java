@@ -76,10 +76,11 @@ public class BestTimetoBuyandSellStock {
 
     /* Transaction Fee */
     public int maxProfit(int[] prices, int fee) {
-        int buy = -prices[0], sell = 0;
+        int buy = prices[0], sell = 0;
         for (int i = 1; i < prices.length; i++) {
-            buy = Math.max(buy, sell-prices[i]);      // dont trade or use previous profit to buy
-            sell = Math.max(sell, buy+prices[i]-fee); // dont trade keep profit or sell today 
+            buy = Math.min(buy, prices[i]-sell);      
+            sell = Math.max(sell, prices[i]-buy-fee); 
+            
         }
         return sell;
     }
