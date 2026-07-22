@@ -1,71 +1,90 @@
-package Topics.Design;
+class MyHashMap {
+private:
+    struct ListNode {
+        int key;
+        int val;
+        ListNode* next;
 
-public class MyHashMap {
-    private ListNode[] l;
-    private int size;
+        ListNode(int k, int v)
+            : key(k), val(v), next(nullptr) {}
+    };
 
-    /** Initialize your data structure here. */
-    public MyHashMap() {
-        l = new ListNode[1000];
-        size = l.length;
+    static constexpr int SIZE = 10000;
+    std::vector<ListNode*> buckets;
+
+    int hash(int key) const {
+        return key % SIZE;
     }
 
-    /** value will always be non-negative. */
-    public void put(int key, int value) {
-        int code = code(key);
-        if (l[code] == null) {
-            l[code] = new ListNode(-1, -1);
-        }
-        ListNode prev = find(l[code], key);
-        if (prev.next == null) {
-            prev.next = new ListNode(key, value);
-        } else {
-            prev.next.val = value;
-        }
-    }
-
-    /** Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key */
-    public int get(int key) {
-        int code = code(key);
-        if (l[code] == null) {
-            return -1;
-        }
-        ListNode prev = find(l[code], key);
-        return prev.next == null? -1:prev.next.val;
-    }
-
-    /** Removes the mapping of the specified value key if this map contains mapping for the key */
-    public void remove(int key) {
-        int code = code(key);
-        if (l[code] == null) {
-            return;
-        }
-        ListNode prev = find(l[code], key);
-        if (prev.next == null) {
-            return;
-        }
-        prev.next = prev.next.next;
-    }
-
-    private ListNode find(ListNode root, int key) {
-        ListNode cur = root, prev = null;
-        while (cur != null && cur.key != key) {
-            prev = cur;
-            cur = cur.next;
+    // Return the previous node of key.
+    ListNode* find(ListNode* head, int key) {
+        ListNode* prev = head;
+        while (prev->next && prev->next->key != key) {
+            prev = prev->next;
         }
         return prev;
     }
 
-    private int code(int key) {
-        return Integer.hashCode(key)%size;
-    }
+public:
+    MyHashMap() : buckets(SIZE, nullptr) {}
 
-    class ListNode {
-        ListNode next;
-        int key, val;
-        ListNode(int _key, int _val) {
-            key = _key;
-            val = _val;
+    void put(int key, int value) {
+        int idx = hash(key);
+
+        if (!buckets[idx]) {
+            buckets[idx] = new ListNode(-1, -1);   // dummy head
+        }
+
+        ListNode* prev = find(buckets[idx], key);
+
+        if (!prev->next) {
+            prev->next = new ListNode(key, value);
+        } else {
+            prev->next->val = value;
         }
     }
-}
+
+    int get(int key) {
+        int idx = hash(key);
+
+        if (!buckets[idx]) {
+            return -1;
+        }
+
+        ListNode* prev = find(buckets[idx], key);
+
+        if (!prev->next) {
+            return -1;
+        }
+
+        return prev->next->val;
+    }
+
+    void remove(int key) {
+        int idx = hash(key);
+
+        if (!buckets[idx]) {
+            return;
+        }
+
+        ListNode* prev = find(buckets[idx], key);
+
+        if (!prev->next) {
+            return;
+        }
+
+        ListNode* node = prev->next;
+        prev->next = node->next;
+        delete node;
+    }
+
+    ~MyHashMap() {
+        for (auto head : buckets) {
+            while (head) {
+                ListNode* next = head->next;
+                delete head;
+                head = next;
+            }
+        }
+    }
+};
