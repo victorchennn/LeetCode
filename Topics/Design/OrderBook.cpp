@@ -10,6 +10,8 @@ enum class Side {Buy, Sell}; // Strongly Typed Enum
     class OrderBook {
 
         private:
+            std::mutex mutex_;
+
             using OrderQueue = std::list<Order>; // std::vector if reallocate fail
 
             std::map<int, OrderQueue, std::greater<int>> bids_; // buy stocks
@@ -112,6 +114,8 @@ enum class Side {Buy, Sell}; // Strongly Typed Enum
                 
         public:
             void addOrder(Order order) {
+                std::lock_guard<std::mutex> lock(mutex_);
+                
                 if (order.id <= 0 ||
                     order.price <= 0 ||
                     order.quantity <= 0
