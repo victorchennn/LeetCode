@@ -1,5 +1,53 @@
 package Companies.Google;
 
+int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+    const int INF = 1 << 29;
+    vector<vector<int>> graph(n, vector<int>(n, INF));
+    for (const auto& edge : times) {
+        int from = edge[0] - 1;  // Convert to 0-indexed
+        int to = edge[1] - 1;     // Convert to 0-indexed
+        int weight = edge[2];
+        graph[from][to] = weight;
+    }
+
+    vector<int> distance(n, INF);
+    distance[k - 1] = 0;  // Distance to source node is 0
+  
+    // Track visited nodes
+    vector<bool> visited(n, false);
+
+    // Dijkstra's algorithm implementation
+    for (int i = 0; i < n; ++i) {
+        // Find the unvisited node with minimum distance
+        int minNode = -1;
+        for (int node = 0; node < n; ++node) {
+            if (!visited[node] &&
+                (minNode == -1 || distance[node] < distance[minNode])) {
+                minNode = node;
+            }
+        }
+
+        if (minNode == -1) {
+            break;
+        }
+      
+        // Mark the selected node as visited
+        visited[minNode] = true;
+      
+        // Update distances to all neighbors of the selected node
+        for (int neighbor = 0; neighbor < n; ++neighbor) {
+            distance[neighbor] = min(distance[neighbor], 
+                                    distance[minNode] + graph[minNode][neighbor]);
+        }
+    }
+
+    int maxDistance = *max_element(distance.begin(), distance.end());
+
+    return maxDistance == INF? -1:maxDistance;
+}
+
+
+
 import java.util.*;
 
 /**
