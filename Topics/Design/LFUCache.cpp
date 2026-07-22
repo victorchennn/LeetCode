@@ -14,7 +14,7 @@ private:
     int minFreq = 0;
 
     unordered_map<int, Entry> entries;
-    unordered_map<int, list<int>> frequencyLists;
+    unordered_map<int, list<int>> frequencyLists; // frequency, [key1, key2]
 
     void increaseFrequency(int key) {
         Entry& entry = entries[key];
@@ -63,7 +63,7 @@ public:
         if (entries.size() == static_cast<size_t>(capacity)) {
             int evictedKey = frequencyLists[minFreq].back();
 
-            frequencyLists[minFreq].pop_back();
+            frequencyLists[minFreq].pop_back(); // least recently used or added removed from back
 
             if (frequencyLists[minFreq].empty()) {
                 frequencyLists.erase(minFreq);
@@ -73,7 +73,7 @@ public:
         }
 
         minFreq = 1;
-        frequencyLists[1].push_front(key);
+        frequencyLists[1].push_front(key); // recently used or added put it front
 
         entries[key] = {
             value,
