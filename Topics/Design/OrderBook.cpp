@@ -191,6 +191,59 @@ enum class Side {Buy, Sell}; // Strongly Typed Enum
 
                 return addOrder(newOrder);
             }
+};
 
+class OrderManagementSystem {
 
+    struct Order {
+        int id;
+        string type;
+        int price;
     };
+
+    unordered_map<int, Order> orders;
+    unordered_map<string, unordered_map<int, unordered_set<int>>> books;
+
+public:
+    OrderManagementSystem() {
+        
+    }
+    
+    void addOrder(int orderId, string orderType, int price) {
+        orders[orderId] = {orderId, orderType, price};
+        books[orderType][price].insert(orderId);
+    }
+    
+    void modifyOrder(int orderId, int newPrice) {
+        Order& order = orders[orderId];
+
+        books[order.type][order.price].erase(orderId);
+        books[order.type][newPrice].insert(orderId);
+
+        order.price = newPrice;
+    }
+    
+    void cancelOrder(int orderId) {
+        Order order = orders[orderId];
+
+        books[order.type][order.price].erase(orderId);
+        orders.erase(orderId);
+    }
+    
+    vector<int> getOrdersAtPrice(string orderType, int price) {
+        vector<int> result;
+
+        auto typeIt = books.find(orderType);
+        if (typeIt == books.end()) return result;
+
+        auto priceIt = typeIt->second.find(price);
+        if (priceIt == typeIt->second.end()) return result;
+
+        result.insert(result.end(),
+                    priceIt->second.begin(),
+                    priceIt->second.end());
+
+        return result;
+    }
+};
+
