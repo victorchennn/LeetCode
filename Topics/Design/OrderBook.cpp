@@ -5,7 +5,7 @@ struct Order {
     Side side;
     int price;
     int quantity;
-}
+};
 
 class OrderBook {
     private:
@@ -63,7 +63,7 @@ class OrderBook {
         }
                     
     public:
-        void addOrder(Order order) {
+        bool addOrder(Order order) {
             std::lock_guard<std::mutex> lock(mutex_);
             
             if (order.id <= 0 || order.price <= 0 || order.quantity <= 0) { return false; }
@@ -111,9 +111,9 @@ class OrderBook {
                 return false;
             }
             Side side = indexIt->second.side;
-            cancelOrder(orderId);
+            cancelOrder(orderId); // this will cause deadloak, need to put real code here instead of calling 
             Order newOrder{orderId, side, newPrice, newQuantity};
-            return addOrder(newOrder);
+            return addOrder(newOrder); // same
         }
 };
 
