@@ -1,11 +1,7 @@
-enum class ReservationStatus {
-    Active,
-    Cancelled
-};
-
-struct Seat {
-    int row;
-    int number;
+enum class ReservationStatus { Active, Cancelled };
+struct Seat { 
+    int row; 
+    int number; 
 };
 
 struct Reservation {
@@ -34,7 +30,6 @@ public:
         for (const Seat& seat : seats) {
             available_[seat.row][seat.number] = false;
         }
-
         return true;
     }
 
@@ -50,7 +45,6 @@ public:
         for (const Seat& seat : seats) {
             available_[seat.row][seat.number] = true;
         }
-
         return true;
     }
 
@@ -58,17 +52,13 @@ public:
         std::lock_guard<std::mutex> lock(mutex_);
 
         std::vector<Seat> result;
-
         for (int row = 0; row < static_cast<int>(available_.size()); ++row) {
-            for (int number = 0;
-                 number < static_cast<int>(available_[row].size());
-                 ++number) {
+            for (int number = 0; number < static_cast<int>(available_[row].size()); ++number) {
                 if (available_[row][number]) {
                     result.push_back({row, number});
                 }
             }
         }
-
         return result;
     }
 
@@ -90,25 +80,17 @@ private:
 
 class BookingSystem {
 public:
-    void addShowtime(int showtimeId,
-                     const std::string& movie,
-                     int rows,
-                     int seatsPerRow) {
+    void addShowtime(int showtimeId, const std::string& movie, int rows, int seatsPerRow) {
         std::lock_guard<std::mutex> lock(systemMutex_);
 
         showtimes_.try_emplace(
             showtimeId,
-            showtimeId,
-            movie,
-            rows,
-            seatsPerRow
+            showtimeId, movie, rows, seatsPerRow
         );
     }
 
-    long long bookSeats(int showtimeId,
-                        const std::vector<Seat>& seats) {
+    long long bookSeats(int showtimeId, const std::vector<Seat>& seats) {
         Showtime* showtime = nullptr;
-
         {
             std::lock_guard<std::mutex> lock(systemMutex_);
 
@@ -116,7 +98,6 @@ public:
             if (it == showtimes_.end()) {
                 return -1;
             }
-
             showtime = &it->second;
         }
 
@@ -125,21 +106,14 @@ public:
         }
 
         long long reservationId = nextReservationId_.fetch_add(1);
-
         {
             std::lock_guard<std::mutex> lock(systemMutex_);
 
             reservations_.emplace(
                 reservationId,
-                Reservation{
-                    reservationId,
-                    showtimeId,
-                    seats,
-                    ReservationStatus::Active
-                }
+                Reservation{ reservationId, showtimeId, seats, ReservationStatus::Active }
             );
         }
-
         return reservationId;
     }
 
@@ -152,7 +126,6 @@ public:
         }
 
         Reservation& reservation = reservationIt->second;
-
         if (reservation.status == ReservationStatus::Cancelled) {
             return false;
         }
