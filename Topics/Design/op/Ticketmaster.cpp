@@ -153,8 +153,10 @@ private:
     std::mutex systemMutex_;
 };
 
-
-
-
-
-
+// 1million? do not call direcly bookSeats(eventId, seats) Virtual Waiting Room
+// 可以进一步按 Section 或 Row 分锁：
+// 浏览座位图的流量远大于真正购买 不能让用户每次刷新座位图都读取主数据库。
+// Seat Map 静态结构→ CDN 大致可用状态 → Redis / Cache最终锁座确认 → Booking Service / Primary Database
+// Redis：高速内存存储 把数据主要放在内存里，所以读写非常快。
+// CDN：把静态内容放到离用户更近的服务器 Content Delivery Network，中文叫内容分发网络。
+// Kafka：高吞吐消息队列 Kafka 可以把大量请求或事件先排队，再让后台服务逐步处理。
