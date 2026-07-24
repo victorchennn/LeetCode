@@ -9,8 +9,9 @@ struct Order {
 
 class OrderBook {
     private:
-        std::mutex mutex_;
-        std::map<int, std::list<Order>, std::greater<int>> bids_; // want to buy stocks
+        std::mutex mutex_; 
+        // why list? O(1) 删除任意订单 iterator不会因为插入而失效
+        std::map<int, std::list<Order>, std::greater<int>> bids_; // want to buy stocks 
         std::map<int, std::list<Order>> asks_; // sell stocks
 
         struct OrderLocation {
@@ -117,4 +118,6 @@ class OrderBook {
         }
 };
 
-
+// improve concurrency? add lock by price level
+// 如果订单有 1000 万个？list / vector
+// memory pool allocate first -> std::list<Order, MyAllocator<Order>>
