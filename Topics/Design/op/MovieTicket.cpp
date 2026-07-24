@@ -83,6 +83,7 @@ public:
     void addShowtime(int showtimeId, const std::string& movie, int rows, int seatsPerRow) {
         std::lock_guard<std::mutex> lock(systemMutex_);
 
+        // showtimes_[showtimeId] = Showtime(showtimeId, movie, rows, seatsPerRow);
         showtimes_.try_emplace(
             showtimeId,
             showtimeId, movie, rows, seatsPerRow
@@ -92,8 +93,8 @@ public:
     long long bookSeats(int showtimeId, const std::vector<Seat>& seats) {
         Showtime* showtime = nullptr;
         {
-            std::lock_guard<std::mutex> lock(systemMutex_);
-
+            std::lock_guard<std::mutex> lock(systemMutex_); 
+            // showtimes_ 是整个系统共享的数据：多个线程可 add/remove/book 所以必须保护。
             auto it = showtimes_.find(showtimeId);
             if (it == showtimes_.end()) {
                 return -1;
@@ -101,6 +102,7 @@ public:
             showtime = &it->second;
         }
 
+        // no need to lock all because different shows
         if (!showtime->reserveSeats(seats)) {
             return -1;
         }
@@ -108,7 +110,7 @@ public:
         long long reservationId = nextReservationId_.fetch_add(1);
         {
             std::lock_guard<std::mutex> lock(systemMutex_);
-
+            // reservations_也是共享的
             reservations_.emplace(
                 reservationId,
                 Reservation{ reservationId, showtimeId, seats, ReservationStatus::Active }
@@ -147,7 +149,7 @@ private:
     std::unordered_map<int, Showtime> showtimes_;
     std::unordered_map<long long, Reservation> reservations_;
 
-    std::atomic<long long> nextReservationId_{1};
+    std::atomic<long long> nextReservationId_{1}; // 生成唯一ReservationID的计数器 线程安全
     std::mutex systemMutex_;
 };
 
