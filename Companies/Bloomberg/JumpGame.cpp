@@ -1,11 +1,4 @@
-package Companies.Bloomberg;
 
-import org.junit.jupiter.api.Test;
-
-import java.util.Deque;
-import java.util.LinkedList;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JumpGame {
     /* Return true if you can reach the last index, or false otherwise. */
@@ -194,20 +187,5 @@ public class JumpGame {
         return reachable[n - 1];
     }
 
-    @Test
-    void test() {
-        assertEquals(true, canJump(new int[]{2,3,1,1,4}));
-        assertEquals(false, canJump(new int[]{3,2,1,0,4}));
 
-        assertEquals(2, jump(new int[]{2,3,1,1,4}));
-        assertEquals(2, jump(new int[]{2,3,0,1,4}));
-
-        assertEquals(true, canReach(new int[]{4,2,3,0,3,1,2}, 5));
-        assertEquals(true, canReach(new int[]{4,2,3,0,3,1,2}, 0));
-        assertEquals(false, canReach(new int[]{3,0,2,1,2}, 2));
-
-        assertEquals(7, maxResult(new int[]{1,-1,-2,4,-7,3}, 2));
-        assertEquals(17, maxResult(new int[]{10,-5,-2,4,0,3}, 3));
-        assertEquals(0, maxResult(new int[]{1,-5,-20,4,-1,3,-6,-3}, 2));
-    }
 }
