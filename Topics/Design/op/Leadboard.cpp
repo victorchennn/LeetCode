@@ -2,7 +2,7 @@ struct Product {
         int productId,
         int invectory,
         double costPrice
-    }
+    } 
 
     struct Order {
         int orderId,
