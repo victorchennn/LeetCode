@@ -1,4 +1,4 @@
-struct Requirement {
+struct Requirement { 
     int maxPrice;
     int requiredSeats;
 };
