@@ -1,5 +1,5 @@
 class Account {
-  public:
+  public: 
     Account(int accountId, double cash): accountId_(accountId), cash_(cash) {}
 
     bool buy(const std::string& stock, int quantity, double price) {
