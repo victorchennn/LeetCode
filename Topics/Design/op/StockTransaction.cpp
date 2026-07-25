@@ -3,7 +3,7 @@
 class StockTransaction {
 private:
     struct Stock {
-        long long weightedSum = 0;  // sum(price * volume)
+        long long weightedSum = 0;  // sum(price * volume) 
         long long totalVolume = 0;
         std::map<int, int> history; // timestamp -> price
 
