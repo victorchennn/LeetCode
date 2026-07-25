@@ -2,7 +2,7 @@ addStock(warehouseId, productId, quantity)
 removeStock(warehouseId, productId, quantity)
 getAvailableWarehouses(productId, quantity)
 transferStock(fromWarehouseId, toWarehouseId, productId, quantity)
-setLowStockThreshold(warehouseId, productId, threshold)
+setLowStockThreshold(warehouseId, productId, threshold) 
 
 
 class AlertListener {
