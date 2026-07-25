@@ -1,5 +1,5 @@
 enum class ReservationStatus { Active, Cancelled };
-struct Seat { 
+struct Seat {  
     int row; 
     int number; 
 };
