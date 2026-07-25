@@ -11,9 +11,11 @@ class OrderBook {
     private:
         std::mutex mutex_; 
         // why list? O(1) 删除任意订单 iterator不会因为插入而失效
+        // price -> all the orders for that price
         std::map<int, std::list<Order>, std::greater<int>> bids_; // want to buy stocks 
         std::map<int, std::list<Order>> asks_; // sell stocks
 
+        // cancel purpose
         struct OrderLocation {
             Side side;
             int price;
@@ -111,6 +113,7 @@ class OrderBook {
             if (indexIt == orderIndex_.end()) {
                 return false;
             }
+            
             Side side = indexIt->second.side;
             cancelOrder(orderId); // this will cause deadloak, need to put real code here instead of calling 
             Order newOrder{orderId, side, newPrice, newQuantity};
