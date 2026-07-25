@@ -4,7 +4,7 @@ private:
         int id;
         int totalItems;
         int processedItems = 0;
-
+ 
         int remainingItems() const {
             return totalItems - processedItems;
         }
