@@ -109,7 +109,7 @@ Vector& operator=(Vector&& other) noexcept {
   
   try { // construct, move old objects to new one
       for (; constructed < size_; ++constructed) {
-          std::construct_at(
+          std::construct_at( // same as new (new_data + constructed) T(std::move(value));
               new_data + constructed,
               std::move_if_noexcept(data_[constructed]) // move is cheaper, but what if error and copying is available, it copies instead
              // This preserves the strong exception guarantee: if reallocation fails, the original vector remains unchanged
@@ -129,8 +129,82 @@ Vector& operator=(Vector&& other) noexcept {
   capacity_ = new_capacity;
 }
 
+void reserve(std::size_t newCapacity) {
+    if (newCapacity <= capacity_) {
+        return;
+    }
+
+    reallocate(newCapacity);
+}
+
+void push_back(const T& value) {
+    if (size_ == capacity_) {
+        reserve(capacity_ == 0 ? 1 : capacity_ * 2);
+    }
+
+    std::construct_at(data_ + size_, value);
+    ++size_;
+}
+
+void push_back(T&& value) {
+    if (size_ == capacity_) {
+        reserve(capacity_ == 0 ? 1 : capacity_ * 2);
+    }
+
+    std::construct_at(
+        data_ + size_,
+        std::move(value)
+    );
+
+    ++size_;
+}
+
+template<typename... Args>
+T& emplace_back(Args&&... args) {
+
+    if (size_ == capacity_) {
+        reserve(capacity_ == 0 ? 1 : capacity_ * 2);
+    }
+
+    std::construct_at(
+        data_ + size_,
+        std::forward<Args>(args)...
+    );
+
+    return data_[size_++];
+}
+
+void pop_back() {
+    if (empty()) {
+        return;
+    }
+
+    --size_;
+    std::destroy_at(data_ + size_);
+}
+
+void clear() noexcept {
+    std::destroy_n(data_, size_);
+    size_ = 0;
+}
+
+// insert, push everything behind 
+for (size_t i = size_; i > index; --i) {
+    std::construct_at(
+        data_ + i,
+        std::move_if_noexcept(data_[i-1])
+    );
+
+    std::destroy_at(data_ + i - 1);
+}
+
+std::construct_at(data_ + index, value);
+
+++size_;
 
 
+// 为什么 std::vector 不用 realloc()？
+// 因为 realloc() 只是按字节搬内存，不会调用对象的移动构造或拷贝构造，也不会维护对象生命周期。对于拥有资源（如 std::string、std::vector、智能指针等）的类型，直接按字节复制会导致未定义行为。std::vector 必须逐个构造新对象、析构旧对象。
 
 
 
