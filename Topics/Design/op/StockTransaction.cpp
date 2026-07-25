@@ -1,3 +1,5 @@
+// stock sum/volume/timestamp update and ranking
+
 class StockTransaction {
 private:
     struct Stock {
@@ -22,21 +24,15 @@ private:
     > ranking_;
 
 public:
-    void update(const std::string& stockName,
-                int price,
-                int volume,
-                int timestamp) {
+    void update(const std::string& stockName, int price, int volume, int timestamp) {
         auto it = stocks_.find(stockName);
-
         if (it != stocks_.end()) {
             // Remove old ranking before changing VWAP.
             ranking_.erase({it->second.vwap(), stockName});
         }
 
         Stock& stock = stocks_[stockName];
-
-        stock.weightedSum +=
-            static_cast<long long>(price) * volume;
+        stock.weightedSum += static_cast<long long>(price) * volume;
         stock.totalVolume += volume;
         stock.history[timestamp] = price;
 
@@ -46,25 +42,21 @@ public:
 
     double getVWAP(const std::string& stockName) const {
         auto it = stocks_.find(stockName);
-
         if (it == stocks_.end()) {
             return 0.0;
         }
-
         return it->second.vwap();
     }
 
     // Latest price at or before timestamp.
     int getPrice(const std::string& stockName, int timestamp) const {
         auto stockIt = stocks_.find(stockName);
-
         if (stockIt == stocks_.end()) {
             return 0;
         }
 
         const auto& history = stockIt->second.history;
         auto it = history.upper_bound(timestamp);
-
         if (it == history.begin()) {
             return 0;
         }
@@ -72,25 +64,20 @@ public:
         return std::prev(it)->second;
     }
 
-    int getMaxPriceInRange(const std::string& stockName,
-                           int startTime,
-                           int endTime) const {
+    int getMaxPriceInRange(const std::string& stockName, int startTime, int endTime) const {
         auto stockIt = stocks_.find(stockName);
-
         if (stockIt == stocks_.end() || startTime > endTime) {
             return 0;
         }
 
         const auto& history = stockIt->second.history;
-        auto begin = history.lower_bound(startTime);
-        auto end = history.upper_bound(endTime);
+        auto begin = history.lower_bound(startTime); // first element >= startTime
+        auto end = history.upper_bound(endTime); // first element > endTime
 
         int maxPrice = 0;
-
         for (auto it = begin; it != end; ++it) {
             maxPrice = std::max(maxPrice, it->second);
         }
-
         return maxPrice;
     }
 
