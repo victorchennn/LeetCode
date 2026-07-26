@@ -76,65 +76,46 @@ Producer =>
   writeCounter  Producer已经预留到哪里 
   publishedCounter 真正已经写好的位置
 
-struct FastQueue {
-    alignas(CACHE_LINE_SIZE)
-    std::atomic<std::uint64_t> writerCounter{0};
-    std::atomic<std::uint64_t> publishedCounter{0};
 
-    std::byte* buffer;
-    std::size_t capacity;
-};
-
-class Producer {
+template <typename T>
+class SpscRingBuffer { // lock-free
 private:
-    FastQueue& queue;
-    std::uint64_t localCounter = 0;
+    std::vector<T> buffer_;
+    const std::size_t capacity_;
+    const std::size_t mask_;
+
+    alignas(64)
+    std::atomic<std::size_t> readCounter_{0}; // std::vector<std::atomic<size_t>> readCounters; 每个 Consumer 一个 readCounter，Producer 看 min(readCounters)
+
+    
+
+    alignas(64)
+    std::atomic<std::size_t> writeCounter_{0};
 
 public:
-    void write(std::span<const std::byte> msg) {
-        const std::int32_t messageSize = Align<64>(message.size());
-        const std::uint64_t recordSize = sizeof(messageSize) + message.size();
-    
-        const std::uint64_t newCounter = localCounter + recordSize;
-    
-        // 先预留
-        queue.writerCounter.store(newCounter, std::memory_order_release);
-    
-        std::memcpy(queue.buffer + localCounter, &messageSize, sizeof(messageSize));
-        std::memcpy(queue.buffer + localCounter + sizeof(messageSize), message.data(), message.size());
-    
-        // 全部写完以后再发布
-        queue.publishedCounter.store(newCounter, std::memory_order_release);
-    
-        localCounter = newCounter;
+    bool push(const T& value) {
+        const std::size_t write = writeCounter_.load(std::memory_order_relaxed);
+        const std::size_t read = readCounter_.load(std::memory_order_acquire);
+        if (write - read == capacity_) {
+            return false;
+        }
+
+        buffer_[write % capacity_] = value;
+        writeCounter_.store(write + 1, std::memory_order_release);
+
+        return true;
     }
-};
 
-class Consumer {
-private:
-    FastQueue& queue;
-    std::uint64_t localCounter = 0;
-    std::uint64_t cachedPublishedCounter = 0;
+    bool pop(T& value) {
+        const std::size_t read = readCounter_.load(std::memory_order_relaxed);
+        const std::size_t write = writeCounter_.load(std::memory_order_acquire);
+        if (write == read) {
+            return false;
+        }
 
-public:
-    std::int32_t tryRead(std::span<std::byte> destination) {
-        if (localCounter == cachedPublishedCounter) {
-            cachedPublishedCounter =
-                queue.publishedCounter.load(
-                    std::memory_order_acquire
-                );
-        }
-    
-        if (localCounter == cachedPublishedCounter) {
-            return 0;
-        }
-    
-        std::int32_t messageSize = 0;
-    
-        std::memcpy(&messageSize, queue.buffer + localCounter, sizeof(messageSize));
-        std::memcpy(destination.data(), queue.buffer + localCounter + sizeof(messageSize), messageSize);
-    
-        localCounter += sizeof(messageSize) + messageSize;
-        return messageSize;
+        value = std::move(buffer_[read % capacity_]);
+        readCounter_.store(read + 1, std::memory_order_release);
+
+        return true;
     }
 };
