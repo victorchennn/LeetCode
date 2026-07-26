@@ -194,3 +194,11 @@ class OrderBook {
 // improve concurrency? add lock by price level
 // 如果订单有 1000 万个？list / vector
 // memory pool allocate first -> std::list<Order, MyAllocator<Order>>
+
+
+先用 perf 找瓶颈，看是 branch miss、cache miss 还是 backend bound，而不是凭感觉优化。
+如果瓶颈在内存访问，优先考虑把价格档从树结构改成连续存储（例如固定价格范围的数组或 vector<PriceLevel>），提升 cache locality。
+减少动态内存分配，订单对象使用 memory pool，而不是频繁 new/delete。
+减少热路径中的分支，例如模板 + if constexpr、必要时使用 branchless 搜索，但前提是 benchmark 证明值得。
+系统架构层面，采用 single-writer OrderBook，网络线程只负责收包，真正修改 OrderBook 的只有一个线程，通过共享内存或无锁队列把数据广播给多个策略，避免锁竞争。
+网络层，使用 kernel bypass（如 DPDK、Onload）减少收发包延迟；如果需要极致延迟，部分风控或下单逻辑可以放到 FPGA。
