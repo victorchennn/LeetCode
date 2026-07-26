@@ -15,7 +15,6 @@ class OrderBook {
         std::map<int, std::list<Order>, std::greater<int>> bids_; // want to buy stocks 
         std::map<int, std::list<Order>> asks_; // sell stocks
 
-        using OrderQueue = std::list<Order>;
          /*
          * Reverse layout:
          * bids_: low -> high, best bid at back() bids = [97, 98, 99, 100]
@@ -32,89 +31,110 @@ class OrderBook {
         struct OrderLocation {
             Side side;
             int price;
-            OrderQueue::iterator iterator;
+            std::list<Order>::iterator iterator;
         };
         std::unordered_map<std::int64_t, OrderLocation> orderIndex_; // orderId -> 买单还是卖单 所在价格 在该价格队列中的具体位置
 
-        void addToBook(const Order& order) {
-            if (order.side == Side::Buy) { //  std::less<int>{} 
-                auto& queue = bids_[order.price];
-                queue.push_back(order);
-                auto orderIt = std::prev(queue.end());
-                orderIndex_[order.id] = {
-                    Side::Buy,
-                    order.price,
-                    orderIt
-                };
-            } else { // std::greater<int>{}
-                auto& queue = asks_[order.price];
-                ............
+        bool addOrderUnlocked(Order order) {
+            if (order.id <= 0 || order.price <= 0 || order.quantity <= 0 || orderIndex_.contains(order.id)) [[unlikely]] {
+                return false;
             }
+    
+            if (order.side == Side::Buy) {
+                matchAgainst<Side::Buy>(order, asks_);
+            } else {
+                matchAgainst<Side::Sell>(order, bids_);
+            }
+    
+            if (order.quantity > 0) {
+                if (order.side == Side::Buy) {
+                    addToBook(bids_, order);
+                } else {
+                    addToBook(asks_, order);
+                }
+            }
+            return true;
         }
 
-        void matchOrder(Order& incoming) {
-            if (incoming.side == Side::Buy) {
-                while (incoming.quantity > 0 && !asks_.empty() && incoming.price >= asks_.begin()->first) { // asks_.back().price
-                    auto bestAskIt = asks_.begin(); //  PriceLevel& bestAsk = asks_.back();
-                    Order& restingOrder = bestAskIt->second.front(); // Order& resting = bestAsk.orders.front();
+        template <typename Book>
+        void addToBook(Book& book, const Order& order) {
+            std::list<Order>& ordersAtPrice = book[order.price];
+            ordersAtPrice.push_back(order);
+            orderIndex_[order.id] = {
+                order.side,
+                order.price,
+                std::prev(ordersAtPrice.end())
+            };
+        }
+
+        template <Side side, typename Book>
+        void matchAgainst(Order& incoming, Book& oppositeBook) {
+            while (incoming.quantity > 0 && !oppositeBook.empty()) {
+                auto priceLevelIt = oppositeBook.begin();
+                int restingPrice = priceLevelIt->first;
     
-                    int tradedQuantity = std::min(incoming.quantity, restingOrder.quantity);
-                    incoming.quantity -= tradedQuantity;
-                    restingOrder.quantity -= tradedQuantity;
-    
-                    if (restingOrder.quantity == 0) {
-                        std::int64_t filledOrderId = restingOrder.id;
-    
-                        bestAskIt->second.pop_front(); // bestAsk.orders.pop_front();
-                        orderIndex_.erase(filledOrderId);
-    
-                        if (bestAskIt->second.empty()) {
-                            asks_.erase(bestAskIt);  // asks_.pop_back();
-                        }
+                if constexpr (side == Side::Buy) {
+                    if (incoming.price < restingPrice) {
+                        break;
+                    }
+                } else {
+                    if (incoming.price > restingPrice) {
+                        break;
                     }
                 }
-            } else {
-                ... same 
+    
+                std::list<Order>& ordersAtPrice = priceLevelIt->second;
+    
+                while (incoming.quantity > 0 && !ordersAtPrice.empty()) {
+                    Order& resting = ordersAtPrice.front();
+                    int tradedQuantity = std::min(incoming.quantity, resting.quantity);
+    
+                    incoming.quantity -= tradedQuantity;
+                    resting.quantity -= tradedQuantity;
+    
+                    if (resting.quantity == 0) {
+                        orderIndex_.erase(resting.id);
+                        ordersAtPrice.pop_front();
+                    }
+                }
+    
+                if (ordersAtPrice.empty()) {
+                    oppositeBook.erase(priceLevelIt);
+                }
             }
         }
 
         bool cancelOrder(std::int64_t orderId) {
-            auto indexIt = orderIndex_.find(orderId);
-            if (indexIt == orderIndex_.end()) {
+            auto orderIndexIt = orderIndex_.find(orderId);
+            if (orderIndexIt == orderIndex_.end()) {
                 return false;
             }
     
-            const OrderLocation location = indexIt->second;
+            OrderLocation location = orderIndexIt->second;
             if (location.side == Side::Buy) {
-                auto levelIt = findLevel(bids_, location.price, std::less<int>{});
-                if (levelIt == levels.end() || levelIt->price != location.price) {
-                    return false;
-                }
-                levelIt->orders.erase(location.orderIt);
-                if (levelIt->orders.empty()) {
-                    levels.erase(levelIt);
-                }
+                eraseFromBook(bids_, location);
             } else {
-                ....
+                eraseFromBook(asks_, location);
             }
     
-            orderIndex_.erase(indexIt);
+            orderIndex_.erase(orderIndexIt);
             return true;
         }
 
-        template <typename Compare>
-        static auto findLevel(std::vector<PriceLevel>& levels,
-                              int price,
-                              Compare compare) {
-            return std::lower_bound(
-                levels.begin(),
-                levels.end(),
-                price,
-                [compare](const PriceLevel& level, int targetPrice) {
-                    return compare(level.price, targetPrice);
-                }
-            );
+        template <typename Book>
+        void eraseFromBook(Book& book, const OrderLocation& location) {
+            auto priceLevelIt = book.find(location.price);
+            if (priceLevelIt == book.end()) {
+                return;
+            }
+    
+            priceLevelIt->second.erase(location.orderIt);
+            if (priceLevelIt->second.empty()) {
+                book.erase(priceLevelIt);
+            }
         }
+
+
                     
     public:
         // explicit OrderBook(std::size_t expectedPriceLevels = 256,
@@ -126,20 +146,12 @@ class OrderBook {
 
         bool addOrder(Order order) {
             std::lock_guard<std::mutex> lock(mutex_);
-            
-            if (order.id <= 0 || order.price <= 0 || order.quantity <= 0) { return false; }
-            if (orderIndex_.find(order.id) != orderIndex_.end()) { return false; }
-
-            matchOrder(order);
-            if (order.quantity > 0) {
-                addToBook(order);
-            }
-            return true;
+            return addOrderUnlocked(std::move(order));
         }
 
         bool cancelOrder(std::int64_t orderId) {
             std::lock_guard<std::mutex> lock(mutex_);
-            return cancel(orderId);
+            return cancelOrderUnlocked(orderId);
         }
 
 
@@ -156,13 +168,8 @@ class OrderBook {
             }
             
             Side side = indexIt->second.side;
-            cancelOrder(orderId); 
-            Order newOrder{orderId, side, newPrice, newQuantity};
-            matchOrder(newOrder);
-            if (order.quantity > 0) {
-                addToBook(newOrder);
-            }
-            return true;
+            cancelOrderUnlocked(orderId);
+            return addOrderUnlocked({ orderId, side, newPrice, newQuantity });
         }
 
          std::optional<int> bestBid() const {
@@ -171,7 +178,7 @@ class OrderBook {
             if (bids_.empty()) {
                 return std::nullopt;
             }
-            return bids_.back().price;
+            return bids_.begin()->first;
         }
     
         std::optional<int> bestAsk() const {
@@ -180,7 +187,7 @@ class OrderBook {
             if (asks_.empty()) {
                 return std::nullopt;
             }
-            return asks_.back().price;
+            return asks_.begin()->first;
         }
 };
 
