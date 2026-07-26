@@ -7,24 +7,25 @@ private:
 
 public:
     MyCircularQueue(int k)
-        : data(k), head(0), tail(-1), len(0) {}
+        : data(k), head(0), tail(0), len(0) {}
 
     bool enQueue(int value) {
         if (isFull()) {
             return false;
         }
 
-        tail = (tail + 1) % data.size();
         data[tail] = value;
+        tail = (tail + 1) % data.size();
         ++len;
         return true;
     }
 
-    bool deQueue() {
+    bool deQueue(int& value) {
         if (isEmpty()) {
             return false;
         }
 
+        value = data[head];
         head = (head + 1) % data.size();
         --len;
         return true;
