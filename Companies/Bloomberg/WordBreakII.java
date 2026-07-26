@@ -1,33 +1,60 @@
 package Companies.Bloomberg;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+#include <string>
+#include <unordered_map>
+#include <vector>
 
-public class WordBreakII {
-    public List<String> wordBreak(String s, List<String> wordDict) {
-        return dfs(s, wordDict, new HashMap<>());
-    }
+using namespace std;
 
-    private List<String> dfs(String s, List<String> wordDict, Map<String, List<String>> m) {
-        if (m.containsKey(s)) {
-            return m.get(s);
+class WordBreakII {
+private:
+    vector<string> dfs(
+        const string& s,
+        int start,
+        const vector<string>& wordDict,
+        unordered_map<int, vector<string>>& memo
+    ) {
+        if (auto it = memo.find(start); it != memo.end()) {
+            return it->second;
         }
-        List<String> l = new ArrayList<>();
-        for (String word : wordDict) {
-            if (s.startsWith(word)) {
-                String after = s.substring(word.length());
-                if (after.length() == 0) {
-                    l.add(word);
-                } else {
-                    for (String sub : dfs(after, wordDict, m)) {
-                        l.add(word + " " + sub);
-                    }
+
+        vector<string> result;
+
+        for (const string& word : wordDict) {
+            int wordLength = static_cast<int>(word.size());
+
+            if (start + wordLength > static_cast<int>(s.size())) {
+                continue;
+            }
+
+            if (s.compare(start, wordLength, word) != 0) {
+                continue;
+            }
+
+            int nextStart = start + wordLength;
+
+            if (nextStart == static_cast<int>(s.size())) {
+                result.push_back(word);
+            } else {
+                vector<string> suffixes =
+                    dfs(s, nextStart, wordDict, memo);
+
+                for (const string& suffix : suffixes) {
+                    result.push_back(word + " " + suffix);
                 }
             }
         }
-        m.put(s, l);
-        return l;
+
+        memo[start] = result;
+        return result;
     }
-}
+
+public:
+    vector<string> wordBreak(
+        const string& s,
+        const vector<string>& wordDict
+    ) {
+        unordered_map<int, vector<string>> memo;
+        return dfs(s, 0, wordDict, memo);
+    }
+};
