@@ -4,33 +4,65 @@ package Companies.Bloomberg;
  * Time Complexity: O(N*4^L), N is the number of cells and L is the length of the word
  * Space Complexity: O(L)
  */
-public class WordSearch {
-    private int[][] dirs = {{0,1}, {0,-1}, {-1,0}, {1,0}};
+#include <string>
+#include <vector>
 
-    public boolean exist(char[][] board, String word) {
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
-                if (dfs(board, word, i, j, 0)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+using namespace std;
 
-    private boolean dfs(char[][] board, String word, int i, int j, int len) {
-        if (word.length() == len) {
+class WordSearch {
+private:
+    const vector<pair<int, int>> dirs{
+        {0, 1},
+        {0, -1},
+        {-1, 0},
+        {1, 0}
+    };
+
+    bool dfs(vector<vector<char>>& board, const string& word, int row, int col, int index) {
+        if (index == static_cast<int>(word.size())) {
             return true;
         }
-        if (i >= 0 && j >= 0 && i < board.length && j < board[0].length && board[i][j] == word.charAt(len)) {
-            board[i][j] = '$';
-            for (int[] dir : dirs) {
-                if (dfs(board, word, i+dir[0], j+dir[1], len+1)) {
+
+        if (row < 0 || row >= static_cast<int>(board.size()) ||
+            col < 0 || col >= static_cast<int>(board[0].size()) ||
+            board[row][col] != word[index]) {
+            return false;
+        }
+
+        char original = board[row][col];
+        board[row][col] = '#';
+
+        for (const auto& [dr, dc] : dirs) {
+            if (dfs(board, word, row + dr, col + dc, index + 1)) {
+                board[row][col] = original;
+                return true;
+            }
+        }
+
+        board[row][col] = original;
+        return false;
+    }
+
+public:
+    bool exist(vector<vector<char>>& board, const string& word) {
+        if (word.empty()) {
+            return true;
+        }
+
+        if (board.empty() || board[0].empty()) {
+            return false;
+        }
+
+        for (int row = 0; row < static_cast<int>(board.size()); ++row) {
+            for (int col = 0;
+                 col < static_cast<int>(board[0].size());
+                 ++col) {
+                if (dfs(board, word, row, col, 0)) {
                     return true;
                 }
             }
-            board[i][j] = word.charAt(len);
         }
+
         return false;
     }
-}
+};
