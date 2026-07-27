@@ -15,40 +15,39 @@
 //         ▼
 // Order*             ← 真正存放对象
 
+// Memory Pool = 一块连续内存 + 一个指向空闲块的单链表头
+
 class MemoryPool {
 private:
     struct FreeNode {
         FreeNode* next;
     };
-
-    void* memory_;
+    
+    std::byte* memory_;
+    FreeNode* head_;
+    
     std::size_t blockSize_;
     std::size_t blockCount_;
-    FreeNode* freeList_;
+   
 
 public:
     MemoryPool(std::size_t blockSize, std::size_t blockCount)
         : memory_(nullptr),
-          blockSize_(
-              blockSize < sizeof(FreeNode*)
-                  ? sizeof(FreeNode*)
-                  : blockSize
-          ),
-          blockCount_(blockCount),
-          freeList_(nullptr) {
-
-        if (blockCount_ == 0) {
-            throw std::invalid_argument("blockCount must be positive");
-        }
-
-        memory_ = ::operator new(blockSize_ * blockCount_);
-
-        auto* bytes = static_cast<std::byte*>(memory_);
+          head_(nullptr),
+          blockSize_(std::max(blockSize, sizeof(FreeNode))),
+          blockCount_(blockCount) {
+            
+        memory_ = static_cast<std::byte*>(
+            ::operator new(blockSize_ * blockCount_)
+        );
 
         for (std::size_t i = 0; i < blockCount_; ++i) {
-            auto* node = reinterpret_cast<FreeNode*>(bytes + i * blockSize_);
-            node->next = freeList_;
-            freeList_ = node;
+            auto* node = reinterpret_cast<FreeNode*>(
+                memory_ + i * blockSize_
+            );
+
+            node->next = head_;
+            head_ = node;
         }
     }
 
@@ -60,12 +59,12 @@ public:
     MemoryPool& operator=(const MemoryPool&) = delete;
 
     void* allocate() {
-        if (freeList_ == nullptr) {
-            return nullptr;
+        if (head_ == nullptr) {
+            throw std::bad_alloc();
         }
 
-        FreeNode* block = freeList_;
-        freeList_ = freeList_->next;
+        FreeNode* block = head_;
+        head_ = head_->next;
 
         return block;
     }
@@ -77,8 +76,8 @@ public:
 
         auto* block = static_cast<FreeNode*>(ptr);
 
-        block->next = freeList_;
-        freeList_ = block;
+        block->next = head_;
+        head_ = block;
     }
 };
 
