@@ -1,49 +1,55 @@
 package Companies.Google;
 
 int networkDelayTime(vector<vector<int>>& times, int n, int k) {
-    const int INF = 1 << 29;
-    vector<vector<int>> graph(n, vector<int>(n, INF));
-    for (const auto& edge : times) {
-        int from = edge[0] - 1;  // Convert to 0-indexed
-        int to = edge[1] - 1;     // Convert to 0-indexed
+    Map<Integer, List<int[]>> graph = new HashMap<>();
+
+    for (int[] edge : times) {
+        int from = edge[0];
+        int to = edge[1];
         int weight = edge[2];
-        graph[from][to] = weight;
+
+        graph.computeIfAbsent(from, key -> new ArrayList<>())
+             .add(new int[]{to, weight});
     }
 
-    vector<int> distance(n, INF);
-    distance[k - 1] = 0;  // Distance to source node is 0
-  
-    // Track visited nodes
-    vector<bool> visited(n, false);
+    int[] dist = new int[n + 1];
+    Arrays.fill(dist, Integer.MAX_VALUE);
+    dist[k] = 0;
 
-    // Dijkstra's algorithm implementation
-    for (int i = 0; i < n; ++i) {
-        // Find the unvisited node with minimum distance
-        int minNode = -1;
-        for (int node = 0; node < n; ++node) {
-            if (!visited[node] &&
-                (minNode == -1 || distance[node] < distance[minNode])) {
-                minNode = node;
+    // {distance, node}，按照 distance 从小到大排列
+    PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+
+    pq.offer(new int[]{0, k});
+
+    while (!pq.isEmpty()) {
+        int[] current = pq.poll();
+        int currentDistance = current[0];
+        int currentNode = current[1];
+
+        // 这是一条旧记录，跳过
+        if (currentDistance > dist[currentNode]) {
+            continue;
+        }
+
+        for (int[] neighbor : graph.getOrDefault(currentNode, Collections.emptyList())) {
+            int nextNode = neighbor[0];
+            int weight = neighbor[1];
+            int newDistance = currentDistance + weight;
+            if (newDistance < dist[nextNode]) {
+                dist[nextNode] = newDistance;
+                pq.offer(new int[]{newDistance, nextNode});
             }
         }
-
-        if (minNode == -1) {
-            break;
-        }
-      
-        // Mark the selected node as visited
-        visited[minNode] = true;
-      
-        // Update distances to all neighbors of the selected node
-        for (int neighbor = 0; neighbor < n; ++neighbor) {
-            distance[neighbor] = min(distance[neighbor], 
-                                    distance[minNode] + graph[minNode][neighbor]);
-        }
     }
 
-    int maxDistance = *max_element(distance.begin(), distance.end());
-
-    return maxDistance == INF? -1:maxDistance;
+    int answer = 0;
+    for (int node = 1; node <= n; node++) {
+        if (dist[node] == Integer.MAX_VALUE) {
+            return -1;
+        }
+        answer = Math.max(answer, dist[node]);
+    }
+    return answer;
 }
 
 
