@@ -1,100 +1,63 @@
+#include <cstddef>
+#include <list>
 #include <unordered_map>
-using namespace std; 
+#include <utility>
+
+std::vector<T, std::allocator<T>>
+
+
 
 class LRUCache {
 private:
-    struct Node {
-        int key;
-        int value;
-        Node* prev;
-        Node* next;
+    using Entry = std::pair<int, int>; // key, value
+    using Iterator = std::list<Entry>::iterator;
 
-        Node(int key = 0, int value = 0)
-            : key(key), value(value), prev(nullptr), next(nullptr) {}
-    };
+    std::size_t capacity_;
 
-    int capacity;
-    Node* head;
-    Node* tail;
+    // front = most recently used
+    // back  = least recently used
+    std::list<Entry> items_;
 
-    unordered_map<int, Node*> cache;
+    // key -> position in items_
+    std::unordered_map<int, Iterator> cache_;
 
 public:
     explicit LRUCache(int capacity)
-        : capacity(capacity) {
-        head = new Node();
-        tail = new Node();
-
-        head->next = tail;
-        tail->prev = head;
-    }
-
-    ~LRUCache() {
-        Node* current = head;
-
-        while (current != nullptr) {
-            Node* next = current->next;
-            delete current;
-            current = next;
-        }
-    }
+        : capacity_(capacity > 0
+                        ? static_cast<std::size_t>(capacity)
+                        : 0) {}
 
     int get(int key) {
-        auto it = cache.find(key);
-
-        if (it == cache.end()) {
+        auto it = cache_.find(key);
+        if (it == cache_.end()) {
             return -1;
         }
 
-        Node* node = it->second;
-        moveToFront(node);
-
-        return node->value;
+        // Move the existing node to the front in O(1).
+        items_.splice(items_.begin(), items_, it->second);
+        return it->second->second;
     }
 
     void put(int key, int value) {
-        auto it = cache.find(key);
-
-        if (it != cache.end()) {
-            Node* node = it->second;
-            node->value = value;
-            moveToFront(node);
+        if (capacity_ == 0) {
             return;
         }
 
-        Node* node = new Node(key, value);
-        cache[key] = node;
-        addToFront(node);
-
-        if (cache.size() > static_cast<size_t>(capacity)) {
-            Node* removed = removeLast();
-            cache.erase(removed->key);
-            delete removed;
+        auto it = cache_.find(key);
+        if (it != cache_.end()) {
+            it->second->second = value;
+            items_.splice(items_.begin(), items_, it->second);
+            return;
         }
-    }
 
-private:
-    void removeNode(Node* node) {
-        node->prev->next = node->next;
-        node->next->prev = node->prev;
-    }
+        items_.insert(items_.begin(), {key, value});
+        cache_[key] = items_.begin();
 
-    void addToFront(Node* node) {
-        node->next = head->next;
-        node->prev = head;
+        if (cache_.size() > capacity_) {
+            const int leastRecentlyUsedKey = items_.back().first;
 
-        head->next->prev = node;
-        head->next = node;
-    }
-
-    void moveToFront(Node* node) {
-        removeNode(node);
-        addToFront(node);
-    }
-
-    Node* removeLast() {
-        Node* node = tail->prev;
-        removeNode(node);
-        return node;
+            cache_.erase(leastRecentlyUsedKey);
+            items_.pop_back();
+        }
     }
 };
