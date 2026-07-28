@@ -22,6 +22,13 @@ private:
     struct FreeNode {
         FreeNode* next;
     };
+
+    static std::size_t alignUp(
+        std::size_t size,
+        std::size_t alignment
+    ) {
+        return (size + alignment - 1) / alignment * alignment;
+    }
     
     std::byte* memory_;
     FreeNode* head_;
@@ -34,7 +41,7 @@ public:
     MemoryPool(std::size_t blockSize, std::size_t blockCount)
         : memory_(nullptr),
           head_(nullptr),
-          blockSize_(std::max(blockSize, sizeof(FreeNode))),
+          blockSize_(std::max(blockSize, sizeof(FreeNode))), // alignUp(std::max(blockSize, sizeof(FreeNode)),alignof(std::max_align_t) )
           blockCount_(blockCount) {
             
         memory_ = static_cast<std::byte*>(
