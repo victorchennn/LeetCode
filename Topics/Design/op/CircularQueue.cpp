@@ -82,33 +82,31 @@ class SpscRingBuffer { // lock-free
 private:
     std::vector<T> buffer_;
     const std::size_t capacity_;
-    const std::size_t mask_;
 
-    alignas(64)
-    std::atomic<std::size_t> readCounter_{0}; // std::vector<std::atomic<size_t>> readCounters; 每个 Consumer 一个 readCounter，Producer 看 min(readCounters)
+    alignas(64) // by default memory_order_seq_cst 
+    std::atomic<std::size_t> readCounter_{0}; 
+    // std::vector<std::atomic<size_t>> readCounters; 每个 Consumer 一个 readCounter，Producer 看 min(readCounters)
 
-    
-
-    alignas(64)
+    alignas(64) // multiple? fetch_add(1, std::memory_order_acq_rel);
     std::atomic<std::size_t> writeCounter_{0};
 
 public:
     bool push(const T& value) {
-        const std::size_t write = writeCounter_.load(std::memory_order_relaxed);
+        const std::size_t write = writeCounter_.load(std::memory_order_relaxed); // 最弱也是最快 只保证atomic操作本身是原子的
         const std::size_t read = readCounter_.load(std::memory_order_acquire);
         if (write - read == capacity_) {
             return false;
         }
 
         buffer_[write % capacity_] = value;
-        writeCounter_.store(write + 1, std::memory_order_release);
+        writeCounter_.store(write + 1, std::memory_order_release); // 在store之前的所有写操作，都不能被移动到store后面
 
         return true;
     }
 
     bool pop(T& value) {
         const std::size_t read = readCounter_.load(std::memory_order_relaxed);
-        const std::size_t write = writeCounter_.load(std::memory_order_acquire);
+        const std::size_t write = writeCounter_.load(std::memory_order_acquire); // 在load之后的读写不能被移动到load前面
         if (write == read) {
             return false;
         }
