@@ -80,3 +80,94 @@ public:
         return totalBacklog % MOD;
     }
 };
+
+// Example 1
+// operations = [["BUY","b1","100","5"],["SELL","s1","90","2"],["SELL","s2","100","4"],["BUY","b2","101","1"]]
+// return = ["b1|s1|100|2","b1|s2|100|3","b2|s2|100|1"]
+
+class Solution {
+
+struct Order {
+    string id;
+    long long quantity;
+};
+
+map<long long, deque<Order>, greater<long long>> bids_; // Highest buy price first
+map<long long, deque<Order>> asks_; // Lowest sell price first
+
+public:
+  vector<string> matchOrders(vector<vector<string>> operations) {
+        vector<string> trades;
+        for (const auto& operation : operations) {
+            const string& side = operation[0];
+            const string& orderId = operation[1];
+            long long price = stoll(operation[2]);
+            long long quantity = stoll(operation[3]);
+
+            if (side == "BUY") {
+                processBuy(orderId, price, quantity, trades);
+            } else {
+                processSell(orderId, price, quantity, trades);
+            }
+        }
+        return trades;
+  }
+
+private:
+  void processBuy(const string& buyId, long long price, long long quantity, vector<string>& trades) {
+        while (quantity > 0 && !asks_.empty() && asks_.begin()->first <= price) {
+            auto priceLevelIt = asks_.begin();
+            long long sellPrice = priceLevelIt->first;
+            auto& orders = priceLevelIt->second;
+
+            Order& current = orders.front();
+            long long tradeQuantity = min(quantity, current.quantity);
+
+            trades.push_back(buyId + "|" + current.id + "|" + 
+                  to_string(sellPrice) + "|" + to_string(tradeQuantity));
+            
+            quantity -= tradeQuantity;
+            current.quantity -= tradeQuantity;
+
+            if (current.quantity == 0) {
+                orders.pop_front();
+            }
+            if (orders.empty()) {
+                asks_.erase(priceLevelIt);
+            }
+         }
+         if (quantity > 0) {
+            bids_[price].push_back({buyId, quantity});
+         }
+  }
+
+  void processSell(const string& sellId, long long price, long long quantity, vector<string>& trades) {
+        while (quantity > 0 && !bids_.empty() && bids_.begin()->first >= price) {
+            auto priceLevelIt = bids_.begin();
+            long long buyPrice = priceLevelIt->first;
+            auto& orders = priceLevelIt->second;
+
+            Order& current = orders.front();
+            long long tradeQuantity = min(quantity, current.quantity);
+
+            trades.push_back(current.id + "|" + sellId + "|" + 
+                  to_string(buyPrice) + "|" + to_string(tradeQuantity));
+            
+            quantity -= tradeQuantity;
+            current.quantity -= tradeQuantity;
+
+            if (current.quantity == 0) {
+                orders.pop_front();
+            }
+            if (orders.empty()) {
+                bids_.erase(priceLevelIt);
+            }
+         }
+         if (quantity > 0) {
+            asks_[price].push_back({sellId, quantity});
+         }
+  }
+
+
+
+};
