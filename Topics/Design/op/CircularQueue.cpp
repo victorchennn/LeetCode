@@ -117,3 +117,70 @@ public:
         return true;
     }
 };
+
+
+template <typename T>
+class SpmcBroadcastRingBuffer {
+private:
+    struct alignas(64) ConsumerCounter {
+        std::atomic<std::size_t> value{0};
+    };
+
+    std::vector<T> buffer_;
+    const std::size_t capacity_;
+
+    // Producer 独占写入，但 Consumer 会读取
+    alignas(64)
+    std::atomic<std::size_t> writeCounter_{0};
+
+    // 每个 Consumer 有自己的读取位置
+    std::vector<ConsumerCounter> readCounters_;
+
+public:
+    SpmcBroadcastRingBuffer(std::size_t capacity, std::size_t consumerCount)
+        : buffer_(capacity),
+          capacity_(capacity),
+          readCounters_(consumerCount) {}
+
+    bool push(const T& value) {
+        const std::size_t write = writeCounter_.load(std::memory_order_relaxed);
+
+        // 找到最慢 Consumer
+        std::size_t minRead = write;
+        for (auto& counter : readCounters_) {
+            const std::size_t read = counter.value.load(std::memory_order_acquire);
+            if (read < minRead) {
+                minRead = read;
+            }
+        }
+
+        // 最慢 Consumer 还没有读完，不能覆盖
+        if (write - minRead >= capacity_) {
+            return false;
+        }
+
+        buffer_[write % capacity_] = value;
+
+        // 发布数据：所有 Consumer 都可以看到
+        writeCounter_.store(write + 1, std::memory_order_release);
+        return true;
+    }
+
+    bool pop(std::size_t consumerId, T& value) {
+        if (consumerId >= readCounters_.size()) {
+            return false;
+        }
+
+        auto& readCounter = readCounters_[consumerId].value;
+
+        const std::size_t read = readCounter.load(std::memory_order_relaxed);
+        const std::size_t write = writeCounter_.load(std::memory_order_acquire);
+        if (read == write) {
+            return false;
+        }
+
+        value = buffer_[read % capacity_];
+        readCounter.store(read + 1, std::memory_order_release);
+        return true;
+    }
+};
