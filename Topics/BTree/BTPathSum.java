@@ -1,41 +1,55 @@
-package Topics.BTree;
-
-import Libs.TreeNode;
-
-/**
- * If the tree has a root-to-leaf path sum equals target.
- */
-public class BTPathSum {
-    public boolean hasPathSum(TreeNode root, int sum) {
-        if (root == null) {
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int targetSum) {
+        if (root == nullptr) {
             return false;
         }
-//        LinkedList<TreeNode> node_stack = new LinkedList<>();
-//        LinkedList<Integer> sum_stack = new LinkedList<>();
-//        node_stack.add(root);
-//        sum_stack.add(sum - root.val);
-//
-//        TreeNode node;
-//        int curr_sum;
-//        while (!node_stack.isEmpty()) {
-//            node = node_stack.pollLast();
-//            curr_sum = sum_stack.pollLast();
-//            if ((node.right == null) && (node.left == null) && (curr_sum == 0))
-//                return true;
-//
-//            if (node.right != null) {
-//                node_stack.add(node.right);
-//                sum_stack.add(curr_sum - node.right.val);
-//            }
-//            if (node.left != null) {
-//                node_stack.add(node.left);
-//                sum_stack.add(curr_sum - node.left.val);
-//            }
-//        }
-//        return false;
-        if (root.left == null && root.right == null && root.val == sum) {
-            return true;
+
+        targetSum -= root->val;
+
+        if (root->left == nullptr &&
+            root->right == nullptr) {
+            return targetSum == 0;
         }
-        return hasPathSum(root.left, sum-root.val) || hasPathSum(root.right, sum-root.val);
+
+        return hasPathSum(root->left, targetSum) ||
+               hasPathSum(root->right, targetSum);
     }
-}
+};
+
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int targetSum) {
+        if (root == nullptr) {
+            return false;
+        }
+
+        std::stack<TreeNode*> nodeStack;
+        std::stack<int> sumStack;
+
+        nodeStack.push(root);
+        sumStack.push(targetSum - root->val);
+
+        while (!nodeStack.empty()) {
+            TreeNode* node = nodeStack.top();
+            nodeStack.pop();
+
+            int remain = sumStack.top();
+            sumStack.pop();
+
+            if (node->left == nullptr && node->right == nullptr && remain == 0) {
+                return true;
+            }
+            if (node->right) {
+                nodeStack.push(node->right);
+                sumStack.push(remain - node->right->val);
+            }
+            if (node->left) {
+                nodeStack.push(node->left);
+                sumStack.push(remain - node->left->val);
+            }
+        }
+
+        return false;
+    }
+};
