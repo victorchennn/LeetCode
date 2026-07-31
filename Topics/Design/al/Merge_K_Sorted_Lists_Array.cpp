@@ -1,3 +1,26 @@
+vector<int> mergeKArrays(const vector<vector<int>>& arrays) {
+    using Node = tuple<int, int, int>; // value, array index, element index
+    priority_queue<Node, vector<Node>, greater<Node>> pq;
+
+    for (int i = 0; i < arrays.size(); ++i)
+        if (!arrays[i].empty())
+            pq.push({arrays[i][0], i, 0});
+
+    vector<int> result;
+
+    while (!pq.empty()) {
+        auto [value, arrayIdx, idx] = pq.top();
+        pq.pop();
+
+        result.push_back(value);
+
+        if (idx + 1 < arrays[arrayIdx].size())
+            pq.push({arrays[arrayIdx][idx + 1], arrayIdx, idx + 1});
+    }
+
+    return result;
+}
+
 class Solution {
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
@@ -5,11 +28,7 @@ public:
             return a->val > b->val;
         };
 
-        priority_queue<
-            ListNode*,
-            vector<ListNode*>,
-            decltype(cmp)
-        > pq(cmp);
+        priority_queue<ListNode*, vector<ListNode*>, decltype(cmp)> pq(cmp);
 
         for (ListNode* node : lists) {
             if (node) {
