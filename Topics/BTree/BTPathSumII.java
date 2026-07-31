@@ -1,38 +1,39 @@
-package Topics.BTree;
+class Solution {
+public:
+    vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
+        vector<vector<int>> result;
 
-import Libs.TreeNode;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class BTPathSumII {
-    public List<List<Integer>> pathSum(TreeNode root, int sum) {
-        List<List<Integer>> re = new ArrayList<>();
-        if (root == null) {
-            return re;
+        if (root == nullptr) {
+            return result;
         }
-        List<Integer> l = new ArrayList<>();
-        l.add(root.val);
-        dfs(re, l, root, sum-root.val);
-        return re;
+
+        vector<int> path;
+        path.push_back(root->val);
+
+        dfs(root, targetSum - root->val, path, result);
+
+        return result;
     }
 
-    private void dfs(List<List<Integer>> re, List<Integer> l, TreeNode root, int sum) {
-        if (root.left == null && root.right == null) {
-            if (sum == 0) {
-                re.add(new ArrayList<>(l));
+private:
+    void dfs(TreeNode* node, int remainingSum, vector<int>& path, vector<vector<int>>& result) {
+        if (node->left == nullptr && node->right == nullptr) {
+            if (remainingSum == 0) {
+                result.push_back(path);
             }
             return;
         }
-        if (root.left != null) {
-            l.add(root.left.val);
-            dfs(re, l, root.left, sum-root.left.val);
-            l.remove(l.size()-1);
+
+        if (node->left != nullptr) {
+            path.push_back(node->left->val);
+            dfs(node->left, remainingSum - node->left->val, path, result);
+            path.pop_back();
         }
-        if (root.right != null) {
-            l.add(root.right.val);
-            dfs(re, l, root.right, sum-root.right.val);
-            l.remove(l.size()-1);
+
+        if (node->right != nullptr) {
+            path.push_back(node->right->val);
+            dfs(node->right, remainingSum - node->right->val, path, result);
+            path.pop_back();
         }
     }
-}
+};
