@@ -1,3 +1,7 @@
+// Given the root of a BT and an integer targetSum, 
+// return all root-to-leaf paths where the sum of the node values in the path equals targetSum. 
+// Each path should be returned as a list of the node values, not node references.
+
 class Solution {
 public:
     vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
