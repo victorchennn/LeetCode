@@ -182,3 +182,78 @@ class Player {
       }
 };
 
+
+
+
+
+class ConnectFour {
+    const int ROWS = 6, COLS = 7;
+    vector<vector<char>> board;
+
+public:
+    ConnectFour() : board(ROWS, vector<char>(COLS, '.')) {}
+
+    string play(const vector<int>& moves) {
+        for (int i = 0; i < moves.size(); i++) {
+            int col = moves[i] - 1;          // 输入是1~7
+            char player = (i % 2 == 0) ? 'X' : 'O';
+
+            if (col < 0 || col >= COLS)
+                return "Invalid Move";
+
+            int row = -1;
+            for (int r = ROWS - 1; r >= 0; r--) {
+                if (board[r][col] == '.') {
+                    board[r][col] = player;
+                    row = r;
+                    break;
+                }
+            }
+
+            if (row == -1)
+                return "Invalid Move";
+
+            if (win(row, col, player))
+                return player == 'X' ? "Player1 Wins" : "Player2 Wins";
+        }
+
+        for (int c = 0; c < COLS; c++)
+            if (board[0][c] == '.')
+                return "In Progress";
+
+        return "Draw";
+    }
+
+    bool win(int r, int c, char p) {
+        int dirs[4][2] = {{0,1},{1,0},{1,1},{1,-1}};
+
+        for (auto& d : dirs) {
+            int cnt = 1;
+
+            for (int sign : {-1, 1}) {
+                int nr = r + sign * d[0];
+                int nc = c + sign * d[1];
+
+                while (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS && board[nr][nc] == p) {
+                    cnt++;
+                    nr += sign * d[0];
+                    nc += sign * d[1];
+                }
+            }
+
+            if (cnt >= 4)
+                return true;
+        }
+
+        return false;
+    }
+
+    void print() {
+        for (auto& row : board) {
+            for (char c : row)
+                cout << c << ' ';
+            cout << '\n';
+        }
+    }
+};
+
