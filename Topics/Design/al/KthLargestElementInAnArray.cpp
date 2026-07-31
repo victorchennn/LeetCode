@@ -1,50 +1,38 @@
-#include <vector>
-
-using namespace std;
-
 class Solution {
 public:
     int findKthLargest(vector<int>& nums, int k) {
-        int left = 0;
-        int right = static_cast<int>(nums.size()) - 1;
-
-        // 第 k 大 = 升序排列后下标 n - k
-        int target = static_cast<int>(nums.size()) - k;
-
-        while (left < right) {
-            int pivotIndex = partition(nums, left, right);
-
-            if (pivotIndex == target) {
-                break;
-            }
-
-            if (pivotIndex > target) {
-                right = pivotIndex - 1;
-            } else {
-                left = pivotIndex + 1;
-            }
-        }
-
+        int target = nums.size() - k;
+        quickSelect(nums, 0, nums.size() - 1, target);
         return nums[target];
     }
 
-private:
-    int partition(vector<int>& nums, int left, int right) {
-        int pivot = nums[left];
+    vector<int> kSmallest(vector<int>& nums, int k) {
+        quickSelect(nums, 0, nums.size() - 1, k - 1);
+        return vector<int>(nums.begin(), nums.begin() + k);
+    }
+    
+    void quickSelect(vector<int>& nums, int l, int r, int k) {
+        if (l >= r) return;
+        int p = partition(nums, l, r);
+        if (p == k)
+            return;
+        else if (p > k)
+            quickSelect(nums, l, p - 1, k);
+        else
+            quickSelect(nums, p + 1, r, k);
+    }
 
-        while (left < right) {
-            while (left < right && nums[right] >= pivot) {
-                --right;
+    int partition(vector<int>& nums, int l, int r) {
+        int pivot = nums[r];
+        int i = l;
+    
+        for (int j = l; j < r; j++) {
+            if (nums[j] < pivot) {
+                swap(nums[i++], nums[j]);
             }
-            nums[left] = nums[right];
-
-            while (left < right && nums[left] <= pivot) {
-                ++left;
-            }
-            nums[right] = nums[left];
         }
-
-        nums[left] = pivot;
-        return left;
+    
+        swap(nums[i], nums[r]);
+        return i;
     }
 };
