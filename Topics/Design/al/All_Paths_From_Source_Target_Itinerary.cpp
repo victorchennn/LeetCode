@@ -1,5 +1,49 @@
+// Reconstruct Itinerary
+class Solution {
+public:
+    vector<string> findItinerary(vector<vector<string>>& tickets，const string& start) {
+        unordered_map<string,
+            priority_queue<string, vector<string>, greater<string>>> graph;
+
+        for (auto& t : tickets)
+            graph[t[0]].push(t[1]);
+
+        vector<string> route;
+        dfs(start, graph, route);
+        reverse(route.begin(), route.end());
+
+         // 可选：确认所有票都被使用
+        if (route.size() != tickets.size() + 1)
+            return {};
+
+        return route;
+    }
+
+private:
+    void dfs(const string& airport,
+        unordered_map<string, priority_queue<string, vector<string>, greater<string>>>& graph,
+        vector<string>& route
+    ) {
+        auto& next = graph[airport];
+
+        while (!next.empty()) {
+            string destination = next.top();
+            next.pop();
+            dfs(destination, graph, route);
+        }
+
+        route.push_back(airport);
+    }
+};
+
 // 这里不需要 visited，因为题目保证 graph 是 DAG，不会形成环。
 // path.push_back(next) 后递归，回来再 pop_back()，就是标准 backtracking。
+
+// Given a directed acyclic graph (DAG) of n nodes labeled from 0 to n - 1, 
+// find all possible paths from node 0 to node n - 1 and return them in any order.
+
+// Input: graph = [[1,2],[3],[3],[]]
+// Output: [[0,1,3],[0,2,3]]
 class Solution {
 public:
     vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
