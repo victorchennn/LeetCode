@@ -1,45 +1,55 @@
-package Topics.Design;
+// multiple same values? unordered_map<int, unordered_set<int>> index_;
+// values = [5,5,5,3] index:
+// 5 -> {0,1,2}
+// 3 -> {3}
 
-import java.util.*;
+class RandomizedSet {
+private:
+    std::vector<int> values_;
+    std::unordered_map<int, std::size_t> index_; // value -> position
 
-public class RandomizedSet {
-    private List<Integer> l = new ArrayList<>();
-    private Map<Integer, Integer> m = new HashMap<>(); // value, position
-    private Random rand = new Random();
+    std::mt19937 generator_{std::random_device{}()};
 
-    /** Insert-Delete-GetRandom O(1). */
-    public RandomizedSet() {
+public:
+    RandomizedSet() = default;
 
-    }
-
-    /** Inserts a value to the set. Returns true if the set did not already contain the specified element. */
-    public boolean insert(int val) {
-        if (m.containsKey(val)) {
+    bool insert(int val) {
+        if (index_.contains(val)) {
             return false;
         }
-        m.put(val, l.size());
-        l.add(val);
+
+        index_[val] = values_.size();
+        values_.push_back(val);
         return true;
     }
 
-    /** Removes a value from the set. Returns true if the set contained the specified element. */
-    public boolean remove(int val) {
-        if (!m.containsKey(val)) {
+    bool remove(int val) {
+        auto it = index_.find(val);
+        if (it == index_.end()) {
             return false;
         }
-        int index = m.get(val);
-        m.remove(val);
-        if (index != l.size()-1) {
-            int last = l.get(l.size()-1);
-            m.put(last, index); // no need to swap
-            l.set(index, last);
+
+        std::size_t removeIndex = it->second;
+        std::size_t lastIndex = values_.size() - 1;
+        int lastValue = values_.back();
+
+        // 用最后一个元素覆盖要删除的位置
+        if (removeIndex != lastIndex) {
+            values_[removeIndex] = lastValue;
+            index_[lastValue] = removeIndex;
         }
-        l.remove(l.size()-1);
+
+        values_.pop_back();
+        index_.erase(it);
+
         return true;
     }
 
-    /** Get a random element from the set. */
-    public int getRandom() {
-        return l.get(rand.nextInt(l.size()));
+    int getRandom() {
+        std::uniform_int_distribution<std::size_t> distribution(
+            0, values_.size() - 1
+        );
+
+        return values_[distribution(generator_)];
     }
-}
+};
