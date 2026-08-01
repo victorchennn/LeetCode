@@ -41,3 +41,33 @@ private:
         }
     }
 };
+
+// 如果你想改成路径和最小的 root-to-leaf 路径，不需要 backtracking 保存所有答案，只要 DFS 返回左右子树中较小的路径和：
+class Solution {
+public:
+    vector<int> minPath(TreeNode* root) {
+        vector<int> path;
+        if (!root) return path;
+        dfs(root, path);
+        return path;
+    }
+
+private:
+    int dfs(TreeNode* node, vector<int>& path) {
+        if (!node->left && !node->right) {
+            path = {node->val};
+            return node->val;
+        }
+
+        vector<int> leftPath, rightPath;
+        int left = INT_MAX, right = INT_MAX;
+
+        if (node->left) left = dfs(node->left, leftPath);
+        if (node->right) right = dfs(node->right, rightPath);
+
+        path = (left <= right) ? leftPath : rightPath;
+        path.insert(path.begin(), node->val);
+
+        return node->val + min(left, right);
+    }
+};
