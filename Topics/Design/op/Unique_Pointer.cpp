@@ -1,3 +1,10 @@
+| 操作                           | 调用              | 发生什么                                      |
+| ------------------------------ | ---------------- | ----------------------------------------- |
+| `UniquePtr p2 = p1;`           | Copy constructor | ❌ 编译错误（`= delete`）                        |
+| `p2 = p1;`                     | Copy assignment  | ❌ 编译错误（`= delete`）                        |
+| `UniquePtr p2(std::move(p1));` | Move constructor | **所有权转移**，`p2` 接管资源，`p1` 变成 `nullptr`     |
+| `p2 = std::move(p1);`          | Move assignment  | **先释放 p2 原来的资源，再转移所有权**，最后 `p1 = nullptr` |
+
 template <typename T>
 class UniquePtr {
 public:
