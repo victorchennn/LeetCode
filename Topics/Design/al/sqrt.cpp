@@ -39,6 +39,28 @@ public:
 
         return right;
     }
+
+
+    double mySqrt(double x, double precision = 1e-6) {
+        if (x < 0) {
+            throw invalid_argument("square root of negative number");
+        }
+
+        double left = 0.0;
+        double right = max(1.0, x);
+
+        while (right - left > precision) {
+            double mid = left + (right - left) / 2.0;
+
+            if (mid > x / mid) {
+                right = mid;
+            } else {
+                left = mid;
+            }
+        }
+
+        return (left + right) / 2.0;
+    }
 };
 
 TEST(SqrtTest, BasicCases) {
