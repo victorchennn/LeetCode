@@ -36,6 +36,7 @@ public:
         return maxLength;
     }
 
+    // one dimension?
     vector<int> dp(n + 1, 0);
 
     for (int i = 1; i <= m; ++i) {
