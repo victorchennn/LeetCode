@@ -20,8 +20,8 @@ int minimumSemesters(int n, const std::vector<std::vector<int>>& relations) {
         }
 
         int semesters = 0, studiedCount = 0;
-        while (!queue.empty()) {
-            int levelSize = static_cast<int>(queue.size());
+        while (!queue.empty()) { 
+            int levelSize = static_cast<int>(queue.size()); // Return if can finish all courses? no need to check each layer
             ++semesters;
 
             for (int i = 0; i < levelSize; ++i) {
