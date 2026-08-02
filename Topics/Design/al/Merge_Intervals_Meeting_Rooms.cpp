@@ -25,6 +25,7 @@ public:
     }
 };
 
+// find the minimum number of conference rooms required to schedule all the meetings without any conflicts.
 class Solution {
 public:
     int minMeetingRooms(vector<vector<int>>& intervals) {
