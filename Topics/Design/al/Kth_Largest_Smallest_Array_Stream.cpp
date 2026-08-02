@@ -36,3 +36,33 @@ public:
         return i;
     }
 };
+
+// Input:
+// ["KthLargest", "add", "add", "add", "add", "add"]
+// [[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
+
+// Output: [null, 4, 5, 5, 8, 8]
+class KthLargest {
+private:
+    int k_;
+    priority_queue<int, vector<int>, greater<int>> minHeap_;
+
+public:
+    KthLargest(int k, vector<int>& nums)
+        : k_(k) {
+        for (int num : nums) {
+            add(num);
+        }
+    }
+
+    int add(int val) {
+        if (minHeap_.size() < k_) {
+            minHeap_.push(val);
+        } else if (val > minHeap_.top()) {
+            minHeap_.pop();
+            minHeap_.push(val);
+        }
+
+        return minHeap_.top();
+    }
+};
