@@ -24,3 +24,65 @@ public class BTMaximumPathSum {
         return root.val + Math.max(left, right);
     }
 }
+
+
+class Solution {
+public:
+    int maxPathSum(TreeNode* root) {
+        dfs(root);
+        return maxSum_;
+    }
+
+private:
+    int maxSum_ = INT_MIN;
+
+    int dfs(TreeNode* root) {
+        if (!root) {
+            return 0;
+        }
+
+        int left = max(0, dfs(root->left));
+        int right = max(0, dfs(root->right));
+
+        maxSum_ = max(maxSum_, left + right + root->val); // left + right + root 用来更新全局答案，因为路径可以在当前节点拐弯
+
+        return root->val + max(left, right); // root + max(left, right) 用来返回给父节点，因为返回的路径必须保持一条链，不能同时走左右两个子树。
+    }
+};
+
+class Solution {
+public:
+    int maxPathSum(TreeNode* root) {
+        return dfs(root).best;
+    }
+
+private:
+    struct Result {
+        int gain;
+        int best;
+    };
+
+    Result dfs(TreeNode* root) {
+        if (!root) {
+            return {0, INT_MIN};
+        }
+
+        Result left = dfs(root->left);
+        Result right = dfs(root->right);
+
+        int gain = root->val + max(0, max(left.gain, right.gain));
+
+        int throughRoot =
+            root->val +
+            max(0, left.gain) +
+            max(0, right.gain);
+
+        int best = max({
+            left.best,
+            right.best,
+            throughRoot
+        });
+
+        return {gain, best};
+    }
+};
