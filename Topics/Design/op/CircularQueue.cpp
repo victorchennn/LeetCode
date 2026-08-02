@@ -36,7 +36,12 @@ public:
     }
 
     int Rear() {
-        return isEmpty() ? -1 : data[tail];
+        if (isEmpty()) {
+            return -1;
+        }
+    
+        int index = (tail - 1 + data.size()) % data.size();
+        return data[index];
     }
 
     bool isEmpty() const {
@@ -47,6 +52,53 @@ public:
         return len == static_cast<int>(data.size());
     }
 };
+
+int main() {
+    MyCircularQueue q(3);
+
+    assert(q.isEmpty());
+    assert(!q.isFull());
+    assert(q.Front() == -1);
+    assert(q.Rear() == -1);
+
+    assert(q.enQueue(10));
+    assert(q.enQueue(20));
+    assert(q.enQueue(30));
+
+    assert(q.isFull());
+    assert(!q.enQueue(40));
+
+    assert(q.Front() == 10);
+    assert(q.Rear() == 30);
+
+    int value;
+
+    assert(q.deQueue(value));
+    assert(value == 10);
+    assert(q.Front() == 20);
+    assert(q.Rear() == 30);
+
+    // tail 此时回绕到下标 0
+    assert(q.enQueue(40));
+
+    assert(q.isFull());
+    assert(q.Front() == 20);
+    assert(q.Rear() == 40);
+
+    assert(q.deQueue(value));
+    assert(value == 20);
+
+    assert(q.deQueue(value));
+    assert(value == 30);
+
+    assert(q.deQueue(value));
+    assert(value == 40);
+
+    assert(q.isEmpty());
+    assert(!q.deQueue(value));
+
+    std::cout << "All tests passed\n";
+}
 
 Single Producer / Multiple Consumer
 Broadcast（所有 Consumer 都能看到同一条消息）
