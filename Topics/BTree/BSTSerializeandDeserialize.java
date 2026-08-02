@@ -1,49 +1,56 @@
-package Topics.BTree;
+class Codec {
+public:
+    string serialize(TreeNode* root) {
+        string result;
+        preorder(root, result);
 
-import Libs.TreeNode;
-
-public class BSTSerializeandDeserialize {
-    // Encodes a tree to a single string.
-    public String serialize(TreeNode root) {
-        if (root == null) {
-            return "";
+        if (!result.empty()) {
+            result.pop_back();   // 去掉最后一个 ','
         }
-        StringBuilder sb = new StringBuilder();
-        helperS(sb, root);
-        sb.deleteCharAt(sb.length()-1);
-        return sb.toString();
+
+        return result;
     }
 
-    private void helperS(StringBuilder sb, TreeNode root) {
-        if (root == null) {
+    TreeNode* deserialize(string data) {
+        if (data.empty()) {
+            return nullptr;
+        }
+
+        TreeNode* root = nullptr;
+
+        stringstream ss(data);
+        string token;
+
+        while (getline(ss, token, ',')) {
+            root = insert(root, stoi(token));
+        }
+
+        return root;
+    }
+
+private:
+    void preorder(TreeNode* root, string& result) {
+        if (!root) {
             return;
         }
-        sb.append(root.val + ",");
-        helperS(sb, root.left);
-        helperS(sb, root.right);
+
+        result += to_string(root->val) + ",";
+
+        preorder(root->left, result);
+        preorder(root->right, result);
     }
 
-    // Decodes your encoded data to tree.
-    public TreeNode deserialize(String data) {
-        if (data.length() == 0) {
-            return null;
-        }
-        TreeNode root = null;
-        for (String s : data.split(",")) {
-            root = helperD(root, Integer.valueOf(s));
-        }
-        return root;
-    }
-
-    private TreeNode helperD(TreeNode root, int val) {
-        if (root == null) {
+    TreeNode* insert(TreeNode* root, int val) {
+        if (!root) {
             return new TreeNode(val);
         }
-        if (val < root.val) {
-            root.left = helperD(root.left, val);
+
+        if (val < root->val) {
+            root->left = insert(root->left, val);
         } else {
-            root.right = helperD(root.right, val);
+            root->right = insert(root->right, val);
         }
+
         return root;
     }
-}
+};
