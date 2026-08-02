@@ -1,5 +1,3 @@
-
-
 public class JumpGame {
     /* Return true if you can reach the last index, or false otherwise. */
     bool canJump(const std::vector<int>& nums) {
@@ -185,6 +183,26 @@ public class JumpGame {
             nextUncheckedIndex = end + 1;
         }
         return reachable[n - 1];
+    }
+
+    // 爬楼梯， 每次可以1/2/3步， 多少种爬法
+    int climbStairs(int n) {
+        if (n == 0) return 1;
+        if (n == 1) return 1;
+        if (n == 2) return 2;
+    
+        long long a = 1; // dp[0]
+        long long b = 1; // dp[1]
+        long long c = 2; // dp[2]
+    
+        for (int i = 3; i <= n; ++i) {
+            long long d = a + b + c;
+            a = b;
+            b = c;
+            c = d;
+        }
+    
+        return c;
     }
 
 
