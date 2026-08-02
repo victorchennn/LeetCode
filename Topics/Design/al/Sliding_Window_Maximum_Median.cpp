@@ -38,7 +38,82 @@ public:
     }
 };
 
+// Median_Data_Stream.cpp  
+// MedianFinder 用两个 priority_queue，为什么 Sliding Window Median 不用？ 
+// MedianFinder 没有删除操作，而 Sliding Window 有。
+class Solution { 
+public:
+    vector<double> medianSlidingWindow(vector<int>& nums, int k) {
+        vector<double> result;
 
+        for (int i = 0; i < nums.size(); ++i) {
+            add(nums[i]);
+            if (i >= k) {
+                remove(nums[i - k]);
+            }
+
+            if (i >= k - 1) {
+                result.push_back(getMedian(k));
+            }
+        }
+        return result;
+    }
+
+private:
+    multiset<int> left;   // 较小的一半
+    multiset<int> right;  // 较大的一半
+
+    void rebalance() {
+        // left 最多比 right 多一个
+        if (left.size() > right.size() + 1) {
+            auto it = prev(left.end()); // left 最大值
+            right.insert(*it);
+            left.erase(it);
+        }
+
+        if (left.size() < right.size()) {
+            auto it = right.begin(); // right 最小值
+            left.insert(*it);
+            right.erase(it);
+        }
+    }
+
+    void add(int value) {
+        if (left.empty() || value <= *prev(left.end())) {
+            left.insert(value);
+        } else {
+            right.insert(value);
+        }
+
+        rebalance();
+    }
+
+    void remove(int value) {
+        auto it = left.find(value);
+
+        if (it != left.end()) {
+            left.erase(it);
+        } else {
+            it = right.find(value);
+            if (it != right.end()) {
+                right.erase(it);
+            }
+        }
+
+        rebalance();
+    }
+
+    double getMedian(int k) const {
+        if (k % 2 == 1) {
+            return static_cast<double>(*prev(left.end()));
+        }
+
+        long long a = *prev(left.end());
+        long long b = *right.begin();
+
+        return (a + b) / 2.0;
+    }
+};
 
 
 
