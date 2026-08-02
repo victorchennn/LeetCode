@@ -79,3 +79,40 @@ private:
         }
     }
 };
+
+class Solution {
+public:
+    vector<vector<int>> dirs{{0,1}, {0,-1}, {1,0}, {-1,0}};
+
+    int maxAreaOfIsland(vector<vector<int>>& grid) {
+        int ans = 0;
+
+        for (int i = 0; i < grid.size(); ++i) {
+            for (int j = 0; j < grid[0].size(); ++j) {
+                if (grid[i][j] == 1) {
+                    ans = max(ans, dfs(grid, i, j));
+                }
+            }
+        }
+
+        return ans;
+    }
+
+private:
+    int dfs(vector<vector<int>>& grid, int i, int j) {
+        if (i < 0 || j < 0 ||
+            i >= grid.size() || j >= grid[0].size() ||
+            grid[i][j] == 0) {
+            return 0;
+        }
+
+        grid[i][j] = 0;   // mark visited
+
+        int area = 1;
+        for (const auto& dir : dirs) {
+            area += dfs(grid, i + dir[0], j + dir[1]);
+        }
+
+        return area;
+    }
+};
