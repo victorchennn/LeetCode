@@ -23,7 +23,7 @@ int leastInterval(vector<char>& tasks, int n) {
     return max(static_cast<int>(tasks.size()), frame);
 }
 
-Follow-up：输出具体调度顺序，而不仅仅是长度
+Follow-up：输出具体调度顺序，而不仅仅是长度 String_Reorganize.cpp？
 // priority_queue<pair<int, char>>：按剩余次数排序。
 // queue<pair<int, pair<int, char>>>：冷却队列 (readyTime, (count, task))
 
