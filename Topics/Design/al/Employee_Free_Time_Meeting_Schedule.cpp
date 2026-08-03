@@ -1,4 +1,4 @@
-class Solution {
+class Solution { // Merge_Intervals_Meeting_Rooms.cpp
 public:
     vector<vector<int>> employeeFreeTime(vector<vector<vector<int>>>& schedule) {
         vector<vector<int>> result;
