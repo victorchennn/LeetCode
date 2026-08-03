@@ -1,4 +1,4 @@
-class Solution {
+class Solution { // Employee_Free_Time_Meeting_Schedule.cpp
 public:
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
         if (intervals.size() <= 1) {
