@@ -202,22 +202,35 @@ std::construct_at(data_ + index, value);
 
 ++size_;
 
+using iterator = T*;
+using const_iterator = const T*;
+
+iterator begin() noexcept {
+    return data_;
+}
+
+iterator end() noexcept {
+    return data_ + size_;
+}
+
+const_iterator begin() const noexcept {
+    return data_;
+}
+
+const_iterator end() const noexcept {
+    return data_ + size_;
+}
+
+const_iterator cbegin() const noexcept {
+    return data_;
+}
+
+const_iterator cend() const noexcept {
+    return data_ + size_;
+}
+
 
 // 为什么 std::vector 不用 realloc()？
 // 因为 realloc() 只是按字节搬内存，不会调用对象的移动构造或拷贝构造，也不会维护对象生命周期。对于拥有资源（如 std::string、std::vector、智能指针等）的类型，直接按字节复制会导致未定义行为。std::vector 必须逐个构造新对象、析构旧对象。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
