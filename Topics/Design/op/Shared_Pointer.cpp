@@ -30,7 +30,7 @@ public:
         : ptr_(other.ptr_),
           count_(other.count_) {
         if (count_) {
-            ++(*count_);
+            ++(*count_); // count_->fetch_add(1, std::memory_order_relaxed);
         }
     }
 
@@ -97,10 +97,10 @@ public:
 
 private:
     void release() {
-        if (count_) {
+        if (count_) { // count_->fetch_sub(1, std::memory_order_acq_rel) == 1
             --(*count_);
 
-            if (*count_ == 0) {
+            if (*count_ == 0) { 
                 delete ptr_;
                 delete count_;
             }
@@ -112,7 +112,7 @@ private:
 
 private:
     T* ptr_;
-    size_t* count_;
+    size_t* count_; // std::atomic<std::size_t>* count_;
 };
 
 int main() {
