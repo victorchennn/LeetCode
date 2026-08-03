@@ -1,3 +1,8 @@
+// You have n dice, and each die has k faces numbered from 1 to k.
+// Given three integers n, k, and target, you need to find the number of possible ways to roll all the dice such that the sum of the face-up numbers equals exactly target.
+// 2 dice with 6 faces each and want a sum of 7, 
+// the valid combinations would be: (1,6), (2,5), (3,4), (4,3), (5,2), (6,1), giving us 6 possible ways.
+
 class Solution {
 public:
     int numRollsToTarget(int d, int f, int target) {
