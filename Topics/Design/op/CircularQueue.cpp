@@ -1,13 +1,13 @@
 class MyCircularQueue {
 private:
-    std::vector<int> data;
+    std::vector<int> data; // int* data; int capacity;
     int head;
     int tail;
     int len;
 
 public:
-    MyCircularQueue(int k)
-        : data(k), head(0), tail(0), len(0) {}
+    MyCircularQueue(int k) // data = new int[capacity]; also need ~MyCircularQueue() { delete[] data; }
+        : data(k), head(0), tail(0), len(0) {} 
 
     bool enQueue(int value) {
         if (isFull()) {
