@@ -1,4 +1,4 @@
-// op k element，还挺practical的
+// top k element
 // 给一个list of logs， 每个element有个timestamp， 一个error code， find most frequent k error code between start time and end time
 
 struct Log {
