@@ -1,3 +1,8 @@
+// Input: nums = [1,2,3,1,2,3,1,2], k = 2
+// Output: 6
+// Input: nums = [1,2,1,2,1,2,1,2], k = 1
+// Output: 2
+    
 class Solution {
 public:
     int maxSubarrayLength(vector<int>& nums, int k) {
