@@ -92,6 +92,24 @@ public class BestTimetoBuyandSellStock {
         return sell;
     }
 
+    int maxProfitCooldownK(const std::vector<int>& prices, int k) {
+        int n = prices.size();
+        if (n == 0) {
+            return 0;
+        }
+    
+        std::vector<int> profit(n, 0);
+        int buyCost = INT_MAX;
+        for (int i = 0; i < n; ++i) {
+            int availableProfit = (i - k - 1 >= 0) ? profit[i - k - 1] : 0;
+            buyCost = std::min(buyCost, prices[i] - availableProfit);
+            int previousProfit = (i > 0) ? profit[i - 1] : 0;
+            profit[i] = std::max(previousProfit, prices[i] - buyCost);
+        }
+    
+        return profit[n - 1];
+    }
+
     /* Transaction Fee */
     int maxProfit(const std::vector<int>& prices, int fee) {
         if (prices.empty()) {
