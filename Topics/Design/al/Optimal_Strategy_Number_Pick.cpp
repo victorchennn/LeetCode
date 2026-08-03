@@ -1,3 +1,6 @@
+// in every turn a player can pick either the first coin or the last coin from the row. 
+// Determine the maximum amount of money we can surely secure if we move first, assuming the opponent is also playing greedily.
+
 class Solution {
 public:
     int optimalStrategy(const vector<int>& arr) {
