@@ -1,9 +1,13 @@
-// Reconstruct Itinerary
+// You are given a list of airline tickets where tickets[i] = [fromi, toi] represent the departure and the arrival airports of one flight. 
+// Reconstruct the itinerary in order and return it.
+// Input: tickets = [["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]]
+// Output: ["JFK","ATL","JFK","SFO","ATL","SFO"]
+// Another possible reconstruction is ["JFK","SFO","ATL","JFK","ATL","SFO"] but it is larger in lexical order.
+// You may assume all tickets form at least one valid itinerary. You must use all the tickets once and only once.
 class Solution {
 public:
     vector<string> findItinerary(vector<vector<string>>& tickets，const string& start) {
-        unordered_map<string,
-            priority_queue<string, vector<string>, greater<string>>> graph;
+        unordered_map<string, priority_queue<string, vector<string>, greater<string>>> graph;
 
         for (auto& t : tickets)
             graph[t[0]].push(t[1]);
@@ -20,10 +24,7 @@ public:
     }
 
 private:
-    void dfs(const string& airport,
-        unordered_map<string, priority_queue<string, vector<string>, greater<string>>>& graph,
-        vector<string>& route
-    ) {
+    void dfs(const string& airport, unordered_map<string, priority_queue<string, vector<string>, greater<string>>>& graph, vector<string>& route) {
         auto& next = graph[airport];
 
         while (!next.empty()) {
@@ -36,7 +37,7 @@ private:
     }
 };
 
-// 这里不需要 visited，因为题目保证 graph 是 DAG，不会形成环。
+// 不需要 visited，因为题目保证 graph 是 DAG，不会形成环。
 // path.push_back(next) 后递归，回来再 pop_back()，就是标准 backtracking。
 
 // Given a directed acyclic graph (DAG) of n nodes labeled from 0 to n - 1, 
@@ -55,7 +56,7 @@ public:
     }
 
 private:
-    void dfs(const vector<vector<int>>& graph, int current, vector<int>& path,vector<vector<int>>& result) {
+    void dfs(const vector<vector<int>>& graph, int current, vector<int>& path, vector<vector<int>>& result) {
         if (current == graph.size() - 1) {
             result.push_back(path);
             return;
