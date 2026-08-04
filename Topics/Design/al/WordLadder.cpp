@@ -109,3 +109,101 @@ int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
 
     return 0;
 }
+
+// Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"]
+// Output: [["hit","hot","dot","dog","cog"],["hit","hot","lot","log","cog"]]
+class Solution {
+private:
+    vector<vector<string>> result;
+    unordered_map<string, vector<string>> predecessors;
+
+public:
+    vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
+        result.clear();
+        predecessors.clear();
+
+        unordered_set<string> wordSet(wordList.begin(), wordList.end());
+        if (!wordSet.count(endWord)) {
+            return {};
+        }
+
+        unordered_map<string, int> distance;
+        queue<string> q;
+
+        q.push(beginWord);
+        distance[beginWord] = 0;
+        wordSet.erase(beginWord);
+
+        bool found = false;
+        int step = 0;
+
+        while (!q.empty() && !found) {
+            int size = q.size();
+            ++step;
+
+            for (int i = 0; i < size; ++i) {
+                string current = q.front();
+                q.pop();
+
+                string next = current;
+
+                for (int pos = 0; pos < next.size(); ++pos) {
+                    char original = next[pos];
+
+                    for (char c = 'a'; c <= 'z'; ++c) {
+                        if (c == original) {
+                            continue;
+                        }
+
+                        next[pos] = c;
+
+                        // 已经在相同最短层访问过
+                        if (distance.count(next) &&
+                            distance[next] == step) {
+                            predecessors[next].push_back(current);
+                            continue;
+                        }
+
+                        // 不在字典中，或者已在更早层访问
+                        if (!wordSet.count(next)) {
+                            continue;
+                        }
+
+                        predecessors[next].push_back(current);
+                        distance[next] = step;
+
+                        q.push(next);
+                        wordSet.erase(next);
+
+                        if (next == endWord) {
+                            found = true;
+                        }
+                    }
+
+                    next[pos] = original;
+                }
+            }
+        }
+
+        if (found) {
+            vector<string> path{endWord};
+            buildPaths(endWord, beginWord, path);
+        }
+
+        return result;
+    }
+
+private:
+    void buildPaths(const string& current, const string& beginWord, vector<string>& path) {
+        if (current == beginWord) {
+            result.emplace_back(path.rbegin(), path.rend());
+            return;
+        }
+
+        for (const string& prev : predecessors[current]) {
+            path.push_back(prev);
+            buildPaths(prev, beginWord, path);
+            path.pop_back();
+        }
+    }
+};
