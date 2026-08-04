@@ -26,6 +26,7 @@ public:
     }
 };
 
+// 如果有重复元素
 vector<int> intersection(vector<vector<int>>& nums) {
     unordered_map<int, int> count;
 
