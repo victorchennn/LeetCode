@@ -16,6 +16,15 @@ private:
         return key % SIZE;
     }
 
+    // struct Bucket {
+    //     ListNode* head = nullptr;
+    //     mutable std::mutex mutex;
+    // };
+    // std::vector<std::unique_ptr<Bucket>> buckets_;
+    ...
+    // Bucket& bucket = *buckets_[hash(key)];
+    // std::lock_guard<std::mutex> lock(bucket.mutex);
+
     // Return the previous node of key.
     ListNode* find(ListNode* head, int key) {
         ListNode* prev = head;
