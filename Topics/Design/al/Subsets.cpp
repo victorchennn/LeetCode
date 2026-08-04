@@ -1,4 +1,5 @@
-#include <vector>
+// Input: nums = [1,2,3]
+// Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
 
 class Solution {
 public:
@@ -14,11 +15,7 @@ public:
     }
 
 private:
-    void dfs(const std::vector<int>& nums,
-             int start,
-             std::vector<int>& subset,
-             std::vector<std::vector<int>>& result) {
-
+    void dfs(const std::vector<int>& nums, int start, std::vector<int>& subset, std::vector<std::vector<int>>& result) {
         result.push_back(subset);
 
         for (int i = start; i < nums.size(); ++i) {
