@@ -85,4 +85,56 @@ public:
 
         return result.size() == s.size() ? result : "";
     }
+
+// 要输出所有不含相邻相同字符的排列
+class Solution {
+public:
+    vector<string> reorganizeStringAll(const string& s) {
+        vector<int> count(26, 0);
+
+        for (char c : s) {
+            ++count[c - 'a'];
+        }
+
+        vector<string> result;
+        string path;
+
+        backtrack(count, static_cast<int>(s.size()), -1, path, result);
+        return result;
+    }
+
+private:
+    void backtrack(vector<int>& count,
+                   int targetLength,
+                   int previous,
+                   string& path,
+                   vector<string>& result) {
+        if (path.size() == targetLength) {
+            result.push_back(path);
+            return;
+        }
+
+        for (int current = 0; current < 26; ++current) {
+            // 当前字符已经用完
+            if (count[current] == 0) {
+                continue;
+            }
+
+            // 不能和上一个字符相同
+            if (current == previous) {
+                continue;
+            }
+
+            // 选择
+            --count[current];
+            path.push_back(static_cast<char>('a' + current));
+
+            backtrack(count, targetLength, current, path, result);
+
+            // 撤销选择
+            path.pop_back();
+            ++count[current];
+        }
+    }
+};
 };
