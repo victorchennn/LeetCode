@@ -39,3 +39,22 @@ int main() {
     Solution solution;
     cout << solution.countEquations() << '\n';  // 336
 }
+
+if (index == 6) {
+    int abc = digits[0] * 100 + digits[1] * 10 + digits[2];
+    int def = digits[3] * 100 + digits[4] * 10 + digits[5];
+    int sum = abc + def;
+
+    if (sum < 100 || sum > 999) return;
+
+    int a = sum / 100;
+    int b = sum / 10 % 10;
+    int c = sum % 10;
+
+    if (a == 0 || b == 0 || c == 0) return;
+    if (a == b || a == c || b == c) return;
+    if (used[a] || used[b] || used[c]) return;
+
+    ++count;
+    return;
+}
