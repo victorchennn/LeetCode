@@ -6,46 +6,38 @@
 // Explanation: Both "1*2*3" and "1+2+3" evaluate to 6.
 
 class Solution {
-private:
-    vector<string> result;
-    string num;
-    long long target;
+public:
+    vector<string> addOperators(string num, int target) {
+        vector<string> result;
+        dfs(num, target, 0, 0, 0, "", result);
+        return result;
+    }
 
-    void dfs(int index, long long value, long long previous, string expression) {
+private:
+    void dfs(const string& num, long long target, int index,
+             long long value, long long prev,
+             string expr, vector<string>& result) {
+
         if (index == num.size()) {
-            if (value == target) {
-                result.push_back(expression);
-            }
+            if (value == target) result.push_back(expr);
             return;
         }
 
-        long long current = 0;
+        long long cur = 0;
+        for (int i = index; i < num.size(); i++) {
+            if (i > index && num[index] == '0') break;
 
-        for (int end = index; end < num.size(); ++end) {
-            if (end > index && num[index] == '0') {
-                break;
-            }
+            cur = cur * 10 + num[i] - '0';
+            string part = num.substr(index, i - index + 1);
 
-            current = current * 10 + (num[end] - '0');
-            string part = num.substr(index, end - index + 1);
-
-            if (index == 0) {
-                dfs(end + 1, current, current, part);
-            } else {
-                dfs(end + 1, value + current, current, expression + "+" + part);
-                dfs(end + 1, value - current, -current, expression + "-" + part);
-                dfs(end + 1, value - previous + previous * current, previous * current, expression + "*" + part);
+            if (index == 0)
+                dfs(num, target, i + 1, cur, cur, part, result);
+            else {
+                dfs(num, target, i + 1, value + cur, cur, expr + "+" + part, result);
+                dfs(num, target, i + 1, value - cur, -cur, expr + "-" + part, result);
+                dfs(num, target, i + 1, value - prev + prev * cur, prev * cur, expr + "*" + part, result);
             }
         }
     }
-
-public:
-    vector<string> addOperators(string digits, int targetValue) {
-        result.clear();
-        num = std::move(digits);
-        target = targetValue;
-
-        dfs(0, 0, 0, "");
-        return result;
-    }
 };
+
