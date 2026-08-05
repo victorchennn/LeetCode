@@ -34,7 +34,7 @@ public:
         }
 
         // Move the existing node to the front in O(1).
-        items_.splice(items_.begin(), items_, it->second);
+        items_.splice(items_.begin(), items_, it->second); // 把it-second 在items中移动到begin
         return it->second->second;
     }
 
