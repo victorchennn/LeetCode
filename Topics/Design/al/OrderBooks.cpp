@@ -168,6 +168,316 @@ private:
          }
   }
 
+void printResult(const vector<string>& result) {
+    cout << "[";
+    for (int i = 0; i < result.size(); ++i) {
+        if (i > 0) cout << ", ";
+        cout << "\"" << result[i] << "\"";
+    }
+    cout << "]\n";
+}
+
+void assertEqual(const vector<string>& actual,
+                 const vector<string>& expected,
+                 const string& testName) {
+    if (actual == expected) {
+        cout << testName << ": PASS\n";
+    } else {
+        cout << testName << ": FAIL\n";
+        cout << "Expected: ";
+        printResult(expected);
+        cout << "Actual:   ";
+        printResult(actual);
+    }
+}
+
+int main() {
+    {
+        // Example 1:
+        // b1 buys 5 at 100
+        // s1 sells 2 at 90, matches b1 at resting price 100
+        // s2 sells 4 at 100, matches remaining 3 with b1
+        // b2 buys 1 at 101, matches remaining 1 of s2 at resting price 100
+        Solution solution;
+
+        vector<vector<string>> operations = {
+            {"BUY",  "b1", "100", "5"},
+            {"SELL", "s1", "90",  "2"},
+            {"SELL", "s2", "100", "4"},
+            {"BUY",  "b2", "101", "1"}
+        };
+
+        vector<string> expected = {
+            "b1|s1|100|2",
+            "b1|s2|100|3",
+            "b2|s2|100|1"
+        };
+
+        assertEqual(
+            solution.matchOrders(operations),
+            expected,
+            "Test 1: Example"
+        );
+    }
+
+    {
+        // No match:
+        // highest bid 99 < lowest ask 100
+        Solution solution;
+
+        vector<vector<string>> operations = {
+            {"BUY",  "b1", "99",  "5"},
+            {"SELL", "s1", "100", "5"}
+        };
+
+        vector<string> expected = {};
+
+        assertEqual(
+            solution.matchOrders(operations),
+            expected,
+            "Test 2: No match"
+        );
+    }
+
+    {
+        // Exact full match
+        Solution solution;
+
+        vector<vector<string>> operations = {
+            {"BUY",  "b1", "100", "5"},
+            {"SELL", "s1", "100", "5"}
+        };
+
+        vector<string> expected = {
+            "b1|s1|100|5"
+        };
+
+        assertEqual(
+            solution.matchOrders(operations),
+            expected,
+            "Test 3: Exact full match"
+        );
+    }
+
+    {
+        // Incoming sell is partially filled.
+        // Remaining sell quantity should stay on asks.
+        Solution solution;
+
+        vector<vector<string>> operations = {
+            {"BUY",  "b1", "100", "3"},
+            {"SELL", "s1", "90",  "5"},
+            {"BUY",  "b2", "95",  "2"}
+        };
+
+        vector<string> expected = {
+            "b1|s1|100|3",
+            "b2|s1|90|2"
+        };
+
+        assertEqual(
+            solution.matchOrders(operations),
+            expected,
+            "Test 4: Incoming sell partial fill"
+        );
+    }
+
+    {
+        // Incoming buy eats multiple sell price levels.
+        Solution solution;
+
+        vector<vector<string>> operations = {
+            {"SELL", "s1", "98",  "2"},
+            {"SELL", "s2", "99",  "3"},
+            {"SELL", "s3", "100", "4"},
+            {"BUY",  "b1", "100", "8"}
+        };
+
+        vector<string> expected = {
+            "b1|s1|98|2",
+            "b1|s2|99|3",
+            "b1|s3|100|3"
+        };
+
+        assertEqual(
+            solution.matchOrders(operations),
+            expected,
+            "Test 5: Buy eats multiple price levels"
+        );
+    }
+
+    {
+        // Incoming sell eats multiple bid price levels.
+        // Highest bid should be matched first.
+        Solution solution;
+
+        vector<vector<string>> operations = {
+            {"BUY",  "b1", "102", "2"},
+            {"BUY",  "b2", "101", "3"},
+            {"BUY",  "b3", "100", "4"},
+            {"SELL", "s1", "100", "7"}
+        };
+
+        vector<string> expected = {
+            "b1|s1|102|2",
+            "b2|s1|101|3",
+            "b3|s1|100|2"
+        };
+
+        assertEqual(
+            solution.matchOrders(operations),
+            expected,
+            "Test 6: Sell eats multiple price levels"
+        );
+    }
+
+    {
+        // Same price level must respect FIFO.
+        Solution solution;
+
+        vector<vector<string>> operations = {
+            {"BUY",  "b1", "100", "2"},
+            {"BUY",  "b2", "100", "3"},
+            {"BUY",  "b3", "100", "4"},
+            {"SELL", "s1", "100", "6"}
+        };
+
+        vector<string> expected = {
+            "b1|s1|100|2",
+            "b2|s1|100|3",
+            "b3|s1|100|1"
+        };
+
+        assertEqual(
+            solution.matchOrders(operations),
+            expected,
+            "Test 7: FIFO at same price"
+        );
+    }
+
+    {
+        // Better price has priority over earlier order at worse price.
+        Solution solution;
+
+        vector<vector<string>> operations = {
+            {"BUY",  "b1", "100", "5"},
+            {"BUY",  "b2", "101", "2"},
+            {"SELL", "s1", "100", "3"}
+        };
+
+        vector<string> expected = {
+            "b2|s1|101|2",
+            "b1|s1|100|1"
+        };
+
+        assertEqual(
+            solution.matchOrders(operations),
+            expected,
+            "Test 8: Price priority before time priority"
+        );
+    }
+
+    {
+        // Buy limit is too low to reach the ask.
+        Solution solution;
+
+        vector<vector<string>> operations = {
+            {"SELL", "s1", "101", "4"},
+            {"BUY",  "b1", "100", "4"}
+        };
+
+        vector<string> expected = {};
+
+        assertEqual(
+            solution.matchOrders(operations),
+            expected,
+            "Test 9: Buy price below ask"
+        );
+    }
+
+    {
+        // Sell limit is too high to reach the bid.
+        Solution solution;
+
+        vector<vector<string>> operations = {
+            {"BUY",  "b1", "100", "4"},
+            {"SELL", "s1", "101", "4"}
+        };
+
+        vector<string> expected = {};
+
+        assertEqual(
+            solution.matchOrders(operations),
+            expected,
+            "Test 10: Sell price above bid"
+        );
+    }
+
+    {
+        // Resting order determines trade price.
+        //
+        // s1 rests at 90.
+        // Incoming b1 is willing to pay up to 100.
+        // Trade occurs at 90, not 100.
+        Solution solution;
+
+        vector<vector<string>> operations = {
+            {"SELL", "s1", "90",  "3"},
+            {"BUY",  "b1", "100", "3"}
+        };
+
+        vector<string> expected = {
+            "b1|s1|90|3"
+        };
+
+        assertEqual(
+            solution.matchOrders(operations),
+            expected,
+            "Test 11: Resting ask determines price"
+        );
+    }
+
+    {
+        // Resting bid determines trade price.
+        //
+        // b1 rests at 110.
+        // Incoming s1 is willing to sell at 100.
+        // Trade occurs at 110.
+        Solution solution;
+
+        vector<vector<string>> operations = {
+            {"BUY",  "b1", "110", "3"},
+            {"SELL", "s1", "100", "3"}
+        };
+
+        vector<string> expected = {
+            "b1|s1|110|3"
+        };
+
+        assertEqual(
+            solution.matchOrders(operations),
+            expected,
+            "Test 12: Resting bid determines price"
+        );
+    }
+
+    {
+        // Empty input
+        Solution solution;
+
+        vector<vector<string>> operations = {};
+        vector<string> expected = {};
+
+        assertEqual(
+            solution.matchOrders(operations),
+            expected,
+            "Test 13: Empty input"
+        );
+    }
+
+    return 0;
+}
+
 
 
 };
