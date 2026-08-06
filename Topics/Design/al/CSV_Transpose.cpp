@@ -1,41 +1,45 @@
-void transposeCSV(istream& in, ostream& out) {
-    vector<vector<string>> columns;
-    string line;
-    size_t rowCount = 0;
+// vector<string> input = {
+//     "a,b,c",
+//     "1,2",
+//     "x,y,z,w"
+// };
+// auto ans = transposeCSV(input);
+// a,1,x
+// b,2,y
+// c,,z
+// ,,w
 
-    while (getline(in, line)) {
-        stringstream ss(line);
+vector<string> transposeCSV(const vector<string>& lines) {
+    vector<vector<string>> columns;
+
+    for (int row = 0; row < lines.size(); ++row) {
+        stringstream ss(lines[row]);
         string value;
-        size_t col = 0;
+        int col = 0;
 
         while (getline(ss, value, ',')) {
-            if (col == columns.size()) {
-                // 新列之前的行都缺少该列
-                columns.emplace_back(rowCount, "");
-            }
+            if (col == columns.size())
+                columns.emplace_back(row, "");
 
             columns[col].push_back(value);
             ++col;
         }
 
-        // 当前行没有的列补空字符串
-        while (col < columns.size()) {
-            columns[col].push_back("");
-            ++col;
-        }
-
-        ++rowCount;
+        while (col < columns.size())
+            columns[col++].push_back("");
     }
 
+    vector<string> result;
     for (const auto& column : columns) {
-        for (size_t i = 0; i < column.size(); ++i) {
-            if (i > 0) {
-                out << ',';
-            }
-            out << column[i];
+        string line;
+        for (int i = 0; i < column.size(); ++i) {
+            if (i) line += ",";
+            line += column[i];
         }
-        out << '\n';
+        result.push_back(line);
     }
+
+    return result;
 }
 
 // return这个column里面所有value
