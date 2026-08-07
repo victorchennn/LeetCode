@@ -151,14 +151,14 @@ public:
         }
 
         buffer_[write % capacity_] = value;
-        writeCounter_.store(write + 1, std::memory_order_release); // 在store之前的所有写操作，都不能被移动到store后面
+        writeCounter_.store(write + 1, std::memory_order_release); // it's telling consumer this is ready, like broadcast
 
         return true;
     }
 
     bool pop(T& value) {
         const std::size_t read = readCounter_.load(std::memory_order_relaxed);
-        const std::size_t write = writeCounter_.load(std::memory_order_acquire); // 在load之后的读写不能被移动到load前面
+        const std::size_t write = writeCounter_.load(std::memory_order_acquire); // get to know this position is ready
         if (write == read) {
             return false;
         }
@@ -236,3 +236,26 @@ public:
         return true;
     }
 };
+
+compare_exchange_weak( // compare_exchange_strong
+    expected,
+    desired,
+    success_memory_order, // release
+    failure_memory_order // relaxed
+);
+
+// weak used in a while loop in case to retry if fail
+int expected = x.load();
+while (!x.compare_exchange_weak(
+    expected,
+    expected + 1))
+{
+}
+
+// string is often for a one-shot attempt:
+int expected = 10;
+if (x.compare_exchange_strong(expected, 11)) {
+    // successfully changed 10 -> 11
+} else {
+    // failed
+}
