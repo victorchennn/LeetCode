@@ -259,3 +259,5 @@ if (x.compare_exchange_strong(expected, 11)) {
 } else {
     // failed
 }
+
+// if multiple producers share a counter: auto pos = nextPosition.fetch_add(1); return old value, but increate it by 1
