@@ -48,13 +48,13 @@ struct B {};
 
 // (C++20) 1. 定义 concept
 template <typename T>
-concept HasFoo = requires(T t) {
-    t.foo();
+concept HasFoo = requires(T t) { // 不会真的创建 t，也不会真的调用 foo()。
+    t.foo(); // 编译器只是在 compile time 问： 表达式 t.foo() 合法吗？
 };
 
 // 2. 限制 template
-template <HasFoo T>
-void callFoo(T& obj) {
+template <HasFoo T> // Compile time禁止不符合要求的类型 -> T必须满足 HasFoo
+void callFoo(T& obj) { // A a; process(a); OK but B b; process(b); Compile Error
     obj.foo();
 }
 
@@ -66,6 +66,21 @@ void process(T& obj) {
     } else {
         std::cout << "no foo";
     }
+}
+
+template <typename T> 
+T maxValue(const T& a, const T& b) {
+    return a > b ? a : b;
+}
+// 我其实不关心int double or whatever T
+template <typename T>
+concept Comparable = requires(T a, T b) { // compile-time polymorphism
+    a > b;
+};
+
+template <Comparable T>
+T maxValue(const T& a, const T& b) { // templates + concepts
+    return a > b ? a : b;
 }
 
 
@@ -90,7 +105,7 @@ int main() {
   // 没有foo()/decltype(...)失败/specialization被SFINAE排除/primary template/false
   std::cout << has_foo<B>::value << std::endl;
 
-  static_assert(HasFoo<A>);
+  static_assert(HasFoo<A>);  // 编译阶段就知道HasFoo<A> true
   static_assert(!HasFoo<B>);
 
   return 0;
