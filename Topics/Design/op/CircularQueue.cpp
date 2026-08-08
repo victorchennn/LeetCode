@@ -139,6 +139,10 @@ private:
     std::atomic<std::size_t> readCounter_{0}; 
     // std::vector<std::atomic<size_t>> readCounters; 每个 Consumer 一个 readCounter，Producer 看 min(readCounters)
 
+    // Producer-local cache of readCounter_.
+    // Not atomic because only producer accesses it.
+    // std::size_t cachedReadCounter_{0};
+
     alignas(64) // multiple? fetch_add(1, std::memory_order_acq_rel);
     std::atomic<std::size_t> writeCounter_{0};
 
@@ -150,6 +154,7 @@ public:
             return false;
         }
 
+        
         // if (write - cachedReadCounter_ == capacity_) { // Caching Read Counter
         //     cachedReadCounter_ = readCounter_.load(std::memory_order_acquire);
         
