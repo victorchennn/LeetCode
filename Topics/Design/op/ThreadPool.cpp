@@ -16,22 +16,17 @@ public:
             workers_.emplace_back([this] {
                 while (true) {
                     std::function<void()> task;
-
                     {
                         std::unique_lock<std::mutex> lock(mutex_);
-
                         cv_.wait(lock, [this] {
                             return stop_ || !tasks_.empty();
                         });
-
                         if (stop_ && tasks_.empty()) {
                             return;
                         }
-
                         task = std::move(tasks_.front());
                         tasks_.pop();
                     }
-
                     task();
                 }
             });
@@ -40,12 +35,13 @@ public:
 
     // std::future if want to return or callback
     void submit(std::function<void()> task) {
-        std::lock_guard<std::mutex> lock(mutex_);
-
-        if (stop_) {
-            return;
+        {
+            std::lock_guard<std::mutex> lock(mutex_);
+            if (stop_) {
+                return;
+            }         
+            tasks_.push(std::move(task));
         }
-        tasks_.push(std::move(task));
         cv_.notify_one();
     }
 
@@ -62,3 +58,37 @@ public:
         } 
     }
 };
+
+// START task 1, thread = A
+// START task 2, thread = B
+// START task 3, thread = C
+//         ↓ 大约 2 秒
+// END task 1
+// END task 2
+// END task 3
+
+// START task 4, thread = A
+// START task 5, thread = B
+// START task 6, thread = C
+//         ↓ 大约 2 秒
+// END task 4
+// END task 5
+// END task 6
+int main() {
+    ThreadPool pool(3);
+
+    for (int i = 1; i <= 6; ++i) {
+        pool.submit([i] {
+            std::cout << "START task " << i
+                      << ", thread = "
+                      << std::this_thread::get_id()
+                      << '\n';
+
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+            
+            std::cout << "END task " << i << '\n';
+        });
+    }
+
+    return 0;
+}
