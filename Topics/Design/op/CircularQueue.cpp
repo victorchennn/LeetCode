@@ -150,6 +150,13 @@ public:
             return false;
         }
 
+        // if (write - cachedReadCounter_ == capacity_) { // Caching Read Counter
+        //     cachedReadCounter_ = readCounter_.load(std::memory_order_acquire);
+        
+        //     if (write - cachedReadCounter_ == capacity_)
+        //         return false;
+        // }
+
         buffer_[write % capacity_] = value;
         writeCounter_.store(write + 1, std::memory_order_release); // it's telling consumer this is ready, like broadcast
 
