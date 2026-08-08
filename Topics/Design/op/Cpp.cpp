@@ -95,3 +95,29 @@ int main() {
 
   return 0;
 }
+
+
+class Singleton {
+public:
+    static Singleton& getInstance() {
+        static Singleton instance;
+        return instance;
+    }
+
+    Singleton(const Singleton&) = delete;
+    Singleton& operator=(const Singleton&) = delete;
+
+    Singleton(Singleton&&) = delete;
+    Singleton& operator=(Singleton&&) = delete;
+
+private:
+    Singleton() = default;
+};
+
+// Singleton s;          // ❌ constructor private
+// Singleton* s = new Singleton(); // ❌
+// Singleton::getInstance(); // 第一次：创建 instance
+// Singleton::getInstance(); // 返回之前那个
+// Singleton::getInstance(); // 返回之前那个
+
+// OrderService(ILogger& logger) dependency injection maybe is better
