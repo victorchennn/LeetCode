@@ -135,4 +135,11 @@ private:
 // Singleton::getInstance(); // 返回之前那个
 // Singleton::getInstance(); // 返回之前那个
 
+int main() {
+    if (sizeof(void*) == 8)
+        std::cout << "64-bit\n";
+    else if (sizeof(void*) == 4)
+        std::cout << "32-bit\n";
+}
+
 // OrderService(ILogger& logger) dependency injection maybe is better
