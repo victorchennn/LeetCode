@@ -7,8 +7,10 @@ template<typename T>
 
         public:
             void push(T value) {
-                std::lock_guard<std::mutex> lock(m); 
-                q.push(std::move(value)); // q.push(value) is copy because value is rvalue, but std::move(value) is lvalue so use push(T&&)
+                {
+                    std::lock_guard<std::mutex> lock(m); 
+                    q.push(std::move(value)); // q.push(value) is copy, but std::move(value) is Rvalue so use push(T&&)
+                }
 
                 cv.notify_one(); // wake up, lock mutex
             }
