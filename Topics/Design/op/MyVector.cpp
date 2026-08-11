@@ -29,6 +29,41 @@ class Vector {
         ::operator delete(data_); // deallocate(data_) free memory
     }
 
+   //  Vector<int> v(5); //  Vector<int> v(5, 10);
+    explicit Vector(std::size_t n) // (std::size_t n, const T& value)
+        : data_(allocate(n)),
+          size_(0),
+          capacity_(n) {
+
+        try {
+            for (; size_ < n; ++size_) {
+                std::construct_at(data_ + size_); // std::construct_at(data_ + size_, value);
+            }
+        } catch (...) {
+            std::destroy_n(data_, size_);
+            deallocate(data_);
+            throw;
+        }
+    }
+
+  // Vector<int> v{1, 2, 3, 4};
+   Vector(std::initializer_list<T> init)
+        : data_(allocate(init.size())),
+          size_(0),
+          capacity_(init.size()) {
+
+        try {
+            for (const T& value : init) {
+                std::construct_at(data_ + size_, value);
+                ++size_;
+            }
+        } catch (...) {
+            std::destroy_n(data_, size_);
+            deallocate(data_);
+            throw;
+        }
+    }
+
 // copy constructor
 Vector(const Vector& other) 
     : data_(allocate(other.capacity_)), // allocate use new memory
@@ -102,7 +137,8 @@ Vector& operator=(Vector&& other) noexcept {
 
 };
 
-// reallocate?
+// reallocate
+void reallocate(std::size_t new_capacity)
 {
   T* new_data = allocate(new_capacity);
   std::size_t constructed = 0;
