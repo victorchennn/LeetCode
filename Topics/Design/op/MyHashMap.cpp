@@ -125,3 +125,123 @@ std::shared_lock lock(shard.mutex); // read
 std::unique_lock lock(shard.mutex); // write
 
 
+
+
+template <typename K, typename V, size_t NumShards = 64, typename Hash = std::hash<K>>
+class ConcurrentHashMap {
+private:
+    static_assert((NumShards & (NumShards - 1)) == 0,
+                  "NumShards must be power of two");
+
+    struct alignas(64) Shard {
+        mutable std::shared_mutex mutex;
+        std::unordered_map<K, V, Hash> map;
+    };
+
+    std::array<Shard, NumShards> shards_;
+    Hash hasher_;
+    std::atomic<size_t> size_{0};
+
+    size_t shardIndex(const K& key) const {
+        return hasher_(key) & (NumShards - 1);
+    }
+
+    Shard& getShard(const K& key) {
+        return shards_[shardIndex(key)];
+    }
+
+    const Shard& getShard(const K& key) const {
+        return shards_[shardIndex(key)];
+    }
+
+public:
+    explicit ConcurrentHashMap(size_t expectedSize = 0) {
+        if (expectedSize > 0) {
+            const size_t perShard =
+                (expectedSize + NumShards - 1) / NumShards;
+
+            for (auto& shard : shards_) {
+                shard.map.reserve(perShard);
+            }
+        }
+    }
+
+    // ---------- READ ----------
+    std::optional<V> get(const K& key) const {
+        const Shard& shard = getShard(key);
+
+        std::shared_lock lock(shard.mutex);
+
+        auto it = shard.map.find(key);
+
+        if (it == shard.map.end())
+            return std::nullopt;
+
+        return it->second;  // return copy
+    }
+
+    // ---------- INSERT ----------
+    bool insert(const K& key, const V& value) {
+        Shard& shard = getShard(key);
+
+        std::unique_lock lock(shard.mutex);
+
+        auto [it, inserted] =
+            shard.map.emplace(key, value);
+
+        if (inserted)
+            size_.fetch_add(1, std::memory_order_relaxed);
+
+        return inserted;
+    }
+
+    // ---------- INSERT OR UPDATE ----------
+    void insertOrUpdate(const K& key, const V& value) {
+        Shard& shard = getShard(key);
+
+        std::unique_lock lock(shard.mutex);
+
+        auto [it, inserted] =
+            shard.map.try_emplace(key, value);
+
+        if (!inserted) {
+            it->second = value;
+        } else {
+            size_.fetch_add(1, std::memory_order_relaxed);
+        }
+    }
+
+    // ---------- ATOMIC READ-MODIFY-WRITE ----------
+    template <typename Func>
+    bool update(const K& key, Func func) {
+        Shard& shard = getShard(key);
+
+        std::unique_lock lock(shard.mutex);
+
+        auto it = shard.map.find(key);
+
+        if (it == shard.map.end())
+            return false;
+
+        func(it->second);
+        return true;
+    }
+
+    // ---------- ERASE ----------
+    bool erase(const K& key) {
+        Shard& shard = getShard(key);
+
+        std::unique_lock lock(shard.mutex);
+
+        if (shard.map.erase(key)) {
+            size_.fetch_sub(1, std::memory_order_relaxed);
+            return true;
+        }
+
+        return false;
+    }
+
+    size_t size() const {
+        return size_.load(std::memory_order_relaxed);
+    }
+};
