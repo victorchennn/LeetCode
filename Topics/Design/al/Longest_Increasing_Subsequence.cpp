@@ -15,6 +15,22 @@ public:
     }
     return dp.size();
   }
+
+  int lowerBound(const vector<int>& nums, int target) {
+        int left = 0;
+        int right = nums.size();
+
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+
+            if (nums[mid] < target)
+                left = mid + 1;
+            else
+                right = mid;
+        }
+
+        return left;
+    }
 };
 
 // Longest Decreasing Subsequence 把所有数取反，再跑 LIS。 x = -x;
