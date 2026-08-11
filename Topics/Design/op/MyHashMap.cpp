@@ -18,7 +18,7 @@ private:
 
     // struct Bucket {
     //     ListNode* head = nullptr;
-    //     mutable std::mutex mutex; // 即使当前对象是 const，这个成员也允许被修改
+    //     mutable std::mutex mutex; // 即使当前对象是 const，这个成员也允许被修改 如果要shared_lock必须shared mutex
     // };
     // std::vector<std::unique_ptr<Bucket>> buckets_; // std::mutex 是 non-copyable / non-movable, 所以用pointer or even std::array<Bucket, SIZE> buckets_;
     ...
@@ -55,7 +55,7 @@ public:
     }
 
     int get(int key) {
-        // std::shared_lock lock(bucket.mutex);
+        // std::shared_lock lock(bucket.mutex); //必须是shared mutex
         int idx = hash(key); 
 
         if (!buckets[idx]) {
