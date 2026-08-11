@@ -4,6 +4,16 @@
 // Output: ["JFK","ATL","JFK","SFO","ATL","SFO"]
 // Another possible reconstruction is ["JFK","SFO","ATL","JFK","ATL","SFO"] but it is larger in lexical order.
 // You may assume all tickets form at least one valid itinerary. You must use all the tickets once and only once.
+// 不需要 visited：
+// 因为每次使用一张 ticket 后直接从 graph 中 pop 掉，
+// 所以同一条 edge 不会被重复使用。
+//
+// 注意：graph 可以有环，并不是 DAG。
+//
+// 这也不是普通 backtracking。
+// DFS 走到没有 outgoing ticket 后才把 airport 加入 route，
+// 因此得到的是逆序 Eulerian path，最后 reverse。
+
 class Solution {
 public:
     vector<string> findItinerary(vector<vector<string>>& tickets，const string& start) {
