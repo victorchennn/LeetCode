@@ -1065,3 +1065,1782 @@ Durable log / Kafka / WAL
 核心面试思路：
 
 > Start with the simplest correct design, identify the bottleneck or new requirement, and evolve the architecture step by step.
+>
+> # Trading Position Signal Queue — Follow-up Questions
+
+## 1. How Do You Guarantee Ordering?
+
+首先需要确认：
+
+> Do we need global ordering, or only per-account / per-instrument ordering?
+
+通常没有必要保证所有 signal 的 global ordering。
+
+例如：
+
+```text
+AAPL sequence = 100
+MSFT sequence = 200
+```
+
+我们通常不关心 AAPL 和 MSFT 谁先处理，只需要保证：
+
+```text
+AAPL:
+100 -> 101 -> 102
+
+MSFT:
+200 -> 201 -> 202
+```
+
+因此更合理的是：
+
+**Per-key ordering**
+
+key 可以是：
+
+```text
+(accountId, instrumentId)
+```
+
+---
+
+### Partitioning
+
+可以根据 key hash：
+
+```cpp
+partition =
+    hash(accountId, instrumentId) % numPartitions;
+```
+
+架构：
+
+```text
+                    +--> Queue 0 --> Consumer 0
+Producer ---------->+--> Queue 1 --> Consumer 1
+                    +--> Queue 2 --> Consumer 2
+```
+
+保证同一个：
+
+```text
+(accountId, instrumentId)
+```
+
+始终进入同一个 partition。
+
+这样：
+
+```text
+AAPL #100
+AAPL #101
+AAPL #102
+```
+
+不会被不同 consumer 并行处理而 reorder。
+
+---
+
+## 2. Do We Need Global Ordering?
+
+通常：
+
+```text
+NO
+```
+
+因为 global ordering 会限制 scalability。
+
+如果所有 signal 都必须经过：
+
+```text
+One Global Sequence
+        ↓
+One Ordered Queue
+        ↓
+Consumer
+```
+
+系统很容易形成 bottleneck。
+
+更好的设计：
+
+```text
+Partition 0:
+AAPL #1 -> #2 -> #3
+
+Partition 1:
+MSFT #1 -> #2 -> #3
+
+Partition 2:
+NVDA #1 -> #2 -> #3
+```
+
+只保证：
+
+```text
+per-key ordering
+```
+
+这样多个 partition 可以并行处理。
+
+面试中可以说：
+
+> I would avoid global ordering unless it is explicitly required. Usually per-account or per-instrument ordering is enough and allows us to partition the workload.
+
+---
+
+# 3. How Do You Handle Duplicate Signals?
+
+Duplicate 可能来自：
+
+```text
+Producer retry
+Network retry
+Consumer replay
+Crash recovery
+At-least-once delivery
+```
+
+例如：
+
+```text
+sequence = 100
+sequence = 101
+sequence = 101   <- duplicate
+sequence = 102
+```
+
+可以在 signal 中加入：
+
+```cpp
+struct PositionSignal {
+    int accountId;
+    int instrumentId;
+
+    long position;
+
+    uint64_t sequence;
+    uint64_t eventId;
+};
+```
+
+Consumer 保存：
+
+```text
+lastProcessedSequence
+```
+
+如果：
+
+```text
+received sequence <= lastProcessedSequence
+```
+
+可能是 duplicate。
+
+---
+
+# 4. Absolute State Makes Idempotency Easier
+
+假设 signal 是：
+
+```text
+AAPL position = 100
+```
+
+处理两次：
+
+```text
+position = 100
+position = 100
+```
+
+结果仍然：
+
+```text
+100
+```
+
+这种操作天然比较容易做到：
+
+**Idempotent**
+
+---
+
+但如果 signal 是 delta：
+
+```text
+AAPL +100
+```
+
+处理两次：
+
+```text
+0
++100
++100
+
+= 200  ❌
+```
+
+正确应该是：
+
+```text
+100
+```
+
+因此 delta event 通常需要：
+
+```text
+eventId
+sequence number
+deduplication
+```
+
+---
+
+# 5. Delivery Semantics
+
+系统可能提供：
+
+### At-Most-Once
+
+```text
+Signal 最多处理一次
+```
+
+但是 crash 时可能丢。
+
+---
+
+### At-Least-Once
+
+```text
+Signal 至少处理一次
+```
+
+不会轻易丢，但可能 duplicate。
+
+因此 consumer 应该：
+
+```text
+idempotent
++
+deduplication
+```
+
+---
+
+### Exactly-Once
+
+理想语义：
+
+```text
+每个 signal 恰好处理一次
+```
+
+但是 distributed system 中实现成本很高。
+
+通常更现实的方案：
+
+```text
+At-Least-Once
+        +
+Idempotent Consumer
+        +
+Deduplication
+```
+
+---
+
+# 6. What Happens If Producer Crashes?
+
+例如：
+
+```text
+Producer
+   |
+   | write signal #100
+   v
+Queue
+
+Producer crashes before receiving acknowledgement
+```
+
+Producer 不知道：
+
+```text
+signal #100
+```
+
+到底成功没有。
+
+restart 后可能 retry：
+
+```text
+signal #100
+```
+
+于是：
+
+```text
+#100
+#100
+```
+
+产生 duplicate。
+
+因此最好使用：
+
+```text
+eventId
+sequence number
+idempotent consumer
+```
+
+---
+
+# 7. What Happens If Consumer Crashes?
+
+假设：
+
+```text
+#100
+#101
+#102
+#103
+```
+
+Consumer 已经处理到：
+
+```text
+#101
+```
+
+然后 crash。
+
+如果是 durable queue，可以记录：
+
+```text
+checkpoint = 101
+```
+
+restart：
+
+```text
+read checkpoint
+      ↓
+start from #102
+```
+
+如果使用 at-least-once delivery，也可能重新收到：
+
+```text
+#101
+```
+
+因此 consumer 应该能够识别 duplicate。
+
+---
+
+# 8. What If One Instrument Is Extremely Hot?
+
+例如：
+
+```text
+AAPL = 80% traffic
+```
+
+简单：
+
+```cpp
+hash(instrumentId) % N
+```
+
+可能得到：
+
+```text
+Partition 0: AAPL 80%
+Partition 1: 5%
+Partition 2: 8%
+Partition 3: 7%
+```
+
+那么：
+
+```text
+Partition 0 overloaded
+```
+
+这就是：
+
+**Hot-key problem**
+
+---
+
+可能的解决方案：
+
+```text
+better partitioning key
+
+(accountId, instrumentId)
+```
+
+而不是只使用：
+
+```text
+instrumentId
+```
+
+例如：
+
+```text
+Account A + AAPL -> Queue 0
+Account B + AAPL -> Queue 1
+Account C + AAPL -> Queue 2
+```
+
+但必须考虑：
+
+> What ordering guarantee do we actually need?
+
+如果要求整个 AAPL global ordering，就不能随便拆。
+
+---
+
+# 9. How Do You Scale Consumers?
+
+最直接的方法：
+
+```text
+                    +--> Queue 0 --> Consumer 0
+Producer ---------->+--> Queue 1 --> Consumer 1
+                    +--> Queue 2 --> Consumer 2
+                    +--> Queue 3 --> Consumer 3
+```
+
+按照：
+
+```text
+hash(accountId, instrumentId)
+```
+
+partition。
+
+优点：
+
+```text
+parallel processing
+per-key ordering
+less lock contention
+better cache locality
+```
+
+---
+
+# 10. Work Queue vs Broadcast
+
+Multiple consumers 有两种完全不同的语义。
+
+## Work Distribution
+
+```text
+             +--> Consumer A
+Queue -------+
+             +--> Consumer B
+```
+
+一个 signal：
+
+```text
+Consumer A OR Consumer B
+```
+
+例如 worker pool。
+
+---
+
+## Broadcast
+
+```text
+                 +--> Risk
+                 |
+Position Signal -+--> Strategy
+                 |
+                 +--> Logger
+                 |
+                 +--> UI
+```
+
+每个 consumer 都需要收到 signal：
+
+```text
+Consumer A AND Consumer B AND Consumer C
+```
+
+这时候普通 MPMC queue 不够。
+
+可以使用：
+
+```text
+Pub/Sub
+Broadcast Ring Buffer
+Independent Consumer Queues
+```
+
+---
+
+# 11. What If One Broadcast Consumer Is Slow?
+
+假设：
+
+```text
+Producer sequence = 1000
+
+Risk     cursor = 999
+Strategy cursor = 995
+Logger   cursor = 500
+```
+
+如果 ring buffer 需要等待所有 consumer：
+
+```text
+minRead = 500
+```
+
+Logger 会拖慢整个系统。
+
+这是：
+
+**Slow Consumer Problem**
+
+---
+
+可能的策略：
+
+### Option 1 — Block Producer
+
+```text
+Slow Consumer
+     ↓
+Ring Buffer Full
+     ↓
+Producer blocks
+```
+
+适合不能丢数据的系统，但可能影响 trading hot path。
+
+---
+
+### Option 2 — Disconnect Slow Consumer
+
+例如 Logger 太慢：
+
+```text
+Logger falls too far behind
+        ↓
+disconnect
+        ↓
+recover from durable log later
+```
+
+---
+
+### Option 3 — Independent Queue
+
+```text
+                   +--> Risk Queue
+Producer ----------+--> Strategy Queue
+                   +--> Logger Queue
+```
+
+Logger 慢不会直接 block Risk。
+
+代价：
+
+```text
+more memory
+more copies
+more complexity
+```
+
+---
+
+### Option 4 — Durable Log Catch-Up
+
+```text
+Fast consumers:
+Ring Buffer
+
+Slow consumer:
+Durable Log
+      ↓
+Replay later
+```
+
+这是比较常见的思路。
+
+---
+
+# 12. How Large Should the Queue Be?
+
+不能简单说：
+
+```text
+As large as possible
+```
+
+应该根据：
+
+```text
+Peak producer rate
+Consumer rate
+Expected burst duration
+Message size
+Memory budget
+```
+
+估算。
+
+例如：
+
+```text
+Peak producer = 2M/s
+Consumer      = 1.5M/s
+
+Difference = 500K/s
+```
+
+如果需要吸收：
+
+```text
+200 ms burst
+```
+
+需要：
+
+```text
+500K * 0.2
+= 100K signals
+```
+
+因此：
+
+```text
+capacity ≈
+(producer peak - consumer capacity)
+*
+expected burst duration
+```
+
+然后增加 safety margin。
+
+---
+
+# 13. What Happens When Queue Is Almost Full?
+
+不要等：
+
+```text
+100% full
+```
+
+才发现问题。
+
+可以设置 threshold：
+
+```text
+Queue Usage
+
+70% -> warning metric
+85% -> throttle / alert
+95% -> emergency policy
+100% -> block / spill / reject
+```
+
+具体 threshold 根据系统 requirement 决定。
+
+---
+
+# 14. What Metrics Would You Monitor?
+
+至少应该监控：
+
+```text
+queue depth
+
+enqueue rate
+
+dequeue rate
+
+consumer lag
+
+oldest message age
+
+end-to-end latency
+
+p50 latency
+
+p99 latency
+
+p99.9 latency
+
+drop count
+
+coalesce count
+
+duplicate count
+
+replay count
+
+queue-full count
+```
+
+---
+
+### Queue Depth
+
+例如：
+
+```text
+capacity = 100K
+current depth = 80K
+```
+
+说明 backlog 很高。
+
+---
+
+### Consumer Lag
+
+例如：
+
+```text
+Producer sequence = 1,000,000
+Consumer sequence =   950,000
+
+lag = 50,000
+```
+
+---
+
+### Oldest Message Age
+
+例如：
+
+```text
+oldest signal has been waiting 500 ms
+```
+
+这有时候比：
+
+```text
+queue depth
+```
+
+更能直接反映 consumer 是否跟不上。
+
+---
+
+# 15. How Do You Timestamp Signals?
+
+需要区分：
+
+```text
+Wall Clock
+vs
+Monotonic Clock
+```
+
+---
+
+## Wall Clock
+
+例如：
+
+```text
+2026-08-16 12:30:00
+```
+
+适合：
+
+```text
+logging
+human-readable timestamps
+cross-system business timestamps
+```
+
+但是可能受到：
+
+```text
+NTP adjustment
+clock correction
+```
+
+影响。
+
+---
+
+## Monotonic Clock
+
+只保证：
+
+```text
+time always moves forward
+```
+
+更适合：
+
+```text
+latency measurement
+timeout
+elapsed time
+```
+
+例如：
+
+```cpp
+auto start =
+    std::chrono::steady_clock::now();
+```
+
+---
+
+# 16. Lock-Based vs Lock-Free
+
+不要直接回答：
+
+```text
+Lock-free is always faster.
+```
+
+这是不准确的。
+
+第一版可以：
+
+```text
+std::mutex
++
+condition_variable
+```
+
+优点：
+
+```text
+simple
+correct
+easy to maintain
+```
+
+如果 benchmark 证明：
+
+```text
+lock contention
+context switch
+tail latency
+```
+
+是瓶颈，再考虑 lock-free。
+
+---
+
+## SPSC
+
+对于：
+
+```text
+Single Producer
+Single Consumer
+```
+
+lock-free ring buffer 非常适合：
+
+```text
+simple atomic operations
+no lock contention
+preallocated memory
+predictable latency
+```
+
+---
+
+## MPMC
+
+MPMC lock-free queue 会复杂很多：
+
+```text
+CAS loops
+memory ordering
+ABA issues
+cache-line contention
+memory reclamation
+```
+
+所以不要为了：
+
+```text
+"lock-free sounds fast"
+```
+
+就直接使用。
+
+---
+
+# 17. Busy Polling vs Condition Variable
+
+## Condition Variable
+
+```text
+No data
+   ↓
+Consumer sleeps
+   ↓
+Producer notify
+   ↓
+OS wakes consumer
+   ↓
+Consumer scheduled
+```
+
+优点：
+
+```text
+low CPU usage
+```
+
+缺点：
+
+```text
+context switch
+scheduler latency
+wake-up latency
+```
+
+---
+
+## Busy Polling
+
+```cpp
+while (running) {
+    PositionSignal signal;
+
+    if (queue.pop(signal)) {
+        process(signal);
+    }
+}
+```
+
+Consumer：
+
+```text
+check
+check
+check
+check
+signal arrives
+process immediately
+```
+
+优点：
+
+```text
+very low wake-up latency
+predictable latency
+```
+
+缺点：
+
+```text
+burns CPU
+```
+
+---
+
+## Hybrid
+
+也可以：
+
+```text
+spin for a while
+       ↓
+still empty?
+       ↓
+sleep
+```
+
+即：
+
+```text
+busy spin
+   +
+condition variable
+```
+
+在 latency 和 CPU usage 之间做 trade-off。
+
+---
+
+# 18. Memory Allocation
+
+Trading hot path 上通常希望避免：
+
+```cpp
+new
+delete
+malloc
+free
+```
+
+因为可能带来：
+
+```text
+allocator contention
+cache miss
+unpredictable latency
+fragmentation
+```
+
+可以使用：
+
+```text
+Preallocated Ring Buffer
+Memory Pool
+Object Pool
+Fixed-size Message
+```
+
+例如：
+
+```cpp
+std::array<PositionSignal, 65536> buffer;
+```
+
+启动时一次性分配。
+
+---
+
+# 19. Cache Locality
+
+Ring buffer 使用 contiguous memory：
+
+```text
+[S0][S1][S2][S3][S4][S5]
+```
+
+相比：
+
+```text
+Node -> Node -> Node -> Node
+```
+
+通常 cache locality 更好。
+
+因此 low-latency queue 常使用：
+
+```text
+array
+ring buffer
+preallocated contiguous storage
+```
+
+而不是 linked list。
+
+---
+
+# 20. False Sharing
+
+假设：
+
+```cpp
+std::atomic<size_t> read;
+std::atomic<size_t> write;
+```
+
+它们位于同一个 cache line：
+
+```text
+Cache Line
++----------------------+
+| read | write | ...   |
++----------------------+
+```
+
+Producer 修改：
+
+```text
+write
+```
+
+Consumer 修改：
+
+```text
+read
+```
+
+两个 core 会不断争夺同一个 cache line。
+
+这就是：
+
+**False Sharing**
+
+可以：
+
+```cpp
+alignas(64)
+std::atomic<size_t> read;
+
+alignas(64)
+std::atomic<size_t> write;
+```
+
+尽量把它们放在不同 cache line。
+
+---
+
+# 21. What If Signal Size Becomes Large?
+
+如果：
+
+```cpp
+struct PositionSignal {
+    ...
+    char hugeData[10000];
+};
+```
+
+每次：
+
+```cpp
+queue.push(signal);
+```
+
+都会产生大量 copy。
+
+可以考虑：
+
+```text
+move semantics
+index / handle
+preallocated object pool
+```
+
+例如 queue 中只保存：
+
+```cpp
+uint32_t signalIndex;
+```
+
+真正对象放在：
+
+```text
+Preallocated Signal Pool
+```
+
+但这样需要额外处理：
+
+```text
+ownership
+lifetime
+memory reclamation
+```
+
+所以只有 signal 确实很大时才值得增加这种复杂度。
+
+---
+
+# 22. How Do You Shut Down Safely?
+
+不能简单：
+
+```text
+kill consumer thread
+```
+
+因为 queue 中可能还有：
+
+```text
+unprocessed signals
+```
+
+Graceful shutdown：
+
+```text
+Stop accepting new signals
+        ↓
+Drain queue
+        ↓
+Finish processing
+        ↓
+Flush / checkpoint
+        ↓
+Stop consumer
+        ↓
+Join threads
+```
+
+C++ 中通常：
+
+```cpp
+running_ = false;
+cv_.notify_all();
+
+for (auto& thread : threads_) {
+    thread.join();
+}
+```
+
+---
+
+# 23. How Do You Restart Without Losing Signals?
+
+如果需要 rolling restart：
+
+```text
+Old Consumer
+     ↓
+stop receiving new work
+     ↓
+drain current queue
+     ↓
+checkpoint
+     ↓
+shutdown
+```
+
+新 consumer：
+
+```text
+startup
+   ↓
+load checkpoint / snapshot
+   ↓
+resume
+```
+
+如果有 durable log：
+
+```text
+checkpoint = 1000
+
+restart
+   ↓
+replay from 1001
+```
+
+---
+
+# 24. What Consistency Does Each Consumer Need?
+
+不同 consumer 可能有完全不同的 requirement。
+
+例如：
+
+## UI
+
+```text
+Only latest position matters
+```
+
+可以：
+
+```text
+coalesce
+eventual consistency
+```
+
+---
+
+## Strategy
+
+可能要求：
+
+```text
+low latency
+per-instrument ordering
+```
+
+---
+
+## Risk
+
+可能要求：
+
+```text
+no missed risk-limit transition
+strong ordering
+low latency
+```
+
+---
+
+## Audit
+
+可能要求：
+
+```text
+every event
+durability
+replay
+no loss
+```
+
+因此：
+
+```text
+One queue policy for every consumer
+```
+
+不一定是正确设计。
+
+可以设计：
+
+```text
+                         +--> Strategy
+                         |    low latency
+                         |
+Position Engine ---------+--> Risk
+                         |    ordered / lossless
+                         |
+                         +--> UI
+                         |    coalesced
+                         |
+                         +--> Audit
+                              durable
+```
+
+---
+
+# 25. Persistence / Crash Recovery
+
+首先确定：
+
+> Is the PositionSignal itself the source of truth?
+
+如果不是，例如：
+
+```text
+Durable Trade / Fill Log
+        ↓
+Position Engine
+        ↓
+PositionSignal
+```
+
+PositionSignal 只是：
+
+```text
+derived state
+```
+
+那么 signal queue 可以保持：
+
+```text
+in-memory
+```
+
+crash 后：
+
+```text
+restart
+   ↓
+load position snapshot
+or
+replay fills
+   ↓
+rebuild position
+```
+
+---
+
+如果 PositionSignal 本身必须永久保存：
+
+```text
+Producer
+   ↓
+Durable Log / WAL
+   ↓
+Consumer
+   ↓
+Checkpoint
+```
+
+restart：
+
+```text
+read checkpoint
+      ↓
+replay missing signals
+```
+
+---
+
+# 26. Async — Does It Solve Slow Consumers?
+
+Async 可以：
+
+```text
+Producer
+   ↓
+Queue
+   ↓
+Consumer
+```
+
+让 producer 不需要同步等待：
+
+```text
+consumer.process()
+```
+
+因此它解决：
+
+**Producer/Consumer Coupling**
+
+但如果：
+
+```text
+Producer = 2M/s
+Consumer = 1M/s
+```
+
+async 后仍然：
+
+```text
+t = 1 sec -> backlog 1M
+t = 2 sec -> backlog 2M
+t = 10 sec -> backlog 10M
+```
+
+最终：
+
+```text
+Queue Full
+```
+
+所以：
+
+> Async solves coupling; it does not solve capacity.
+
+最终仍然需要：
+
+```text
+Backpressure
+Coalescing
+Partitioning
+More Consumers
+Batch Processing
+Consumer Optimization
+```
+
+---
+
+# 27. What If Consumer Is Permanently Slower?
+
+如果只是 temporary burst：
+
+```text
+Producer temporarily > Consumer
+        ↓
+Queue absorbs burst
+        ↓
+Producer rate drops
+        ↓
+Consumer catches up
+```
+
+没问题。
+
+但是：
+
+```text
+Producer permanently = 2M/s
+Consumer permanently = 1M/s
+```
+
+任何 queue 都无法解决。
+
+必须：
+
+```text
+Increase consumer throughput
+        |
+        +--> optimize processing
+        |
+        +--> batching
+        |
+        +--> partition workload
+        |
+        +--> add consumers
+        |
+        +--> reduce/coalesce messages
+        |
+        +--> throttle producer
+```
+
+核心结论：
+
+> A queue can absorb temporary bursts, but it cannot solve a permanent throughput mismatch.
+
+---
+
+# 28. Batch Processing
+
+如果 throughput 比 single-message latency 更重要，可以 batch：
+
+```text
+Queue
+
+S1
+S2
+S3
+...
+S100
+   ↓
+Consumer processes 100 together
+```
+
+例如：
+
+```cpp
+std::vector<PositionSignal> batch;
+
+queue.popBatch(batch, 100);
+
+for (const auto& signal : batch) {
+    process(signal);
+}
+```
+
+可以 amortize：
+
+```text
+locking
+atomic operations
+syscalls
+network I/O
+```
+
+提高 throughput。
+
+代价：
+
+```text
+latency may increase
+```
+
+因为第一条 signal 可能需要等待 batch。
+
+---
+
+# 29. Throughput vs Latency
+
+如果更关注 latency：
+
+```text
+SPSC Ring Buffer
+Preallocation
+Busy Polling
+CPU Affinity
+No Dynamic Allocation
+Small Batches / No Batching
+```
+
+如果更关注 throughput：
+
+```text
+Batch Processing
+Multiple Consumers
+Partitioning
+Larger Buffers
+Amortize Synchronization Cost
+```
+
+因此应该先问：
+
+> Is this queue on the critical trading path, or is it for downstream risk, UI, logging, or reporting?
+
+不同 workload 的设计可能完全不同。
+
+---
+
+# 30. Most Important Follow-Ups to Remember
+
+如果时间有限，重点准备下面这些。
+
+### Ordering
+
+```text
+Global ordering?
+or
+Per-key ordering?
+```
+
+通常选择：
+
+```text
+per-account / per-instrument ordering
+```
+
+然后通过 partitioning 保证。
+
+---
+
+### Duplicate / Delivery Semantics
+
+准备：
+
+```text
+At-most-once
+At-least-once
+Exactly-once
+Idempotency
+Sequence Number
+Event ID
+```
+
+---
+
+### Slow Consumer
+
+准备：
+
+```text
+Bounded Queue
+Backpressure
+Coalescing
+Spill
+Scale Consumer
+```
+
+并记住：
+
+> Queue solves bursts, not permanent throughput mismatch.
+
+---
+
+### Partitioning
+
+准备：
+
+```text
+hash(accountId, instrumentId)
+        %
+numPartitions
+```
+
+同一个 key 固定进入同一个 partition，从而：
+
+```text
+maintain ordering
++
+scale consumers
+```
+
+---
+
+### Observability
+
+至少记住：
+
+```text
+Queue Depth
+Consumer Lag
+Oldest Message Age
+Enqueue / Dequeue Rate
+p99 / p99.9 Latency
+Drop / Coalesce Count
+```
+
+---
+
+### Low-Latency C++
+
+准备：
+
+```text
+SPSC Ring Buffer
+Busy Polling
+Preallocation
+Cache Locality
+False Sharing
+alignas(64)
+Atomic Memory Ordering
+CPU Affinity
+```
+
+---
+
+# 31. Final Interview Framework
+
+拿到：
+
+> Design a Trading Position Signal Queue
+
+可以按照下面顺序展开：
+
+```text
+1. Clarify Requirements
+        ↓
+2. Signal Semantics
+   Absolute State vs Delta
+        ↓
+3. Simple Bounded Queue
+        ↓
+4. Producer > Consumer?
+   Backpressure / Coalescing
+        ↓
+5. Latency Requirement
+   Blocking vs Busy Polling
+        ↓
+6. SPSC Ring Buffer
+        ↓
+7. Multiple Producers
+   MPSC vs Per-Producer SPSC
+        ↓
+8. Multiple Consumers
+   Work Queue vs Broadcast
+        ↓
+9. Ordering
+   Per-Key Sequence
+        ↓
+10. Partitioning
+        ↓
+11. Duplicate / Idempotency
+        ↓
+12. Consumer Failure
+    Checkpoint / Replay
+        ↓
+13. Slow Consumer
+        ↓
+14. Persistence
+    Snapshot / WAL / Durable Log
+        ↓
+15. Observability
+        ↓
+16. Capacity Planning
+```
+
+最终思路不是一上来就说：
+
+```text
+Kafka
+Lock-Free
+Distributed System
+```
+
+而是：
+
+> Start with the simplest correct design. Then evolve the architecture as new requirements are introduced.
+
+每一个优化都应该能够回答：
+
+```text
+What problem am I solving?
+Why is the previous design insufficient?
+What trade-off am I introducing?
+```
+
+这才是这道 system design 题真正应该展示的设计过程。
+
