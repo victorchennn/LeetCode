@@ -42,3 +42,46 @@ template<typename T>
             }
         
     };
+
+class BlockingQueue {
+public:
+    explicit BlockingQueue(size_t capacity)
+        : capacity_(capacity) {}
+
+    void push(PositionSignal signal) {
+        std::unique_lock<std::mutex> lock(mutex_);
+
+        notFull_.wait(lock, [this] {
+            return queue_.size() < capacity_;
+        });
+
+        queue_.push(std::move(signal));
+
+        lock.unlock();
+        notEmpty_.notify_one();
+    }
+
+    PositionSignal pop() {
+        std::unique_lock<std::mutex> lock(mutex_);
+
+        notEmpty_.wait(lock, [this] {
+            return !queue_.empty();
+        });
+
+        PositionSignal signal = std::move(queue_.front());
+        queue_.pop();
+
+        lock.unlock();
+        notFull_.notify_one();
+
+        return signal;
+    }
+
+private:
+    size_t capacity_;
+    std::queue<PositionSignal> queue_;
+
+    std::mutex mutex_;
+    std::condition_variable notEmpty_;
+    std::condition_variable notFull_;
+};
