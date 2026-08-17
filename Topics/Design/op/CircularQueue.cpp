@@ -273,3 +273,92 @@ if (x.compare_exchange_strong(expected, 11)) {
 }
 
 // if multiple producers share a counter: auto pos = nextPosition.fetch_add(1); return old value, but increate it by 1
+// 1. 不维护 per-consumer read index
+//    ↓
+//    Producer 不需要追踪所有 Consumer
+// 2. Less contention
+//    ↓
+//    更少 shared cache-line communication
+//    ↓
+//    Producer 更快、更稳定
+// 3. No backpressure
+//    ↓
+//    Producer 永远不等 Consumer
+//    ↓
+//    Slow Consumer 可能 overflow
+// 4. Store bytes
+//    ↓
+//    Ring 可以保存 heterogeneous events
+//    Trade / Add / Cancel / ...
+// Producer 是最重要的。宁可让一个跟不上的 Consumer overflow 并重新同步，也不要让这个 Consumer 给整个 market-data fan-out 路径施加 backpressure。
+// SPMC V1 mIndex; mPendingIndex; Producer不知道 Consumer 在哪。Consumer has its own localIndex Producer 不关心任何 Consumer 的 read position；
+// 它只负责 reserve → write → publish。 这也是为什么它可以做到很低的 producer-side contention，但代价就是 slow consumer 可能被覆盖、发生 overflow。
+// ┌──────┬───────────────┬──────┬───────────────────┐
+// │ size │ message bytes │ size │ message bytes     │
+// └──────┴───────────────┴──────┴───────────────────┘
+// 24 | <24 bytes Trade>
+// 48 | <48 bytes AddOrder>
+// 16 | <16 bytes Cancel>
+// 先读 size
+//    ↓
+// 知道这条 message 多长
+//    ↓
+// 读对应数量的 bytes
+//    ↓
+// 跳到下一条 message
+struct Q {
+    alignas(64) std::atomic<uint64_t> mIndex;
+    alignas(64) std::atomic<uint64_t> mPendingIndex;
+    alignas(64) uint8_t mData[0];
+};
+
+// v2
+// Ring 每一个 Ring Buffer slot 上放一个 mini Seqlock。
+┌─────────┬─────────┬─────────┬─────────┬─────────┐
+│ atomic  │ atomic  │ atomic  │ atomic  │ atomic  │
+│ Event A │ Event B │ Event C │ Event D │ Event E │
+└─────────┴─────────┴─────────┴─────────┴─────────┘
+// atomic<uint64_t> counter; 同时表示两个信息。
+// 最低 bit：bit 0 是否正在 write / 剩下的 bits：version / generation
+Block
+┌────────────────────────┐
+│ mVersion                │  ← 这个 Block 当前是什么状态
+├────────────────────────┤
+│ mSize                   │  ← 这里存的 message 多大
+├────────────────────────┤
+│ mData                   │  ← 真正的数据
+│ ...                     │
+└────────────────────────┘
+Memory
+┌───────────────────────────────┐
+│ Header                        │
+├───────────────────────────────┤
+│ mBlockCounter[...]            │
+├───────────────────────────────┤
+│ Block 0                       │
+│ version | size | data         │
+├───────────────────────────────┤
+│ Block 1                       │
+│ version | size | data         │
+├───────────────────────────────┤
+│ Block 2                       │
+│ version | size | data         │
+├───────────────────────────────┤
+│ ...                           │
+└───────────────────────────────┘
+
+               Shared Header
+              mBlockCounter
+                    │
+                    │ reader join 时看一下
+                    ▼
+
+Consumer local position
+        │
+        │ 决定我要读哪个 Block
+        ▼
+      Block N
+        │
+        ├── mVersion
+        ├── mSize
+        └── mData
