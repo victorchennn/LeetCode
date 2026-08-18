@@ -1,5 +1,79 @@
 # Designing a Trading Position Signal Queue
 
+
+- Do we need to process every signal, or do we only care about the latest position for each instrument? event 还是 state
+- How many producers and consumers do we have? Is this SPSC, MPSC, or MPMC?
+- What are the expected throughput and latency requirements?
+
+Since we already established that every signal must be processed, I cannot drop or overwrite signals. If the bounded queue is full, I need some form of backpressure. 
+Producer -> queue full -> temporarily wait / retry
+
+极度在意latency而且 producer/consumer 都绑定独立 CPU core，我可能让 producer busy-wait 一小段时间，直到 consumer 腾出 slot. 这样没有 sleep/wakeup 和 context switch，latency 更可预测。但这只适合 短暂 overload。如果 consumer 长期比 producer 慢，busy-wait 只是把问题藏起来，queue 最终还是永远满着。所以我会继续追问系统层面：
+
+Is temporary backpressure acceptable? Can the producer slow down? If not, do we need a larger buffer, batching, multiple consumers, or an upstream rate-control mechanism?
+
+A bounded queue protects the system from unbounded memory growth. When it fills, that is a signal that downstream capacity is insufficient. For transient overload I can apply backpressure or spin briefly, but for sustained overload I need to fix capacity or change the system design.
+
+When would you choose busy polling, and when would you choose blocking? 对于 microsecond-level low latency 的 hot path，如果 producer 和 consumer 都有 dedicated core，我会更倾向于 busy polling。因为 consumer 不进入 sleep，不需要 condition variable 唤醒，也不会发生额外的 context switch，所以 latency 和 jitter 更低、更可预测。 代价就是它会一直占一个 CPU core，即使没有数据也在跑。
+Hot path Strategy → Signal Queue → Execution = busy polling
+Cold path Logging / Metrics / GUI = blocking
+
+You said you would dedicate a CPU core to the producer and consumer. How would you actually make sure they stay on those cores? I would pin the producer and consumer threads to dedicated CPU cores using CPU affinity, so the OS scheduler doesn't move them between cores.
+
+Your SPSC queue is entirely in memory. What happens if the trading process or machine crashes? Do we need to persist every position signal? How would you design crash recovery?
+Do we need to recover every historical signal after a crash, or can we reconstruct the current state from another authoritative source?
+情况 A：这些 signal 必须一个不漏地重新处理 durable recording、log / low-latency trade-off 如果要求 durable before accepted，持久化就可能进入 hot path，增加 latency。
+情况 B：signal 本身不用恢复，只需要恢复正确的 current position  Position database / snapshot
+
+Every signal represents an important trading decision and must be recoverable. We cannot lose an acknowledged signal. How would you add durability without destroying the latency of the hot path? append-only log
+                     ┌──→ SPSC Queue → Trading Consumer
+Producer → Signal ───┤
+                     └──→ Logging Queue → Persistence Thread
+                                         ↓
+                                      Append Log
+所以这里存在一个不可消除的 trade-off：Strong durability - Low latency
+RPO = Recovery Point Objective？0 意味着：已经确认接受的数据，一条都不能丢。那么 ACK 前就必须有足够强的 durability guarantee。
+RPO = 100 ms 意味着 crash 后允许最多损失最近大约 100ms 尚未 durable 的数据。通过 batching 减少 persistence overhead。
+
+RTO = Recovery Time Objective crash 后多久必须恢复服务？5s? Primary - Standby - read log / replay - reconstruct state - resume
+RTO < 100 ms snapshot + incremental log
+
+If every acknowledged signal must survive a crash, I first need to define the acknowledgement boundary. The safest design is to append the signal to a durable log before acknowledging it, but that puts persistence on the latency-sensitive path.
+If the business can tolerate a non-zero RPO, I can move persistence to a separate thread and batch writes, keeping disk I/O off the trading hot path.
+For recovery, I would periodically snapshot the current state and keep an append-only log after the snapshot, so we don't have to replay the entire history.
+
+Consumer 挂了怎么办？我会给 consumer 维护一个 heartbeat 或 progress indicator，比如 如果过了一段时间：producer keeps advancing consumerLastProcessedSequence 不再变化
+I would monitor not only thread liveness, but also processing progress. A stuck consumer is effectively failed even if the thread is technically still running.
+
+如果系统要求 high availability，就需要 backup consumer。 不能简单让两个 consumer 同时从同一个 SPSC queue 读。
+
+What if one strategy produces far more signals than all the others? How do you stop it from starving the other queues?
+round-robin polling？consumer 每处理一个 Q1 signal 都要检查另外 19 个 empty queue，效率不好。所以可以使用 bounded batching： I would use bounded batching. The consumer can process up to N signals from one queue before moving to the next. This amortizes polling overhead while preventing a busy strategy from monopolizing the consumer.
+
+Strategy 1 is producing 800K signals/sec and the other 19 strategies together produce 700K/sec.Your single consumer can only process 1M/sec.
+单纯把 queue 变大不能解决问题，只能延迟爆满。更好的第一选择通常是：不要拆同一个 instrument，先做 dynamic shard assignment。也就是给 hot instrument 一个 dedicated consumer/core。例如原来：
+
+Shard 0: AAPL + IBM + META
+Shard 1: MSFT + AMZN
+Shard 2: NVDA + TSLA
+
+发现 AAPL 很热以后，可以调整成：
+
+Shard 0: AAPL only
+Shard 1: IBM + META + MSFT
+Shard 2: AMZN + NVDA + TSLA
+
+But AAPL alone generates more traffic than one consumer can handle. What then? 这时候你应该优化单 shard：reduce allocations / reduce copies / batch work / precompute / better cache locality / avoid locks / CPU pinning /faster data structures
+
+Suppose AAPL currently belongs to Shard 0, but we want to move it to Shard 1 at runtime because Shard 0 is overloaded. How do you migrate ownership without losing, duplicating, or reordering AAPL signals? 这里关键是：不能直接改 hash mapping。
+
+What if the strategy and execution engine need to run in different processes on the same machine? Shared Memory 两个 process 把同一块 physical memory map 到自己的 virtual address space。 Strategy 可以写 ring buffer，Execution 可以直接读。
+
+Now Strategy is on Machine A and Execution Engine is on Machine B. Shared memory no longer works. How do you communicate?
+最自然的第一版是：Strategy Process / Network Socket / NIC / Network / NIC / Execution Process 如果 requirement 是：every signal must be processed 我会优先考虑 TCP，或者交易系统内部自己定义的可靠协议。发送前变成固定格式 bytes：[sequence][instrumentId][targetPosition]
+
+TCP already guarantees reliable delivery. Why would you still need sequence numbers and application-level acknowledgements? 因为 TCP 保证的是 byte stream 的 transport-level reliability，不是你的业务操作已经完成。不能说明：Execution application 已经 parse signal 已经 risk check 已经更新 state 已经产生 order 所以如果业务要求知道 processed 到哪里了，需要 application-level ACK： sequence number 是我们的 business/application sequence。
+ 
 ## 1. Problem Definition
 
 设计一个 **Trading Position Signal Queue**：
