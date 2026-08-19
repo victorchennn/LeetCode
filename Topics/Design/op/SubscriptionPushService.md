@@ -14,6 +14,28 @@ Machine
       ├── Thread 2
       ├── Thread 3
       └── Thread 4
+
+                 Clients
+                    |
+                    v
+            TCP / WebSocket
+                    |
+                    v
+              I/O Threads
+            non-blocking I/O 负责：accept recv/ send/ socket readiness/ parse lightweight message 
+                 epoll
+                    |
+                   v
+                Queue
+                  |
+       +----------+----------+
+       |          |          |
+     Worker1    Worker2    Worker3 负责：business logic/ DB access/ calculation/ state update (subscribers_[AAPL].insert(Alice))
+       \          |          /
+        \         |         /
+             Shared State
+                  |
+                mutex
 ```
 然后这个 process 对外监听网络：Client( TCP/HTTP )SubscriptionService process 比如 Alice 发：POST /subscribe user=Alice topic=AAPL
 这个网络包到服务器以后，最终必须有某个 CPU core 上的某个 thread 执行你的 C++ 代码：addSubscription("Alice", "AAPL");
