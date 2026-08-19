@@ -35,10 +35,10 @@ Clients
 | - lightweight parsing     |
 +---------------------------+
              |
-             | Request / Command
+             | Request / Command  tryPush() 
              v
           Work Queue
-             |
+             | waitAndPop()
      +-------+-------+
      |       |       |
      v       v       v
