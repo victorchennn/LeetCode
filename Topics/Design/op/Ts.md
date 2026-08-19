@@ -12,13 +12,13 @@
 
 ```text
 Amsterdam Office
-   │  WAN：部署 / Monitoring / Control
-   ▼
-Frankfurt Colocation
-   │
-   ├── Trading Server
-   ├── Backup Server
-   └── Fiber Cross-Connect ─── Frankfurt Exchange
+    | private WAN / leased line
+    v
+Frankfurt Colo / Data Center
+    |
+    +---- Market Data Cable <----- Exchange
+    |
+    +---- Order Cable -----------> Exchange
 ```
 
 在机房里通过 **Cross-Connect** 把自己的 Rack/NIC 和 Exchange Network 用 Fiber 直接连接。Amsterdam 主要负责 Monitoring、Deployment、Configuration 和 Kill Switch，不参与 latency-sensitive hot path。
@@ -51,7 +51,76 @@ Exchange Market Data → NIC → Market Data Decoder → BMW Order Book
 → ACK/FILL → Order State / Position
 ```
 
-只有一只 BMW 的情况下没必要一开始引入 Kafka、Redis、Database、Microservices 等复杂组件。Hot Path 越短越好。
+Frankfurt 机房里面放什么？
+```
+Exchange
+   |
+   | Market Data
+   v
++-----------------------+
+| Frankfurt Trading Box |
+|                       |
+| Market Data Handler   |
+|        ↓              |
+| Strategy / Decision   |
+|        ↓              |
+| Risk Check            |
+|        ↓              |
+| Order Gateway         |
++-----------------------+
+   |
+   | Order / Execution
+   v
+Exchange
+```
+两条 Exchange Cable 分别接哪里? 你可以认为服务器至少有两个 network interface：
+```
+                    Frankfurt Exchange
+                   /                  \
+          Market Data                Orders
+             Cable                    Cable
+               |                        |
+               v                        v
+          +---------+              +---------+
+          |  NIC 1  |              |  NIC 2  |
+          +----+----+              +----+----+
+               |                        |
+               +-----------+------------+
+                           |
+                    Trading Server
+```
+
+Amsterdam Office 干什么？
+
+Amsterdam 不应该参与真正的 hot path。办公室主要做：
+* monitoring
+* GUI
+* risk dashboard
+* configuration
+* logging
+* strategy parameter updates
+* manual kill switch
+* historical analysis
+
+Frankfurt 把必要的信息传回 Amsterdam：
+* positions
+* orders
+* fills
+* health
+* market snapshots
+
+那 Amsterdam ↔ Frankfurt 用什么？优先使用 dedicated private network / leased line，而不是普通公网 Internet。
+```
+Best latency / reliability
+        ↑
+Dedicated fiber
+Private leased line
+MPLS / Private WAN (运营商提供的企业专线) lower latency lower jitter more predictable routing better reliability / SLA
+VPN over Internet
+Public Internet
+        ↓
+Worst predictability
+```
 
 ## 4. Market Data：UDP
 
@@ -215,6 +284,40 @@ Primary Server / Backup Server
 Backup Server 可以同步 Order / Position State，但必须明确谁拥有 Order Entry 权限，否则 Primary 和 Backup 同时发送 Order 会造成 Duplicate Trading。常见方式是 Active-Passive + 明确的 Failover Ownership。
 
 ## 12. 面试时的 2 分钟版本
+
+```
+                     EXCHANGE
+                  ↙            ↖
+          Market Data         Orders
+               ↓                 ↑
+        ┌─────────────────────────────┐
+        │          HOT PATH           │
+        │                             │
+        │ Market Data Handler         │
+        │       ↓                     │
+        │ In-Memory OrderBook         │
+        │       ↓                     │
+        │ Strategy                    │
+        │       ↓                     │
+        │ In-Memory Risk/Position     │
+        │       ↓                     │
+        │ Order Gateway               │
+        │                             │
+        └─────────────────────────────┘
+                    │
+                    │ async events
+                    ↓
+        ┌─────────────────────────────┐
+        │          COLD PATH          │
+        │                             │
+        │ Kafka / Message Bus         │
+        │     ↓        ↓       ↓      │
+        │ Logging   Monitoring  PnL   │
+        │     ↓        ↓       ↓      │
+        │ Database   Redis     GUI    │
+        │                             │
+        └─────────────────────────────┘
+```
 
 公司虽然在 Amsterdam，但我会把 latency-sensitive Trading Server 放到 Frankfurt Exchange 附近的 Colocation，通过 dedicated fiber cross-connect 连接 Exchange。Market Data 和 Order Entry 使用独立链路。
 
