@@ -15,38 +15,51 @@ Machine
       ├── Thread 3
       └── Thread 4
 
-                 Clients
-                    |
-                    v
-            TCP / WebSocket
-                    |
-                    v
-              I/O Threads
-            non-blocking I/O 负责：accept recv/ send/ socket readiness/ parse lightweight message 
-                 epoll
-                    |
-                   v
-                Queue
-                  |
-       +----------+----------+
-       |          |          |
-     Worker1    Worker2    Worker3 负责：business logic/ DB access/ calculation/ state update (subscribers_[AAPL].insert(Alice))
-       \          |          /
-        \         |         /
-             Shared State
-                  |
-                mutex
-```
-然后这个 process 对外监听网络：Client( TCP/HTTP )SubscriptionService process 比如 Alice 发：POST /subscribe user=Alice topic=AAPL
-这个网络包到服务器以后，最终必须有某个 CPU core 上的某个 thread 执行你的 C++ 代码：addSubscription("Alice", "AAPL");
+                         ONE SERVICE INSTANCE / PROCESS
 
-这里其实有两层 queue，不要混：
-* 第一层：Request Threads → Owner 解决：多个 server request 同时修改 topic 怎么办？
-* 第二层：Owner → subscribers 解决：一条 news 怎么广播给多个 subscriber？
+Clients
+   |
+   | TCP / WebSocket
+   v
++---------------------------+
+| I/O Threads               |
+|                           |
+| non-blocking sockets      |
+| epoll                     |
+|                           |
+| 负责：                    |
+| - accept                  |
+| - recv                    |
+| - send                    |
+| - socket readiness        |
+| - lightweight parsing     |
++---------------------------+
+             |
+             | Request / Command
+             v
+          Work Queue
+             |
+     +-------+-------+
+     |       |       |
+     v       v       v
+  Worker1 Worker2 Worker3
+     |       |       |
+     | 负责：
+     | - business logic
+     | - DB access
+     | - calculation
+     | - state update
+     |
+     +-------+-------+
+             |
+             v
+        Shared State
+             |
+          mutex / lock
+```
 
 那怎么避免 MPSC？你之前 trading 里学过的一个很好的办法就是：
 不要让多个 producer 竞争同一条 queue；给每个 producer-owner pair 一条 SPSC。
-
 
 ```
                 Clients / API threads
@@ -70,6 +83,41 @@ Machine
     |      |    |                  |       |
  Alice   Bob Charlie             Alice    Tom
  readSeq readSeq readSeq         readSeq  readSeq
+```
+
+hash(AAPL) → Owner0 所有subscribe(AAPL) unsubscribe(AAPL) publish(AAPL) 都去 Owner0。
+
+```
+             上层 System Design
+
+Client
+↓
+Network
+↓
+I/O Thread
+↓
+Queue
+↓
+Worker
+↓
+Shared State
+
+             ↓ 优化
+
+Owner / Partition
+↓
+Single Writer
+
+             ↓ 再往底层
+
+SPSC / MPSC
+↓
+atomic
+↓
+acquire/release
+↓
+cache line
+
 ```
 
 ```cpp
