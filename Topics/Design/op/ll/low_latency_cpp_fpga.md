@@ -2,11 +2,20 @@
 
 ![Low-Latency Trading
 Architecture](low_latency_trading_architecture.png)
+![Low-Latency Trading
+Architecture2](low_latency_trading_architecture2.png)
 
-这张图展示了一个典型的 low-latency trading system：**Exchange
-发出市场数据 → 系统接收并处理 → Strategy 做决策 → Order 发回
-Exchange**。对于普通策略，这条链路主要运行在 CPU/C++ 上；对于极端
-latency-sensitive 的策略，可以把最后的快速触发路径放到 FPGA。
+Trading Server? Colocation -> Trading Engine 尽可能靠近 Exchange
+```
+Amsterdam Office
+    | private WAN / leased line
+    v
+Frankfurt Colo / Data Center
+    |
+    +---- Market Data Cable <----- Exchange
+    |
+    +---- Order Cable -----------> Exchange
+```
 
 ## 1. Exchange：市场数据从哪里来，订单发到哪里
 
