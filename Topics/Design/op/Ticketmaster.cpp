@@ -1,9 +1,41 @@
-#include <atomic>
-#include <mutex>
-#include <string>
-#include <unordered_map>
-#include <utility>
-#include <vector>
+// Users
+//   |
+//   v
+// +------------------+
+// | Virtual Waiting  |
+// | Room             |
+// +--------+---------+
+//          |
+//          v
+// +------------------+
+// | Load Balancer    | 把请求分给不同 Server
+// +--------+---------+
+//          |
+//    +-----+--------+
+//    |              |
+//    v              v
+// Event Service   Booking Service
+//    |              |
+//    v              |
+//  DB - Cache       |
+//                    |
+//                    v
+//               Primary DB
+//                    |
+//                    v
+//             Payment Service
+
+// Event Service(“大概现在还能买什么”): read-heavy Event Service 里的数据分成两类  
+// 第一类几乎永远不变：stadium layout section row seat coordinates event name event start time 静态数据很好 cache：
+// 第二类经常变化：AVAILABLE HELD SOLD price 动态 availability 也 cache TTL要短一点
+//              ┌── Event Service 1 ──┐ stateless service
+//              │                     │
+// User → LB ───┼── Event Service 2 ──┼──> Shared Cache
+//              │                     │
+//              └── Event Service 3 ──┘
+//                                       |
+//                                       v
+//                                    Database
 
 enum class ReservationStatus {
     Active, Cancelled
