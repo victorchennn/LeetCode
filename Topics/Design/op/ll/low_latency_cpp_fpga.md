@@ -19,10 +19,29 @@ Frankfurt Colo / Data Center
 
 ## 1. Exchange：市场数据从哪里来，订单发到哪里
 
-左边的建筑可以理解成 Exchange，例如 NASDAQ /
-NYSE。交易所一方面向市场参与者发送 Market Data，另一方面接收交易公司的
-Buy / Sell / Cancel Order。
+左边的建筑可以理解成 Exchange，例如 NASDAQ /NYSE。交易所一方面向市场参与者发送 Market Data，另一方面接收交易公司的 Buy / Sell / Cancel Order。在机房里通过 Cross-Connect 把自己的 Rack/NIC 和 Exchange Network 用 Fiber 直接连接。Amsterdam 主要负责 Monitoring、Deployment、Configuration 和 Kill Switch，不参与 latency-sensitive hot path。
 
+那 Amsterdam ↔ Frankfurt 用什么？优先使用 dedicated private network / leased line，而不是普通公网 Internet。
+```
+Best latency / reliability
+        ↑
+Dedicated fiber
+Private leased line
+MPLS / Private WAN (运营商提供的企业专线) lower latency lower jitter more predictable routing better reliability / SLA
+VPN over Internet
+Public Internet
+        ↓
+Worst predictability
+```
+
+Market Data：UDP 的问题是可能丢包，因此每个 Market Data Message 要有 Sequence Number。例如收到 10001, 10002, 10003, 10005，马上知道 10004 丢失，此时不能继续相信自己的 Order Book。
+
+Order Entry / Execution：TCP 须明确知道 Exchange 有没有收到、是否 ACK、是否 Reject、成交了多少。因此如果 Exchange 提供 TCP Order Entry Protocol，可以建立长期存在的 Persistent TCP Connection：
+
+Trading Engine → Order Gateway ──TCP──> Exchange <── ACK / Reject / Fill
+
+TCP 提供 Reliability 和 Ordering，但 Application Layer 仍然需要自己的 OrderId、Sequence Number 和 Session Recovery。比如订单发出去后连接断了，必须能够判断 Exchange 是否已经接受该订单，不能简单地重新发送，否则可能产生 Duplicate Order。
+ 
 ``` text
 Exchange
    │
